@@ -47,15 +47,10 @@
       padding-bottom: 88px;
     }
 
-    /* Oswald Display Typography for Headings & Big Balances (Tersistem Signature) */
-    .oswald {
-      font-family: "Oswald", sans-serif;
-      letter-spacing: -0.01em;
-    }
-
+    .oswald { font-family: "Oswald", sans-serif; letter-spacing: -0.01em; }
     .container { max-width: 580px; margin: 0 auto; padding: 0 14px; }
 
-    /* 1. Sticky Glass Header (Exact Tersistem Header) */
+    /* 1. Sticky Glass Header (Tersistem Header) */
     header.ts-header {
       position: sticky;
       top: 0;
@@ -73,7 +68,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 10px;
+      gap: 8px;
     }
     .ts-logo {
       display: flex;
@@ -81,6 +76,7 @@
       gap: 10px;
       text-decoration: none;
       color: var(--ink);
+      min-width: 0;
     }
     .ts-logo-box {
       width: 34px;
@@ -99,9 +95,10 @@
     .ts-logo-text {
       display: flex;
       flex-direction: column;
+      min-width: 0;
     }
     .ts-logo-brand {
-      font-size: 11px;
+      font-size: 10.5px;
       font-weight: 700;
       color: var(--brand);
       text-transform: uppercase;
@@ -109,10 +106,67 @@
       line-height: 1.1;
     }
     .ts-logo-title {
-      font-size: 15px;
+      font-size: 14.5px;
       font-weight: 800;
       color: var(--ink);
       line-height: 1.2;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* Role Switcher Bar (Top Interactive Strip) */
+    .role-strip {
+      background: #fff;
+      border-bottom: 1px solid var(--border-warm);
+      padding: 8px 14px;
+    }
+    .role-strip-inner {
+      max-width: 580px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .role-current-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--ink);
+    }
+    .role-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--brand);
+      display: inline-block;
+    }
+    .role-switcher-pills {
+      display: flex;
+      gap: 4px;
+      background: #f1f5f9;
+      padding: 3px;
+      border-radius: 999px;
+    }
+    .role-tab {
+      border: none;
+      background: transparent;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .role-tab.active {
+      background: var(--brand-deep);
+      color: #fff;
+      box-shadow: 0 2px 6px rgba(15, 122, 90, 0.25);
     }
 
     /* 2. Tersistem Public Hero Balance Banner (.pub-hero) */
@@ -237,6 +291,11 @@
       justify-content: space-between;
       gap: 8px;
     }
+    .power-result.warn {
+      background: var(--accent-soft);
+      border-left-color: var(--accent);
+      color: #92400e;
+    }
 
     .section-head {
       display: flex;
@@ -299,8 +358,10 @@
       color: #92400e;
       border-color: #fde68a;
     }
-    .btn-warn:hover {
-      background: #fde68a;
+    .btn-danger {
+      background: var(--danger-bg);
+      color: var(--danger);
+      border-color: #fecaca;
     }
     .btn-block { width: 100%; }
 
@@ -389,6 +450,9 @@
       color: var(--brand-dark);
       border-color: #6ee7b7;
     }
+    .month-pill.readonly {
+      cursor: default;
+    }
 
     .member-actions { display: flex; gap: 6px; }
     .member-actions .btn { flex: 1; padding: 8px 10px; font-size: 12px; }
@@ -430,7 +494,7 @@
     }
     .tx-row:last-child { border-bottom: none; }
 
-    /* Bottom Navigation Bar (Tersistem Emerald Active State) */
+    /* Bottom Navigation Bar */
     .bottom-nav {
       position: fixed;
       bottom: 0;
@@ -448,10 +512,10 @@
     }
     .nav-item {
       flex: 1;
-      max-width: 170px;
+      max-width: 150px;
       background: none;
       border: none;
-      padding: 7px 6px;
+      padding: 7px 4px;
       border-radius: 12px;
       display: flex;
       flex-direction: column;
@@ -469,12 +533,12 @@
       background: var(--brand-bg);
     }
 
-    /* Modals */
+    /* Modals & Full-Screen Login Modal */
     .modal-backdrop {
       position: fixed;
       inset: 0;
-      background: rgba(15, 23, 42, 0.55);
-      backdrop-filter: blur(3px);
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(4px);
       display: none;
       align-items: center;
       justify-content: center;
@@ -485,11 +549,13 @@
     .modal-box {
       background: #fff;
       width: 100%;
-      max-width: 410px;
+      max-width: 420px;
       border-radius: 20px;
-      padding: 18px;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+      padding: 20px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.22);
       animation: modalPop 0.18s ease-out;
+      max-height: 92vh;
+      overflow-y: auto;
     }
     @keyframes modalPop {
       from { opacity: 0; transform: translateY(10px) scale(0.98); }
@@ -504,10 +570,27 @@
       color: var(--ink);
     }
 
-    /* View Transition Animation */
-    .view-panel {
-      animation: fadeSlideIn 0.2s ease-out;
+    /* Role Login Cards inside Login Modal */
+    .login-role-card {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 12px;
+      margin-bottom: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      transition: all 0.16s ease;
     }
+    .login-role-card:hover, .login-role-card.selected {
+      border-color: var(--brand);
+      background: var(--brand-bg);
+      transform: translateY(-2px);
+    }
+
+    /* View Transition Animation */
+    .view-panel { animation: fadeSlideIn 0.2s ease-out; }
     @keyframes fadeSlideIn {
       from { opacity: 0; transform: translateY(6px); }
       to { opacity: 1; transform: translateY(0); }
@@ -563,16 +646,34 @@
           <span class="ts-logo-title" id="hdrName">Komunitas Motor Nusantara</span>
         </div>
       </div>
-      <div style="display:flex; gap:6px;">
-        <button class="btn btn-ghost" style="padding:7px 11px; font-size:12px;" onclick="exportToExcelCSV()" title="Download Excel CSV">
+      <div style="display:flex; gap:6px; align-items:center;">
+        <button id="btnExportHeader" class="btn btn-ghost" style="padding:6px 10px; font-size:11.5px;" onclick="exportToExcelCSV()" title="Download Excel CSV">
           📥 Excel
         </button>
-        <button class="btn btn-ghost" style="padding:7px 11px; font-size:12px;" onclick="openModal('settingsModal')">
-          ⚙️ Edit
+        <button id="btnSettingsHeader" class="btn btn-ghost" style="padding:6px 10px; font-size:11.5px;" onclick="openModal('settingsModal')">
+          ⚙️ Setup
+        </button>
+        <button class="btn btn-primary btn-pill" style="padding:6px 12px; font-size:11.5px;" onclick="openModal('loginModal')">
+          🔐 <span id="hdrRoleBtnText">Ketua</span>
         </button>
       </div>
     </nav>
   </header>
+
+  <!-- Interactive Role & Hak Akses Switcher Strip -->
+  <div class="role-strip">
+    <div class="role-strip-inner">
+      <div class="role-current-badge">
+        <span class="role-dot"></span>
+        <span id="roleStatusLabel">Login sebagai: <strong>👑 Ketua (Full Akses)</strong></span>
+      </div>
+      <div class="role-switcher-pills" title="Klik untuk simulasi ganti Role Login">
+        <button class="role-tab active" id="rtab-ketua" onclick="quickSwitchRole('ketua')">👑 Ketua</button>
+        <button class="role-tab" id="rtab-bendahara" onclick="quickSwitchRole('bendahara')">💰 Bendahara</button>
+        <button class="role-tab" id="rtab-anggota" onclick="quickSwitchRole('anggota')">👤 Anggota</button>
+      </div>
+    </div>
+  </div>
 
   <main class="container">
 
@@ -607,20 +708,33 @@
       <div class="ts-card">
         <div class="section-head">
           <div>
-            <h2 class="section-title">DAFTAR ANGGOTA & IURAN</h2>
-            <p class="section-sub">Klik tombol bulan untuk catat Lunas / Belum Bayar</p>
+            <h2 class="section-title" id="membersSectionTitle">DAFTAR ANGGOTA &amp; IURAN</h2>
+            <p class="section-sub" id="membersSectionSub">Klik tombol bulan untuk catat Lunas / Belum Bayar</p>
           </div>
-          <button class="btn btn-primary btn-pill" onclick="openModal('memberModal')">
+          <button id="btnAddMember" class="btn btn-primary btn-pill" onclick="openModal('memberModal')">
             + Anggota Baru
           </button>
         </div>
 
-        <!-- Tersistem Power Callout -->
-        <div class="power-result">
-          <span>⚡ Data tersimpan rapi & otomatis menghitung Saldo Kas di atas.</span>
+        <!-- Dynamic Role Info Banner -->
+        <div class="power-result" id="rolePermissionBanner">
+          <span id="roleBannerText">⚡ Mode Pengurus: Klik nama bulan untuk ubah status Lunas / Belum.</span>
           <button onclick="copyReportWA()" style="background:none;border:none;color:var(--brand-deep);font-weight:800;font-size:12px;cursor:pointer;text-decoration:underline;white-space:nowrap;">
             Salin WA →
           </button>
+        </div>
+
+        <!-- Member Self-View Selector (Only shown when logged in as Anggota) -->
+        <div id="anggotaSelfBar" class="hidden" style="background:#f8fafc;border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:12px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;">
+            <div>
+              <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;">Akun Anggota Aktif:</div>
+              <div style="font-size:14px;font-weight:800;color:var(--ink);" id="activeAnggotaName">Dimas Saputra (KMN-26-003)</div>
+            </div>
+            <button class="btn btn-primary btn-pill" style="padding:7px 14px;font-size:12px;" onclick="confirmPayToTreasurerWA()">
+              💳 Konfirmasi Bayar Iuran via WA
+            </button>
+          </div>
         </div>
 
         <div class="toolbar">
@@ -696,19 +810,20 @@
         <textarea id="waTextOutput" rows="11" readonly style="font-family:monospace; font-size:12px; background:#0f172a; color:#6ee7b7; border:none; margin-bottom:12px; border-radius:14px; padding:14px;"></textarea>
 
         <button class="btn btn-primary btn-pill btn-block" onclick="copyReportWA()">
-          📋 Salin Laporan & Bagikan ke Grup WA
+          📋 Salin Laporan &amp; Bagikan ke Grup WA
         </button>
       </div>
 
       <div class="ts-card">
         <div class="section-head">
           <div>
-            <h2 class="section-title">💰 CATAT PEMASUKAN & PENGELUARAN</h2>
+            <h2 class="section-title">💰 CATAT PEMASUKAN &amp; PENGELUARAN</h2>
             <p class="section-sub">Iuran bulanan anggota sudah otomatis masuk ke saldo kas</p>
           </div>
         </div>
 
-        <form onsubmit="addTransaction(event)" style="display:grid; grid-template-columns: 1fr 1fr; gap:8px; margin-bottom:14px;">
+        <!-- Cash Input Form (Hidden for Read-Only Anggota Role) -->
+        <form id="cashInputForm" onsubmit="addTransaction(event)" style="display:grid; grid-template-columns: 1fr 1fr; gap:8px; margin-bottom:14px;">
           <select id="txType">
             <option value="out">🔴 Pengeluaran Kas</option>
             <option value="in">🟢 Pemasukan Lain</option>
@@ -717,6 +832,10 @@
           <input type="text" id="txDesc" required placeholder="Keterangan (mis: Konsumsi Kopdar / Cetak Banner)" style="grid-column: span 2;" />
           <button type="submit" class="btn btn-primary" style="grid-column: span 2;">+ Simpan Catatan Kas</button>
         </form>
+
+        <div id="cashReadonlyNotice" class="power-result warn hidden">
+          <span>🔒 Mode Anggota (Transparansi Publik): Hanya Ketua &amp; Bendahara yang dapat menambah atau mengubah catatan kas.</span>
+        </div>
 
         <div id="txHistoryList"></div>
       </div>
@@ -742,9 +861,69 @@
       <span class="icon">📊</span>
       <span>Kas &amp; Laporan</span>
     </button>
+    <button class="nav-item" id="nav-login" onclick="openModal('loginModal')">
+      <span class="icon">🔐</span>
+      <span>Ganti Role</span>
+    </button>
   </nav>
 
-  <!-- MODAL: TAMBAH ANGGOTA (+ AI KTP Autofill Demo seperti Aplikasi Warga Tersistem) -->
+  <!-- ==================== MODAL: LOGIN & MULTI-ROLE ACCESS ==================== -->
+  <div id="loginModal" class="modal-backdrop">
+    <div class="modal-box">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+        <h3 class="section-title">🔐 LOGIN &amp; HAK AKSES ROLE</h3>
+        <button onclick="closeModal('loginModal')" style="background:none;border:none;font-size:18px;cursor:pointer;color:var(--muted);">✕</button>
+      </div>
+      <p class="section-sub" style="margin-bottom:14px;">Pilih Role untuk masuk menggunakan PIN Pengurus atau Nomor KTA Anggota.</p>
+
+      <!-- 3 Role Cards -->
+      <div class="login-role-card" onclick="selectLoginRole('ketua')" id="lcard-ketua">
+        <div>
+          <div style="font-weight:800;font-size:14px;color:var(--ink);">👑 Ketua / Admin Utama</div>
+          <div style="font-size:11.5px;color:var(--muted);">Full Akses: Edit Komunitas, Tambah/Hapus Anggota, Iuran &amp; Kas</div>
+        </div>
+        <span class="role-pill">PIN: 1111</span>
+      </div>
+
+      <div class="login-role-card" onclick="selectLoginRole('bendahara')" id="lcard-bendahara">
+        <div>
+          <div style="font-weight:800;font-size:14px;color:var(--ink);">💰 Bendahara Komunitas</div>
+          <div style="font-size:11.5px;color:var(--muted);">Akses Keuangan: Checklist Lunas, Tagih WA, Catat Kas &amp; Laporan</div>
+        </div>
+        <span class="role-pill">PIN: 2222</span>
+      </div>
+
+      <div class="login-role-card" onclick="selectLoginRole('anggota')" id="lcard-anggota">
+        <div>
+          <div style="font-weight:800;font-size:14px;color:var(--ink);">👤 Anggota (Mode Transparan)</div>
+          <div style="font-size:11.5px;color:var(--muted);">Lihat KTA Sendiri, Cek Saldo Kas &amp; Konfirmasi Bayar (Read-Only)</div>
+        </div>
+        <span class="role-pill">Pilih Nama</span>
+      </div>
+
+      <!-- Dynamic Auth Input Area -->
+      <form onsubmit="submitRoleLogin(event)" style="margin-top:14px;padding-top:12px;border-top:1px solid var(--line);">
+        <input type="hidden" id="selectedRoleInput" value="ketua" />
+
+        <div id="pinInputGroup" class="form-group">
+          <label id="pinLabelText">Masukkan PIN Ketua (Default Demo: 1111)</label>
+          <input type="password" id="loginPinInput" value="1111" placeholder="Masukkan 4 digit PIN" />
+        </div>
+
+        <div id="memberLoginGroup" class="form-group hidden">
+          <label>Masuk Sebagai Anggota:</label>
+          <select id="loginMemberSelect"></select>
+        </div>
+
+        <div style="display:flex;gap:8px;margin-top:12px;">
+          <button type="button" class="btn btn-ghost" style="flex:1;" onclick="closeModal('loginModal')">Tutup</button>
+          <button type="submit" class="btn btn-primary" style="flex:1.5;">🔐 Masuk Sekarang</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: TAMBAH ANGGOTA (+ AI KTP Autofill Demo) -->
   <div id="memberModal" class="modal-backdrop">
     <div class="modal-box">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
@@ -775,22 +954,34 @@
     </div>
   </div>
 
-  <!-- MODAL: EDIT KOMUNITAS -->
+  <!-- MODAL: EDIT KOMUNITAS (Hanya Ketua) -->
   <div id="settingsModal" class="modal-backdrop">
     <div class="modal-box">
-      <h3 class="section-title" style="margin-bottom:12px;">PENGATURAN KOMUNITAS</h3>
+      <h3 class="section-title" style="margin-bottom:12px;">⚙️ PENGATURAN KOMUNITAS &amp; PIN</h3>
       <form onsubmit="saveSettings(event)">
         <div class="form-group">
           <label>Nama Komunitas / Paguyuban / Klub</label>
           <input type="text" id="setCommName" required />
         </div>
-        <div class="form-group">
-          <label>Nominal Iuran Bulanan (Rp)</label>
-          <input type="number" id="setCommFee" required />
+        <div class="grid" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+          <div class="form-group">
+            <label>Iuran Bulanan (Rp)</label>
+            <input type="number" id="setCommFee" required />
+          </div>
+          <div class="form-group">
+            <label>Kode Awalan KTA</label>
+            <input type="text" id="setCommPrefix" required placeholder="KMN-26" />
+          </div>
         </div>
-        <div class="form-group">
-          <label>Kode Awalan Nomor KTA</label>
-          <input type="text" id="setCommPrefix" required placeholder="KMN-26" />
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+          <div class="form-group">
+            <label>PIN Login Ketua</label>
+            <input type="text" id="setPinKetua" required />
+          </div>
+          <div class="form-group">
+            <label>PIN Login Bendahara</label>
+            <input type="text" id="setPinBendahara" required />
+          </div>
         </div>
         <div style="display:flex; gap:8px; margin-top:16px;">
           <button type="button" class="btn btn-ghost" style="flex:1;" onclick="closeModal('settingsModal')">Batal</button>
@@ -802,7 +993,6 @@
 
   <script>
     const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun'];
-    // Theme 0 is Tersistem Official Emerald + Gold
     const THEMES = [
       ['#064e3b', '#0f7a5a', '#059669'],
       ['#0f172a', '#1e3a8a', '#2563eb'],
@@ -815,6 +1005,10 @@
       fee: 50000,
       prefix: 'KMN-26',
       theme: 0,
+      pinKetua: '1111',
+      pinBendahara: '2222',
+      currentRole: 'ketua', // 'ketua' | 'bendahara' | 'anggota'
+      loggedInMemberId: 3,  // Default member account when in 'anggota' role
       members: [
         { id: 1, kta: 'KMN-26-001', name: 'Budi Santoso', role: 'Ketua Umum', phone: '081234567801', paid: [1, 1, 1, 0, 0, 0] },
         { id: 2, kta: 'KMN-26-002', name: 'Rina Wijaya', role: 'Bendahara', phone: '081234567802', paid: [1, 1, 1, 1, 0, 0] },
@@ -827,10 +1021,14 @@
       ]
     };
 
-    let db = JSON.parse(localStorage.getItem('komunitasku_tersistem_v3')) || initialData;
+    let db = JSON.parse(localStorage.getItem('komunitasku_tersistem_v4')) || initialData;
+    if (!db.currentRole) db.currentRole = 'ketua';
+    if (!db.pinKetua) db.pinKetua = '1111';
+    if (!db.pinBendahara) db.pinBendahara = '2222';
+    if (!db.loggedInMemberId) db.loggedInMemberId = db.members[0]?.id || 1;
 
     function saveDB() {
-      localStorage.setItem('komunitasku_tersistem_v3', JSON.stringify(db));
+      localStorage.setItem('komunitasku_tersistem_v4', JSON.stringify(db));
       refreshUI();
     }
 
@@ -843,7 +1041,132 @@
       el.textContent = msg;
       el.classList.add('show');
       clearTimeout(window._tTimer);
-      window._tTimer = setTimeout(() => el.classList.remove('show'), 2200);
+      window._tTimer = setTimeout(() => el.classList.remove('show'), 2300);
+    }
+
+    // ==================== ROLE & PERMISSION ENGINE (RBAC) ====================
+    function canEditFinance() {
+      return db.currentRole === 'ketua' || db.currentRole === 'bendahara';
+    }
+    function isKetua() {
+      return db.currentRole === 'ketua';
+    }
+
+    function quickSwitchRole(role) {
+      db.currentRole = role;
+      saveDB();
+      const labels = {
+        ketua: '👑 Mode Ketua Aktif (Full Akses)',
+        bendahara: '💰 Mode Bendahara Aktif (Akses Iuran & Kas)',
+        anggota: '👤 Mode Anggota Aktif (Transparansi Read-Only)'
+      };
+      toast(labels[role]);
+    }
+
+    function selectLoginRole(role) {
+      document.getElementById('selectedRoleInput').value = role;
+      ['ketua', 'bendahara', 'anggota'].forEach(r => {
+        document.getElementById('lcard-' + r).classList.toggle('selected', r === role);
+      });
+
+      const pinGroup = document.getElementById('pinInputGroup');
+      const memGroup = document.getElementById('memberLoginGroup');
+      const pinInput = document.getElementById('loginPinInput');
+      const pinLabel = document.getElementById('pinLabelText');
+
+      if (role === 'anggota') {
+        pinGroup.classList.add('hidden');
+        memGroup.classList.remove('hidden');
+      } else {
+        pinGroup.classList.remove('hidden');
+        memGroup.classList.add('hidden');
+        if (role === 'ketua') {
+          pinLabel.textContent = `Masukkan PIN Ketua (Demo: ${db.pinKetua})`;
+          pinInput.value = db.pinKetua;
+        } else {
+          pinLabel.textContent = `Masukkan PIN Bendahara (Demo: ${db.pinBendahara})`;
+          pinInput.value = db.pinBendahara;
+        }
+      }
+    }
+
+    function submitRoleLogin(e) {
+      e.preventDefault();
+      const role = document.getElementById('selectedRoleInput').value;
+      const pin = document.getElementById('loginPinInput').value.trim();
+
+      if (role === 'ketua' && pin !== db.pinKetua) {
+        toast('❌ PIN Ketua salah!');
+        return;
+      }
+      if (role === 'bendahara' && pin !== db.pinBendahara) {
+        toast('❌ PIN Bendahara salah!');
+        return;
+      }
+      if (role === 'anggota') {
+        db.loggedInMemberId = parseInt(document.getElementById('loginMemberSelect').value, 10);
+      }
+
+      db.currentRole = role;
+      closeModal('loginModal');
+      saveDB();
+      toast(`✅ Berhasil masuk sebagai ${role.toUpperCase()}`);
+    }
+
+    function applyRolePermissionsUI() {
+      const role = db.currentRole;
+      ['ketua', 'bendahara', 'anggota'].forEach(r => {
+        document.getElementById('rtab-' + r).classList.toggle('active', r === role);
+      });
+
+      const roleTextMap = {
+        ketua: '👑 Ketua',
+        bendahara: '💰 Bendahara',
+        anggota: '👤 Anggota'
+      };
+      document.getElementById('hdrRoleBtnText').textContent = roleTextMap[role];
+
+      const statusEl = document.getElementById('roleStatusLabel');
+      const bannerEl = document.getElementById('rolePermissionBanner');
+      const bannerTxt = document.getElementById('roleBannerText');
+      const selfBar = document.getElementById('anggotaSelfBar');
+
+      // Show/Hide Admin Controls
+      document.getElementById('btnSettingsHeader').classList.toggle('hidden', !isKetua());
+      document.getElementById('btnAddMember').classList.toggle('hidden', !canEditFinance());
+      document.getElementById('cashInputForm').classList.toggle('hidden', !canEditFinance());
+      document.getElementById('cashReadonlyNotice').classList.toggle('hidden', canEditFinance());
+
+      if (role === 'ketua') {
+        statusEl.innerHTML = `Login: <strong>👑 Ketua (Full Akses)</strong>`;
+        bannerEl.className = 'power-result';
+        bannerTxt.textContent = '⚡ Mode Ketua: Anda dapat mengelola anggota, checklist iuran, kas & pengaturan.';
+        selfBar.classList.add('hidden');
+      } else if (role === 'bendahara') {
+        statusEl.innerHTML = `Login: <strong>💰 Bendahara (Keuangan)</strong>`;
+        bannerEl.className = 'power-result';
+        bannerTxt.textContent = '💰 Mode Bendahara: Klik bulan untuk catat Lunas, tagih WA, atau catat kas.';
+        selfBar.classList.add('hidden');
+      } else {
+        const me = db.members.find(m => m.id === db.loggedInMemberId) || db.members[0];
+        statusEl.innerHTML = `Login: <strong>👤 ${me ? me.name : 'Anggota'} (Read-Only)</strong>`;
+        bannerEl.className = 'power-result warn';
+        bannerTxt.textContent = '🔒 Mode Transparansi Anggota: Anda dapat melihat laporan kas & KTA (tidak bisa ubah data).';
+        selfBar.classList.remove('hidden');
+        if (me) {
+          document.getElementById('activeAnggotaName').textContent = `${me.name} (${me.kta})`;
+          document.getElementById('ktaMemberSelect').value = me.id;
+        }
+      }
+    }
+
+    function confirmPayToTreasurerWA() {
+      const me = db.members.find(m => m.id === db.loggedInMemberId) || db.members[0];
+      const bendahara = db.members.find(m => m.role.toLowerCase().includes('bendahara')) || db.members[0];
+      const mIdx = parseInt(document.getElementById('activeMonthSelect').value, 10);
+      const msg = `Halo Bendahara *${db.name}* 🙏,\n\nSaya *${me.name}* (${me.kta}) ingin melakukan pembayaran/konfirmasi iuran bulan *${MONTHS[mIdx]} 2026* sebesar *${rp(db.fee)}*.\n\nBerikut saya lampirkan bukti transfernya. Terima kasih! 🤝`;
+      const phone = (bendahara?.phone || '081234567802').replace(/^0/, '62').replace(/\D/g, '');
+      window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, '_blank');
     }
 
     function switchView(view) {
@@ -869,6 +1192,7 @@
       const box = document.getElementById('memberListContainer');
       const q = document.getElementById('searchMember').value.toLowerCase();
       const mIdx = parseInt(document.getElementById('activeMonthSelect').value, 10);
+      const editable = canEditFinance();
 
       const list = db.members.filter(m => m.name.toLowerCase().includes(q) || m.kta.toLowerCase().includes(q));
       if (!list.length) {
@@ -879,44 +1203,88 @@
       box.innerHTML = list.map(m => {
         const isPaidMonth = !!m.paid[mIdx];
         const initials = m.name.split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase();
+        const isMe = db.currentRole === 'anggota' && m.id === db.loggedInMemberId;
+
         const pills = MONTHS.map((mName, idx) => `
-          <div class="month-pill ${m.paid[idx] ? 'paid' : ''}" onclick="toggleMonth(${m.id}, ${idx})">
+          <div class="month-pill ${m.paid[idx] ? 'paid' : ''} ${!editable ? 'readonly' : ''}"
+               onclick="toggleMonth(${m.id}, ${idx})">
             ${mName}${m.paid[idx] ? ' ✓' : ''}
           </div>
         `).join('');
 
+        let actionButtonsHTML = '';
+        if (editable) {
+          actionButtonsHTML = `
+            <button class="btn btn-ghost" onclick="previewMemberKTA(${m.id})">🪪 KTA</button>
+            ${
+              isPaidMonth
+                ? `<button class="btn" style="background:var(--brand-bg); color:var(--brand-dark); border-color:#a7f3d0;" onclick="toggleMonth(${m.id}, ${mIdx})">✅ ${MONTHS[mIdx]} Lunas</button>`
+                : `<button class="btn btn-warn" onclick="billMemberWA(${m.id}, ${mIdx})">📲 Tagih ${MONTHS[mIdx]}</button>`
+            }
+            ${
+              isKetua()
+                ? `<button class="btn btn-danger" style="flex:0 0 38px;padding:8px 0;" title="Hapus Anggota" onclick="deleteMember(${m.id})">🗑️</button>`
+                : ''
+            }
+          `;
+        } else {
+          actionButtonsHTML = `
+            <button class="btn btn-ghost" onclick="previewMemberKTA(${m.id})">🪪 Lihat KTA</button>
+            ${
+              isPaidMonth
+                ? `<span class="btn" style="background:var(--brand-bg); color:var(--brand-dark); cursor:default;">✅ ${MONTHS[mIdx]} Lunas</span>`
+                : (isMe
+                    ? `<button class="btn btn-primary" onclick="confirmPayToTreasurerWA()">💳 Bayar Iuran ${MONTHS[mIdx]}</button>`
+                    : `<span class="btn btn-warn" style="cursor:default;">⏳ Belum Bayar</span>`)
+            }
+          `;
+        }
+
         return `
-          <div class="ts-card-interactive">
+          <div class="ts-card-interactive" style="${isMe ? 'border:2px solid var(--brand);background:#f0fdf4;' : ''}">
             <div class="member-top">
               <div class="member-avatar-row">
                 <div class="ic-box">${initials}</div>
                 <div>
-                  <div class="member-name">${m.name}</div>
-                  <div class="member-meta">${m.kta} • ${m.phone}</div>
+                  <div class="member-name">${m.name} ${isMe ? '<span style="font-size:11px;color:var(--brand);">(Anda)</span>' : ''}</div>
+                  <div class="member-meta">${m.kta} • ${editable ? m.phone : m.phone.slice(0, 6) + '••••'}</div>
                 </div>
               </div>
               <span class="role-pill">${m.role}</span>
             </div>
             <div class="months-grid">${pills}</div>
-            <div class="member-actions">
-              <button class="btn btn-ghost" onclick="previewMemberKTA(${m.id})">🪪 Kartu KTA</button>
-              ${
-                isPaidMonth
-                  ? `<button class="btn" style="background:var(--brand-bg); color:var(--brand-dark); border-color:#a7f3d0;" onclick="toggleMonth(${m.id}, ${mIdx})">✅ ${MONTHS[mIdx]} Lunas</button>`
-                  : `<button class="btn btn-warn" onclick="billMemberWA(${m.id}, ${mIdx})">📲 Tagih ${MONTHS[mIdx]}</button>`
-              }
-            </div>
+            <div class="member-actions">${actionButtonsHTML}</div>
           </div>
         `;
       }).join('');
     }
 
     function toggleMonth(memberId, monthIdx) {
+      if (!canEditFinance()) {
+        toast('🔒 Hanya Ketua & Bendahara yang bisa mengubah status iuran!');
+        return;
+      }
       const m = db.members.find(x => x.id === memberId);
       if (!m) return;
       m.paid[monthIdx] = m.paid[monthIdx] ? 0 : 1;
       saveDB();
       toast(`${m.name} (${MONTHS[monthIdx]}): ${m.paid[monthIdx] ? 'LUNAS ✓' : 'Belum Bayar'}`);
+    }
+
+    function deleteMember(memberId) {
+      if (!isKetua()) {
+        toast('🔒 Hanya Ketua yang dapat menghapus anggota!');
+        return;
+      }
+      if (db.members.length <= 1) {
+        toast('Minimal harus ada 1 anggota di komunitas.');
+        return;
+      }
+      const m = db.members.find(x => x.id === memberId);
+      if (!m) return;
+      db.members = db.members.filter(x => x.id !== memberId);
+      saveDB();
+      toast(`🗑️ Anggota ${m.name} telah dihapus.`);
     }
 
     function billMemberWA(memberId, monthIdx) {
@@ -950,7 +1318,6 @@
       const colors = THEMES[db.theme || 0];
       const W = canvas.width, H = canvas.height;
 
-      // 1. Background Gradient
       const grad = ctx.createLinearGradient(0, 0, W, H);
       grad.addColorStop(0, colors[0]);
       grad.addColorStop(0.55, colors[1]);
@@ -958,12 +1325,10 @@
       ctx.fillStyle = grad;
       ctx.fillRect(0, 0, W, H);
 
-      // Decorative circles
       ctx.fillStyle = 'rgba(255,255,255,0.07)';
       ctx.beginPath(); ctx.arc(W - 60, 60, 160, 0, Math.PI * 2); ctx.fill();
       ctx.beginPath(); ctx.arc(80, H - 30, 130, 0, Math.PI * 2); ctx.fill();
 
-      // 2. Top Header Bar
       ctx.fillStyle = '#ffffff';
       ctx.beginPath();
       ctx.roundRect(44, 38, 68, 68, 16);
@@ -983,12 +1348,10 @@
       ctx.font = '700 29px "Oswald", sans-serif';
       ctx.fillText(db.name.toUpperCase().substring(0, 30), 130, 97);
 
-      // Divider line
       ctx.strokeStyle = 'rgba(255,255,255,0.2)';
       ctx.lineWidth = 2;
       ctx.beginPath(); ctx.moveTo(44, 128); ctx.lineTo(W - 44, 128); ctx.stroke();
 
-      // 3. Avatar Initials Box
       ctx.fillStyle = 'rgba(255,255,255,0.18)';
       ctx.beginPath(); ctx.roundRect(44, 175, 140, 140, 26); ctx.fill();
       ctx.strokeStyle = 'rgba(255,255,255,0.6)';
@@ -1001,7 +1364,6 @@
       ctx.textAlign = 'center';
       ctx.fillText(initials, 114, 263);
 
-      // 4. Member Details
       ctx.textAlign = 'left';
       ctx.fillStyle = '#fde047';
       ctx.font = '700 23px monospace';
@@ -1015,7 +1377,6 @@
       ctx.font = '600 21px "Plus Jakarta Sans", sans-serif';
       ctx.fillText(`Jabatan: ${m.role}  •  WA: ${m.phone}`, 212, 296);
 
-      // 5. QR Matrix Box
       const qrX = W - 184, qrY = 175, qrSize = 140;
       ctx.fillStyle = '#ffffff';
       ctx.beginPath(); ctx.roundRect(qrX, qrY, qrSize, qrSize, 16); ctx.fill();
@@ -1033,7 +1394,6 @@
         }
       }
 
-      // 6. Bottom Footer
       ctx.fillStyle = 'rgba(0,0,0,0.25)';
       ctx.fillRect(0, H - 74, W, 74);
 
@@ -1075,7 +1435,6 @@
       window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, '_blank');
     }
 
-    // Export Data Anggota & Status Iuran ke File Excel (.CSV)
     function exportToExcelCSV() {
       const headers = ['No KTA', 'Nama Anggota', 'Jabatan', 'WhatsApp', ...MONTHS.map(m => 'Iuran ' + m)];
       const rows = db.members.map(m => [
@@ -1093,7 +1452,6 @@
       toast('📥 Data berhasil diekspor ke Excel (.CSV)!');
     }
 
-    // Simulasi AI Scan KTP (Fitur Viral Tersistem)
     function simulateKTPScan(input) {
       if (!input.files || !input.files[0]) return;
       toast('🤖 AI Tersistem sedang membaca foto KTP...');
@@ -1152,6 +1510,10 @@ _Dikelola rapi dengan Tersistem.com_`;
 
     function addTransaction(e) {
       e.preventDefault();
+      if (!canEditFinance()) {
+        toast('🔒 Hanya Ketua & Bendahara yang dapat mencatat kas!');
+        return;
+      }
       const type = document.getElementById('txType').value;
       const amount = parseInt(document.getElementById('txAmount').value, 10);
       const desc = document.getElementById('txDesc').value.trim();
@@ -1175,9 +1537,21 @@ _Dikelola rapi dengan Tersistem.com_`;
 
     function openModal(id) {
       if (id === 'settingsModal') {
+        if (!isKetua()) {
+          toast('🔒 Hanya Role Ketua yang bisa mengubah pengaturan!');
+          return;
+        }
         document.getElementById('setCommName').value = db.name;
         document.getElementById('setCommFee').value = db.fee;
         document.getElementById('setCommPrefix').value = db.prefix;
+        document.getElementById('setPinKetua').value = db.pinKetua;
+        document.getElementById('setPinBendahara').value = db.pinBendahara;
+      }
+      if (id === 'loginModal') {
+        const memSelect = document.getElementById('loginMemberSelect');
+        memSelect.innerHTML = db.members.map(m => `<option value="${m.id}">${m.kta} — ${m.name}</option>`).join('');
+        memSelect.value = db.loggedInMemberId;
+        selectLoginRole(db.currentRole);
       }
       document.getElementById(id).classList.add('show');
     }
@@ -1188,6 +1562,7 @@ _Dikelola rapi dengan Tersistem.com_`;
 
     function saveMember(e) {
       e.preventDefault();
+      if (!canEditFinance()) return;
       const name = document.getElementById('inName').value.trim();
       const role = document.getElementById('inRole').value.trim();
       const phone = document.getElementById('inPhone').value.trim();
@@ -1208,12 +1583,15 @@ _Dikelola rapi dengan Tersistem.com_`;
 
     function saveSettings(e) {
       e.preventDefault();
+      if (!isKetua()) return;
       db.name = document.getElementById('setCommName').value.trim();
       db.fee = parseInt(document.getElementById('setCommFee').value, 10) || 50000;
       db.prefix = document.getElementById('setCommPrefix').value.trim();
+      db.pinKetua = document.getElementById('setPinKetua').value.trim() || '1111';
+      db.pinBendahara = document.getElementById('setPinBendahara').value.trim() || '2222';
       closeModal('settingsModal');
       saveDB();
-      toast('⚙️ Pengaturan disimpan!');
+      toast('⚙️ Pengaturan komunitas & PIN berhasil disimpan!');
     }
 
     function refreshUI() {
@@ -1235,6 +1613,7 @@ _Dikelola rapi dengan Tersistem.com_`;
       sel.innerHTML = db.members.map(m => `<option value="${m.id}">${m.kta} — ${m.name}</option>`).join('');
       if (cur && db.members.some(m => String(m.id) === String(cur))) sel.value = cur;
 
+      applyRolePermissionsUI();
       renderMemberList();
       renderKas();
       drawIDCard();
