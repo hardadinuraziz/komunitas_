@@ -9,10 +9,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
-    /* ==========================================================================
-       TERSISTEM OFFICIAL DESIGN SYSTEM (tersistem.com)
-       Emerald Primary (#059669 / #0f7a5a) + Warm Gold Accent (#d8a13c)
-       ========================================================================== */
     :root {
       --brand: #059669;
       --brand-deep: #0f7a5a;
@@ -44,13 +40,155 @@
       color: var(--ink);
       line-height: 1.55;
       -webkit-font-smoothing: antialiased;
-      padding-bottom: 88px;
     }
 
     .oswald { font-family: "Oswald", sans-serif; letter-spacing: -0.01em; }
-    .container { max-width: 580px; margin: 0 auto; padding: 0 14px; }
+    .container { max-width: 580px; margin: 0 auto; padding: 0 14px 88px; }
+    .hidden { display: none !important; }
 
-    /* 1. Sticky Glass Header (Tersistem Header) */
+    /* ==========================================================================
+       FULL-SCREEN REAL LOGIN GATE (Tersistem Auth Screen)
+       ========================================================================== */
+    .auth-screen {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px 16px;
+      background: radial-gradient(circle at top right, #d1fae5 0%, #faf8f3 45%, #f1f5f9 100%);
+    }
+    .auth-card {
+      width: 100%;
+      max-width: 420px;
+      background: #ffffff;
+      border: 1px solid var(--border-warm);
+      border-radius: 24px;
+      padding: 28px 24px;
+      box-shadow: 0 20px 45px -15px rgba(15, 23, 42, 0.12);
+      animation: fadeSlideIn 0.25s ease-out;
+    }
+    .auth-brand-header {
+      text-align: center;
+      margin-bottom: 22px;
+    }
+    .auth-logo-badge {
+      width: 52px;
+      height: 52px;
+      border-radius: 15px;
+      background: linear-gradient(135deg, #0b5e45, #059669);
+      color: #fff;
+      font-weight: 800;
+      font-size: 26px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 20px rgba(5, 150, 105, 0.3);
+      margin-bottom: 12px;
+    }
+    .auth-eyebrow {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--brand);
+      display: block;
+      margin-bottom: 4px;
+    }
+    .auth-title {
+      font-family: "Oswald", sans-serif;
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--ink-warm);
+      line-height: 1.15;
+    }
+    .auth-subtitle {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+    .auth-error {
+      background: var(--danger-bg);
+      border: 1px solid #fecaca;
+      color: var(--danger);
+      padding: 10px 12px;
+      border-radius: 10px;
+      font-size: 12.5px;
+      font-weight: 700;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .password-wrap {
+      position: relative;
+    }
+    .password-toggle {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--muted);
+      cursor: pointer;
+      padding: 4px 6px;
+    }
+
+    /* Collapsible Demo Credentials Helper */
+    details.demo-helper {
+      margin-top: 20px;
+      background: #f8fafc;
+      border: 1px dashed var(--line);
+      border-radius: 12px;
+      padding: 10px 12px;
+      font-size: 12px;
+    }
+    details.demo-helper summary {
+      font-weight: 700;
+      color: var(--muted);
+      cursor: pointer;
+      user-select: none;
+      list-style: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    details.demo-helper summary::after {
+      content: "▼";
+      font-size: 10px;
+    }
+    details.demo-helper[open] summary::after {
+      content: "▲";
+    }
+    .demo-cred-list {
+      margin-top: 10px;
+      padding-top: 8px;
+      border-top: 1px solid var(--line);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .demo-cred-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #fff;
+      border: 1px solid var(--line);
+      padding: 7px 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: border-color 0.15s ease;
+    }
+    .demo-cred-item:hover {
+      border-color: var(--brand);
+    }
+
+    /* ==========================================================================
+       MAIN APPLICATION UI (Shown only after authenticated login)
+       ========================================================================== */
     header.ts-header {
       position: sticky;
       top: 0;
@@ -92,11 +230,7 @@
       box-shadow: 0 3px 10px rgba(5, 150, 105, 0.25);
       flex-shrink: 0;
     }
-    .ts-logo-text {
-      display: flex;
-      flex-direction: column;
-      min-width: 0;
-    }
+    .ts-logo-text { display: flex; flex-direction: column; min-width: 0; }
     .ts-logo-brand {
       font-size: 10.5px;
       font-weight: 700;
@@ -115,61 +249,42 @@
       text-overflow: ellipsis;
     }
 
-    /* Role Switcher Bar (Top Interactive Strip) */
-    .role-strip {
+    /* User Session Bar */
+    .session-bar {
       background: #fff;
       border-bottom: 1px solid var(--border-warm);
       padding: 8px 14px;
     }
-    .role-strip-inner {
+    .session-bar-inner {
       max-width: 580px;
       margin: 0 auto;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 8px;
-      flex-wrap: wrap;
     }
-    .role-current-badge {
-      display: inline-flex;
+    .session-user-info {
+      display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 8px;
       font-size: 12px;
-      font-weight: 700;
       color: var(--ink);
     }
-    .role-dot {
-      width: 8px;
-      height: 8px;
+    .session-avatar {
+      width: 26px;
+      height: 26px;
       border-radius: 50%;
-      background: var(--brand);
-      display: inline-block;
-    }
-    .role-switcher-pills {
-      display: flex;
-      gap: 4px;
-      background: #f1f5f9;
-      padding: 3px;
-      border-radius: 999px;
-    }
-    .role-tab {
-      border: none;
-      background: transparent;
-      padding: 4px 10px;
-      border-radius: 999px;
+      background: var(--brand-bg);
+      color: var(--brand-dark);
+      font-weight: 800;
       font-size: 11px;
-      font-weight: 700;
-      color: var(--muted);
-      cursor: pointer;
-      transition: all 0.15s ease;
-    }
-    .role-tab.active {
-      background: var(--brand-deep);
-      color: #fff;
-      box-shadow: 0 2px 6px rgba(15, 122, 90, 0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid #a7f3d0;
     }
 
-    /* 2. Tersistem Public Hero Balance Banner (.pub-hero) */
+    /* Tersistem Public Hero Balance Banner (.pub-hero) */
     .pub-hero {
       background: linear-gradient(135deg, #0b5e45 0%, #0f7a5a 55%, #059669 100%);
       color: #fff;
@@ -224,7 +339,6 @@
       margin-top: 2px;
     }
 
-    /* 3-Column Mini KPI Strip inside Hero */
     .hero-kpis {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -252,7 +366,7 @@
       margin-top: 1px;
     }
 
-    /* 3. Tersistem Signature Cards & Hover Lift Animation (.18s) */
+    /* Cards & Hover Lift Animation (.18s) */
     .ts-card {
       background: var(--bg);
       border: 1px solid var(--border-warm);
@@ -276,7 +390,6 @@
       transform: translateY(-3px);
     }
 
-    /* Tersistem Power Result Callout Box */
     .power-result {
       background: var(--brand-light);
       border-left: 3px solid var(--brand-deep);
@@ -311,18 +424,15 @@
       color: var(--ink-warm);
       line-height: 1.2;
     }
-    .section-sub {
-      font-size: 12.5px;
-      color: var(--muted);
-    }
+    .section-sub { font-size: 12.5px; color: var(--muted); }
 
-    /* 4. Tersistem Buttons & Micro-Interactions */
+    /* Buttons */
     .btn {
       display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 6px;
-      padding: 10px 16px;
+      padding: 11px 16px;
       border-radius: 10px;
       font-weight: 700;
       font-size: 13px;
@@ -369,10 +479,10 @@
     .toolbar { display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
     input, select, textarea {
       width: 100%;
-      padding: 10px 12px;
+      padding: 11px 13px;
       border: 1px solid var(--line);
-      border-radius: 10px;
-      font-size: 13.5px;
+      border-radius: 11px;
+      font-size: 14px;
       font-family: inherit;
       background: #f8fafc;
       color: var(--ink);
@@ -385,7 +495,7 @@
       box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.12);
     }
 
-    /* Member Item Elements */
+    /* Member Item */
     .member-top {
       display: flex;
       justify-content: space-between;
@@ -393,11 +503,7 @@
       gap: 8px;
       margin-bottom: 10px;
     }
-    .member-avatar-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
+    .member-avatar-row { display: flex; align-items: center; gap: 10px; }
     .ic-box {
       width: 40px;
       height: 40px;
@@ -424,7 +530,6 @@
       white-space: nowrap;
     }
 
-    /* 6-Month Matrix Pills */
     .months-grid {
       display: grid;
       grid-template-columns: repeat(6, 1fr);
@@ -450,14 +555,12 @@
       color: var(--brand-dark);
       border-color: #6ee7b7;
     }
-    .month-pill.readonly {
-      cursor: default;
-    }
+    .month-pill.readonly { cursor: default; }
 
     .member-actions { display: flex; gap: 6px; }
     .member-actions .btn { flex: 1; padding: 8px 10px; font-size: 12px; }
 
-    /* KTA Canvas & Theme Picker */
+    /* KTA Canvas */
     .canvas-wrap {
       width: 100%;
       overflow: hidden;
@@ -465,7 +568,6 @@
       box-shadow: 0 12px 28px -8px rgba(15, 23, 42, 0.22);
       margin: 10px 0 14px;
       background: #0b5e45;
-      transition: transform 0.18s ease;
     }
     canvas#ktaCanvas { width: 100%; height: auto; display: block; }
     .theme-picker { display: flex; gap: 8px; margin: 8px 0 12px; }
@@ -483,7 +585,6 @@
       box-shadow: 0 4px 10px rgba(0,0,0,0.12);
     }
 
-    /* Cashflow Rows */
     .tx-row {
       display: flex;
       justify-content: space-between;
@@ -512,7 +613,7 @@
     }
     .nav-item {
       flex: 1;
-      max-width: 150px;
+      max-width: 160px;
       background: none;
       border: none;
       padding: 7px 4px;
@@ -533,7 +634,7 @@
       background: var(--brand-bg);
     }
 
-    /* Modals & Full-Screen Login Modal */
+    /* Modals */
     .modal-backdrop {
       position: fixed;
       inset: 0;
@@ -561,42 +662,21 @@
       from { opacity: 0; transform: translateY(10px) scale(0.98); }
       to { opacity: 1; transform: translateY(0) scale(1); }
     }
-    .form-group { margin-bottom: 11px; }
+    .form-group { margin-bottom: 12px; }
     .form-group label {
       display: block;
-      font-size: 12px;
+      font-size: 12.5px;
       font-weight: 700;
-      margin-bottom: 4px;
+      margin-bottom: 5px;
       color: var(--ink);
     }
 
-    /* Role Login Cards inside Login Modal */
-    .login-role-card {
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      padding: 12px;
-      margin-bottom: 8px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      transition: all 0.16s ease;
-    }
-    .login-role-card:hover, .login-role-card.selected {
-      border-color: var(--brand);
-      background: var(--brand-bg);
-      transform: translateY(-2px);
-    }
-
-    /* View Transition Animation */
     .view-panel { animation: fadeSlideIn 0.2s ease-out; }
     @keyframes fadeSlideIn {
       from { opacity: 0; transform: translateY(6px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* Toast */
     #toast {
       position: fixed;
       top: 14px;
@@ -615,9 +695,7 @@
       border: 1px solid rgba(255,255,255,0.12);
     }
     #toast.show { transform: translateX(-50%) translateY(0); }
-    .hidden { display: none !important; }
 
-    /* Tersistem Mini Footer */
     .ts-footer {
       text-align: center;
       font-size: 12px;
@@ -636,294 +714,337 @@
   <!-- Toast Notification -->
   <div id="toast">✅ Berhasil disimpan</div>
 
-  <!-- 1. Tersistem Sticky Glass Header -->
-  <header class="ts-header">
-    <nav class="ts-nav">
-      <div class="ts-logo">
-        <div class="ts-logo-box">T</div>
-        <div class="ts-logo-text">
-          <span class="ts-logo-brand">Tersistem.com</span>
-          <span class="ts-logo-title" id="hdrName">Komunitas Motor Nusantara</span>
-        </div>
-      </div>
-      <div style="display:flex; gap:6px; align-items:center;">
-        <button id="btnExportHeader" class="btn btn-ghost" style="padding:6px 10px; font-size:11.5px;" onclick="exportToExcelCSV()" title="Download Excel CSV">
-          📥 Excel
-        </button>
-        <button id="btnSettingsHeader" class="btn btn-ghost" style="padding:6px 10px; font-size:11.5px;" onclick="openModal('settingsModal')">
-          ⚙️ Setup
-        </button>
-        <button class="btn btn-primary btn-pill" style="padding:6px 12px; font-size:11.5px;" onclick="openModal('loginModal')">
-          🔐 <span id="hdrRoleBtnText">Ketua</span>
-        </button>
-      </div>
-    </nav>
-  </header>
-
-  <!-- Interactive Role & Hak Akses Switcher Strip -->
-  <div class="role-strip">
-    <div class="role-strip-inner">
-      <div class="role-current-badge">
-        <span class="role-dot"></span>
-        <span id="roleStatusLabel">Login sebagai: <strong>👑 Ketua (Full Akses)</strong></span>
-      </div>
-      <div class="role-switcher-pills" title="Klik untuk simulasi ganti Role Login">
-        <button class="role-tab active" id="rtab-ketua" onclick="quickSwitchRole('ketua')">👑 Ketua</button>
-        <button class="role-tab" id="rtab-bendahara" onclick="quickSwitchRole('bendahara')">💰 Bendahara</button>
-        <button class="role-tab" id="rtab-anggota" onclick="quickSwitchRole('anggota')">👤 Anggota</button>
-      </div>
-    </div>
-  </div>
-
-  <main class="container">
-
-    <!-- 2. Tersistem Signature Emerald & Gold Balance Banner (.pub-hero) -->
-    <div class="pub-hero">
-      <div class="pub-top">
-        <div>
-          <div class="pub-saldo-label">SALDO KAS KOMUNITAS TRANSPARAN</div>
-          <div class="pub-saldo" id="kpiSaldo">Rp 0</div>
-        </div>
-        <span class="eyebrow-pill" id="hdrSub">Iuran: Rp 50.000/bln</span>
+  <!-- ==========================================================================
+       1. REAL AUTHENTICATION LOGIN PAGE (Shown before entering dashboard)
+       ========================================================================== -->
+  <div id="authScreen" class="auth-screen">
+    <div class="auth-card">
+      <div class="auth-brand-header">
+        <div class="auth-logo-badge">T</div>
+        <span class="auth-eyebrow">Ekosistem Tersistem.com</span>
+        <h1 class="auth-title" id="authCommTitle">KOMUNITAS MOTOR NUSANTARA</h1>
+        <p class="auth-subtitle">Silakan masuk menggunakan Nomor WA / ID Akun &amp; Kata Sandi</p>
       </div>
 
-      <div class="hero-kpis">
-        <div class="hero-kpi-item">
-          <div class="hero-kpi-label">Total Anggota</div>
-          <div class="hero-kpi-val" id="kpiMembers">0 Orang</div>
-        </div>
-        <div class="hero-kpi-item">
-          <div class="hero-kpi-label" id="kpiPaidLabel">Lunas (Jan)</div>
-          <div class="hero-kpi-val" id="kpiPaid" style="color:#6ee7b7;">0 / 0</div>
-        </div>
-        <div class="hero-kpi-item">
-          <div class="hero-kpi-label">Total Iuran</div>
-          <div class="hero-kpi-val" id="kpiIuranTotal">Rp 0</div>
-        </div>
+      <div id="authErrorBox" class="auth-error hidden">
+        <span>⚠️</span>
+        <span id="authErrorText">ID Akun atau Kata Sandi tidak sesuai.</span>
       </div>
-    </div>
 
-    <!-- ==================== VIEW 1: ANGGOTA & IURAN ==================== -->
-    <section id="view-members" class="view-panel">
-      <div class="ts-card">
-        <div class="section-head">
-          <div>
-            <h2 class="section-title" id="membersSectionTitle">DAFTAR ANGGOTA &amp; IURAN</h2>
-            <p class="section-sub" id="membersSectionSub">Klik tombol bulan untuk catat Lunas / Belum Bayar</p>
-          </div>
-          <button id="btnAddMember" class="btn btn-primary btn-pill" onclick="openModal('memberModal')">
-            + Anggota Baru
-          </button>
+      <form onsubmit="handleRealLogin(event)">
+        <div class="form-group">
+          <label for="loginIdentifier">Nomor WhatsApp / Username / No. KTA</label>
+          <input
+            type="text"
+            id="loginIdentifier"
+            required
+            autocomplete="username"
+            placeholder="Contoh: 081234567801 atau KMN-26-001"
+          />
         </div>
 
-        <!-- Dynamic Role Info Banner -->
-        <div class="power-result" id="rolePermissionBanner">
-          <span id="roleBannerText">⚡ Mode Pengurus: Klik nama bulan untuk ubah status Lunas / Belum.</span>
-          <button onclick="copyReportWA()" style="background:none;border:none;color:var(--brand-deep);font-weight:800;font-size:12px;cursor:pointer;text-decoration:underline;white-space:nowrap;">
-            Salin WA →
-          </button>
-        </div>
-
-        <!-- Member Self-View Selector (Only shown when logged in as Anggota) -->
-        <div id="anggotaSelfBar" class="hidden" style="background:#f8fafc;border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:12px;">
-          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;">
-            <div>
-              <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;">Akun Anggota Aktif:</div>
-              <div style="font-size:14px;font-weight:800;color:var(--ink);" id="activeAnggotaName">Dimas Saputra (KMN-26-003)</div>
-            </div>
-            <button class="btn btn-primary btn-pill" style="padding:7px 14px;font-size:12px;" onclick="confirmPayToTreasurerWA()">
-              💳 Konfirmasi Bayar Iuran via WA
+        <div class="form-group">
+          <label for="loginPassword">Kata Sandi / PIN Keamanan</label>
+          <div class="password-wrap">
+            <input
+              type="password"
+              id="loginPassword"
+              required
+              autocomplete="current-password"
+              placeholder="Masukkan kata sandi / PIN"
+              style="padding-right: 68px;"
+            />
+            <button type="button" class="password-toggle" onclick="togglePasswordVisibility()" id="btnTogglePwd">
+              Lihat
             </button>
           </div>
         </div>
 
-        <div class="toolbar">
-          <select id="activeMonthSelect" onchange="refreshUI()" style="flex:1;">
-            <option value="0">Bulan Aktif: Januari</option>
-            <option value="1">Bulan Aktif: Februari</option>
-            <option value="2">Bulan Aktif: Maret</option>
-            <option value="3">Bulan Aktif: April</option>
-            <option value="4">Bulan Aktif: Mei</option>
-            <option value="5">Bulan Aktif: Juni</option>
-          </select>
-          <input type="search" id="searchMember" oninput="renderMemberList()" placeholder="🔍 Cari nama / No. KTA..." style="flex:1.2;" />
+        <div style="display:flex;align-items:center;justify-content:space-between;margin: 12px 0 18px;font-size:12px;">
+          <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-weight:600;color:var(--muted);">
+            <input type="checkbox" id="rememberSession" checked style="width:15px;height:15px;" />
+            Ingat sesi masuk saya
+          </label>
+          <a href="javascript:void(0)" onclick="forgotPinAlert()" style="color:var(--brand-deep);font-weight:700;text-decoration:none;">
+            Lupa Sandi?
+          </a>
         </div>
 
-        <div id="memberListContainer"></div>
-      </div>
-    </section>
-
-    <!-- ==================== VIEW 2: KARTU ANGGOTA (KTA DIGITAL) ==================== -->
-    <section id="view-card" class="view-panel hidden">
-      <div class="ts-card">
-        <div class="section-head">
-          <div>
-            <h2 class="section-title">🪪 CETAK KARTU ANGGOTA (KTA)</h2>
-            <p class="section-sub">Desain resmi ber-QR Matrix, siap simpan PNG atau kirim ke WA</p>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label>Pilih Anggota Komunitas</label>
-          <select id="ktaMemberSelect" onchange="drawIDCard()"></select>
-        </div>
-
-        <div class="form-group">
-          <label>Tema Warna Kartu Resmi</label>
-          <div class="theme-picker">
-            <div class="theme-dot active" style="background:linear-gradient(135deg,#064e3b,#059669)" onclick="setTheme(0, this)" title="Tersistem Emerald"></div>
-            <div class="theme-dot" style="background:linear-gradient(135deg,#0f172a,#2563eb)" onclick="setTheme(1, this)" title="Royal Blue"></div>
-            <div class="theme-dot" style="background:linear-gradient(135deg,#3b0764,#d97706)" onclick="setTheme(2, this)" title="Purple Gold"></div>
-            <div class="theme-dot" style="background:linear-gradient(135deg,#450a0a,#ef4444)" onclick="setTheme(3, this)" title="Crimson Red"></div>
-          </div>
-        </div>
-
-        <!-- Fast Native HTML5 Canvas (CR80 Aspect Ratio 856x540) -->
-        <div class="canvas-wrap">
-          <canvas id="ktaCanvas" width="856" height="540"></canvas>
-        </div>
-
-        <div style="display:flex; gap:8px;">
-          <button class="btn btn-primary btn-pill" style="flex:1.3;" onclick="downloadCanvasPNG()">
-            📥 Download KTA (PNG)
-          </button>
-          <button class="btn btn-ghost btn-pill" style="flex:1;" onclick="sendKTAWhatsApp()">
-            📲 Kirim ke WA
-          </button>
-        </div>
-      </div>
-    </section>
-
-    <!-- ==================== VIEW 3: KAS & LAPORAN GRUP WA ==================== -->
-    <section id="view-kas" class="view-panel hidden">
-      <div class="ts-card">
-        <div class="section-head">
-          <div>
-            <h2 class="section-title">📋 GENERATOR LAPORAN GRUP WA</h2>
-            <p class="section-sub">Transparansi kas 100% tanpa perlu ketik manual di WhatsApp</p>
-          </div>
-          <button class="btn btn-ghost" style="padding:7px 12px;font-size:12px;" onclick="exportToExcelCSV()">
-            📥 Export Excel
-          </button>
-        </div>
-
-        <textarea id="waTextOutput" rows="11" readonly style="font-family:monospace; font-size:12px; background:#0f172a; color:#6ee7b7; border:none; margin-bottom:12px; border-radius:14px; padding:14px;"></textarea>
-
-        <button class="btn btn-primary btn-pill btn-block" onclick="copyReportWA()">
-          📋 Salin Laporan &amp; Bagikan ke Grup WA
+        <button type="submit" class="btn btn-primary btn-pill btn-block" style="padding:13px 20px;font-size:14px;">
+          🔐 Masuk ke Sistem Komunitas
         </button>
-      </div>
+      </form>
 
-      <div class="ts-card">
-        <div class="section-head">
-          <div>
-            <h2 class="section-title">💰 CATAT PEMASUKAN &amp; PENGELUARAN</h2>
-            <p class="section-sub">Iuran bulanan anggota sudah otomatis masuk ke saldo kas</p>
+      <!-- Collapsible Demo Helper for Testing (Optional for testers) -->
+      <details class="demo-helper">
+        <summary>🔑 Lihat Akun Terdaftar (Untuk Testing)</summary>
+        <div class="demo-cred-list">
+          <div class="demo-cred-item" onclick="fillLoginInput('081234567801', '1111')">
+            <div>
+              <strong>👑 Ketua (Budi Santoso)</strong>
+              <div style="font-size:11px;color:var(--muted);">ID: 081234567801 • Sandi: 1111</div>
+            </div>
+            <span style="font-size:11px;font-weight:700;color:var(--brand);">Isi Form →</span>
+          </div>
+          <div class="demo-cred-item" onclick="fillLoginInput('081234567802', '2222')">
+            <div>
+              <strong>💰 Bendahara (Rina Wijaya)</strong>
+              <div style="font-size:11px;color:var(--muted);">ID: 081234567802 • Sandi: 2222</div>
+            </div>
+            <span style="font-size:11px;font-weight:700;color:var(--brand);">Isi Form →</span>
+          </div>
+          <div class="demo-cred-item" onclick="fillLoginInput('KMN-26-003', '1234')">
+            <div>
+              <strong>👤 Anggota (Dimas Saputra)</strong>
+              <div style="font-size:11px;color:var(--muted);">ID: KMN-26-003 • Sandi: 1234</div>
+            </div>
+            <span style="font-size:11px;font-weight:700;color:var(--brand);">Isi Form →</span>
           </div>
         </div>
+      </details>
+    </div>
 
-        <!-- Cash Input Form (Hidden for Read-Only Anggota Role) -->
-        <form id="cashInputForm" onsubmit="addTransaction(event)" style="display:grid; grid-template-columns: 1fr 1fr; gap:8px; margin-bottom:14px;">
-          <select id="txType">
-            <option value="out">🔴 Pengeluaran Kas</option>
-            <option value="in">🟢 Pemasukan Lain</option>
-          </select>
-          <input type="number" id="txAmount" required placeholder="Nominal (Rp)" />
-          <input type="text" id="txDesc" required placeholder="Keterangan (mis: Konsumsi Kopdar / Cetak Banner)" style="grid-column: span 2;" />
-          <button type="submit" class="btn btn-primary" style="grid-column: span 2;">+ Simpan Catatan Kas</button>
-        </form>
-
-        <div id="cashReadonlyNotice" class="power-result warn hidden">
-          <span>🔒 Mode Anggota (Transparansi Publik): Hanya Ketua &amp; Bendahara yang dapat menambah atau mengubah catatan kas.</span>
-        </div>
-
-        <div id="txHistoryList"></div>
-      </div>
-    </section>
-
-    <footer class="ts-footer">
-      Bagian dari ekosistem <a href="https://tersistem.com" target="_blank">Tersistem.com</a> — Usaha &amp; Komunitas Lebih Rapi Tanpa Ribet
-    </footer>
-
-  </main>
-
-  <!-- Mobile Bottom Navigation Bar -->
-  <nav class="bottom-nav">
-    <button class="nav-item active" id="nav-members" onclick="switchView('members')">
-      <span class="icon">👥</span>
-      <span>Iuran Anggota</span>
-    </button>
-    <button class="nav-item" id="nav-card" onclick="switchView('card')">
-      <span class="icon">🪪</span>
-      <span>Kartu KTA</span>
-    </button>
-    <button class="nav-item" id="nav-kas" onclick="switchView('kas')">
-      <span class="icon">📊</span>
-      <span>Kas &amp; Laporan</span>
-    </button>
-    <button class="nav-item" id="nav-login" onclick="openModal('loginModal')">
-      <span class="icon">🔐</span>
-      <span>Ganti Role</span>
-    </button>
-  </nav>
-
-  <!-- ==================== MODAL: LOGIN & MULTI-ROLE ACCESS ==================== -->
-  <div id="loginModal" class="modal-backdrop">
-    <div class="modal-box">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
-        <h3 class="section-title">🔐 LOGIN &amp; HAK AKSES ROLE</h3>
-        <button onclick="closeModal('loginModal')" style="background:none;border:none;font-size:18px;cursor:pointer;color:var(--muted);">✕</button>
-      </div>
-      <p class="section-sub" style="margin-bottom:14px;">Pilih Role untuk masuk menggunakan PIN Pengurus atau Nomor KTA Anggota.</p>
-
-      <!-- 3 Role Cards -->
-      <div class="login-role-card" onclick="selectLoginRole('ketua')" id="lcard-ketua">
-        <div>
-          <div style="font-weight:800;font-size:14px;color:var(--ink);">👑 Ketua / Admin Utama</div>
-          <div style="font-size:11.5px;color:var(--muted);">Full Akses: Edit Komunitas, Tambah/Hapus Anggota, Iuran &amp; Kas</div>
-        </div>
-        <span class="role-pill">PIN: 1111</span>
-      </div>
-
-      <div class="login-role-card" onclick="selectLoginRole('bendahara')" id="lcard-bendahara">
-        <div>
-          <div style="font-weight:800;font-size:14px;color:var(--ink);">💰 Bendahara Komunitas</div>
-          <div style="font-size:11.5px;color:var(--muted);">Akses Keuangan: Checklist Lunas, Tagih WA, Catat Kas &amp; Laporan</div>
-        </div>
-        <span class="role-pill">PIN: 2222</span>
-      </div>
-
-      <div class="login-role-card" onclick="selectLoginRole('anggota')" id="lcard-anggota">
-        <div>
-          <div style="font-weight:800;font-size:14px;color:var(--ink);">👤 Anggota (Mode Transparan)</div>
-          <div style="font-size:11.5px;color:var(--muted);">Lihat KTA Sendiri, Cek Saldo Kas &amp; Konfirmasi Bayar (Read-Only)</div>
-        </div>
-        <span class="role-pill">Pilih Nama</span>
-      </div>
-
-      <!-- Dynamic Auth Input Area -->
-      <form onsubmit="submitRoleLogin(event)" style="margin-top:14px;padding-top:12px;border-top:1px solid var(--line);">
-        <input type="hidden" id="selectedRoleInput" value="ketua" />
-
-        <div id="pinInputGroup" class="form-group">
-          <label id="pinLabelText">Masukkan PIN Ketua (Default Demo: 1111)</label>
-          <input type="password" id="loginPinInput" value="1111" placeholder="Masukkan 4 digit PIN" />
-        </div>
-
-        <div id="memberLoginGroup" class="form-group hidden">
-          <label>Masuk Sebagai Anggota:</label>
-          <select id="loginMemberSelect"></select>
-        </div>
-
-        <div style="display:flex;gap:8px;margin-top:12px;">
-          <button type="button" class="btn btn-ghost" style="flex:1;" onclick="closeModal('loginModal')">Tutup</button>
-          <button type="submit" class="btn btn-primary" style="flex:1.5;">🔐 Masuk Sekarang</button>
-        </div>
-      </form>
+    <div class="ts-footer" style="margin-top:16px;">
+      Ditenagai oleh <a href="https://tersistem.com" target="_blank">Tersistem.com</a> • Keamanan Akses Terenkripsi
     </div>
   </div>
 
-  <!-- MODAL: TAMBAH ANGGOTA (+ AI KTP Autofill Demo) -->
+  <!-- ==========================================================================
+       2. PROTECTED APPLICATION SHELL (Hidden until login succeeds)
+       ========================================================================== -->
+  <div id="appShell" class="hidden">
+
+    <!-- Sticky Glass Header -->
+    <header class="ts-header">
+      <nav class="ts-nav">
+        <div class="ts-logo">
+          <div class="ts-logo-box">T</div>
+          <div class="ts-logo-text">
+            <span class="ts-logo-brand">Tersistem.com</span>
+            <span class="ts-logo-title" id="hdrName">Komunitas Motor Nusantara</span>
+          </div>
+        </div>
+        <div style="display:flex; gap:6px; align-items:center;">
+          <button id="btnExportHeader" class="btn btn-ghost" style="padding:6px 10px; font-size:11.5px;" onclick="exportToExcelCSV()" title="Download Excel CSV">
+            📥 Excel
+          </button>
+          <button id="btnSettingsHeader" class="btn btn-ghost" style="padding:6px 10px; font-size:11.5px;" onclick="openModal('settingsModal')">
+            ⚙️ Setup
+          </button>
+          <button class="btn btn-danger btn-pill" style="padding:6px 12px; font-size:11.5px;" onclick="handleLogout()" title="Keluar dari sesi">
+            🚪 Keluar
+          </button>
+        </div>
+      </nav>
+    </header>
+
+    <!-- Active Authenticated User Session Strip -->
+    <div class="session-bar">
+      <div class="session-bar-inner">
+        <div class="session-user-info">
+          <div class="session-avatar" id="sessAvatar">BS</div>
+          <div>
+            <span style="color:var(--muted);">Masuk sebagai:</span>
+            <strong id="sessUserName">Budi Santoso</strong>
+            <span class="role-pill" id="sessRoleBadge" style="margin-left:4px;">Ketua Umum</span>
+          </div>
+        </div>
+        <span style="font-size:11px;color:var(--muted);font-family:monospace;" id="sessKtaCode">KMN-26-001</span>
+      </div>
+    </div>
+
+    <main class="container">
+
+      <!-- Tersistem Signature Emerald & Gold Balance Banner (.pub-hero) -->
+      <div class="pub-hero">
+        <div class="pub-top">
+          <div>
+            <div class="pub-saldo-label">SALDO KAS KOMUNITAS TRANSPARAN</div>
+            <div class="pub-saldo" id="kpiSaldo">Rp 0</div>
+          </div>
+          <span class="eyebrow-pill" id="hdrSub">Iuran: Rp 50.000/bln</span>
+        </div>
+
+        <div class="hero-kpis">
+          <div class="hero-kpi-item">
+            <div class="hero-kpi-label">Total Anggota</div>
+            <div class="hero-kpi-val" id="kpiMembers">0 Orang</div>
+          </div>
+          <div class="hero-kpi-item">
+            <div class="hero-kpi-label" id="kpiPaidLabel">Lunas (Jan)</div>
+            <div class="hero-kpi-val" id="kpiPaid" style="color:#6ee7b7;">0 / 0</div>
+          </div>
+          <div class="hero-kpi-item">
+            <div class="hero-kpi-label">Total Iuran</div>
+            <div class="hero-kpi-val" id="kpiIuranTotal">Rp 0</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==================== VIEW 1: ANGGOTA & IURAN ==================== -->
+      <section id="view-members" class="view-panel">
+        <div class="ts-card">
+          <div class="section-head">
+            <div>
+              <h2 class="section-title">DAFTAR ANGGOTA &amp; IURAN</h2>
+              <p class="section-sub">Status iuran bulanan seluruh anggota komunitas</p>
+            </div>
+            <button id="btnAddMember" class="btn btn-primary btn-pill" onclick="openModal('memberModal')">
+              + Anggota Baru
+            </button>
+          </div>
+
+          <div class="power-result" id="rolePermissionBanner">
+            <span id="roleBannerText">⚡ Mode Pengurus: Klik nama bulan untuk ubah status Lunas / Belum.</span>
+            <button onclick="copyReportWA()" style="background:none;border:none;color:var(--brand-deep);font-weight:800;font-size:12px;cursor:pointer;text-decoration:underline;white-space:nowrap;">
+              Salin WA →
+            </button>
+          </div>
+
+          <!-- Member Self-View Action Box (Only shown when logged in as Anggota) -->
+          <div id="anggotaSelfBar" class="hidden" style="background:#f8fafc;border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:12px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;">
+              <div>
+                <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;">Tagihan Iuran Anda:</div>
+                <div style="font-size:13.5px;font-weight:800;color:var(--ink);" id="activeAnggotaName">Dimas Saputra (KMN-26-003)</div>
+              </div>
+              <button class="btn btn-primary btn-pill" style="padding:7px 14px;font-size:12px;" onclick="confirmPayToTreasurerWA()">
+                💳 Konfirmasi Bayar Iuran via WA
+              </button>
+            </div>
+          </div>
+
+          <div class="toolbar">
+            <select id="activeMonthSelect" onchange="refreshUI()" style="flex:1;">
+              <option value="0">Bulan Aktif: Januari</option>
+              <option value="1">Bulan Aktif: Februari</option>
+              <option value="2">Bulan Aktif: Maret</option>
+              <option value="3">Bulan Aktif: April</option>
+              <option value="4">Bulan Aktif: Mei</option>
+              <option value="5">Bulan Aktif: Juni</option>
+            </select>
+            <input type="search" id="searchMember" oninput="renderMemberList()" placeholder="🔍 Cari nama / No. KTA..." style="flex:1.2;" />
+          </div>
+
+          <div id="memberListContainer"></div>
+        </div>
+      </section>
+
+      <!-- ==================== VIEW 2: KARTU ANGGOTA (KTA DIGITAL) ==================== -->
+      <section id="view-card" class="view-panel hidden">
+        <div class="ts-card">
+          <div class="section-head">
+            <div>
+              <h2 class="section-title">🪪 KARTU TANDA ANGGOTA (KTA)</h2>
+              <p class="section-sub">Kartu identitas resmi komunitas ber-QR Matrix</p>
+            </div>
+          </div>
+
+          <div class="form-group" id="ktaSelectGroup">
+            <label>Pilih Anggota Komunitas</label>
+            <select id="ktaMemberSelect" onchange="drawIDCard()"></select>
+          </div>
+
+          <div class="form-group">
+            <label>Tema Warna Kartu Resmi</label>
+            <div class="theme-picker">
+              <div class="theme-dot active" style="background:linear-gradient(135deg,#064e3b,#059669)" onclick="setTheme(0, this)" title="Tersistem Emerald"></div>
+              <div class="theme-dot" style="background:linear-gradient(135deg,#0f172a,#2563eb)" onclick="setTheme(1, this)" title="Royal Blue"></div>
+              <div class="theme-dot" style="background:linear-gradient(135deg,#3b0764,#d97706)" onclick="setTheme(2, this)" title="Purple Gold"></div>
+              <div class="theme-dot" style="background:linear-gradient(135deg,#450a0a,#ef4444)" onclick="setTheme(3, this)" title="Crimson Red"></div>
+            </div>
+          </div>
+
+          <div class="canvas-wrap">
+            <canvas id="ktaCanvas" width="856" height="540"></canvas>
+          </div>
+
+          <div style="display:flex; gap:8px;">
+            <button class="btn btn-primary btn-pill" style="flex:1.3;" onclick="downloadCanvasPNG()">
+              📥 Download KTA (PNG)
+            </button>
+            <button class="btn btn-ghost btn-pill" style="flex:1;" onclick="sendKTAWhatsApp()">
+              📲 Kirim ke WA
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== VIEW 3: KAS & LAPORAN GRUP WA ==================== -->
+      <section id="view-kas" class="view-panel hidden">
+        <div class="ts-card">
+          <div class="section-head">
+            <div>
+              <h2 class="section-title">📋 GENERATOR LAPORAN GRUP WA</h2>
+              <p class="section-sub">Transparansi kas 100% siap bagikan ke grup WhatsApp</p>
+            </div>
+            <button class="btn btn-ghost" style="padding:7px 12px;font-size:12px;" onclick="exportToExcelCSV()">
+              📥 Export Excel
+            </button>
+          </div>
+
+          <textarea id="waTextOutput" rows="11" readonly style="font-family:monospace; font-size:12px; background:#0f172a; color:#6ee7b7; border:none; margin-bottom:12px; border-radius:14px; padding:14px;"></textarea>
+
+          <button class="btn btn-primary btn-pill btn-block" onclick="copyReportWA()">
+            📋 Salin Laporan &amp; Bagikan ke Grup WA
+          </button>
+        </div>
+
+        <div class="ts-card">
+          <div class="section-head">
+            <div>
+              <h2 class="section-title">💰 CATAT PEMASUKAN &amp; PENGELUARAN</h2>
+              <p class="section-sub">Iuran bulanan anggota sudah otomatis masuk ke saldo kas</p>
+            </div>
+          </div>
+
+          <form id="cashInputForm" onsubmit="addTransaction(event)" style="display:grid; grid-template-columns: 1fr 1fr; gap:8px; margin-bottom:14px;">
+            <select id="txType">
+              <option value="out">🔴 Pengeluaran Kas</option>
+              <option value="in">🟢 Pemasukan Lain</option>
+            </select>
+            <input type="number" id="txAmount" required placeholder="Nominal (Rp)" />
+            <input type="text" id="txDesc" required placeholder="Keterangan (mis: Konsumsi Kopdar / Cetak Banner)" style="grid-column: span 2;" />
+            <button type="submit" class="btn btn-primary" style="grid-column: span 2;">+ Simpan Catatan Kas</button>
+          </form>
+
+          <div id="cashReadonlyNotice" class="power-result warn hidden">
+            <span>🔒 Mode Anggota (Read-Only): Hanya Ketua &amp; Bendahara yang dapat menambah catatan mutasi kas.</span>
+          </div>
+
+          <div id="txHistoryList"></div>
+        </div>
+      </section>
+
+      <footer class="ts-footer">
+        Bagian dari ekosistem <a href="https://tersistem.com" target="_blank">Tersistem.com</a> — Usaha &amp; Komunitas Lebih Rapi Tanpa Ribet
+      </footer>
+
+    </main>
+
+    <!-- Mobile Bottom Navigation Bar -->
+    <nav class="bottom-nav">
+      <button class="nav-item active" id="nav-members" onclick="switchView('members')">
+        <span class="icon">👥</span>
+        <span>Iuran Anggota</span>
+      </button>
+      <button class="nav-item" id="nav-card" onclick="switchView('card')">
+        <span class="icon">🪪</span>
+        <span>Kartu KTA</span>
+      </button>
+      <button class="nav-item" id="nav-kas" onclick="switchView('kas')">
+        <span class="icon">📊</span>
+        <span>Kas &amp; Laporan</span>
+      </button>
+      <button class="nav-item" onclick="handleLogout()">
+        <span class="icon">🚪</span>
+        <span>Keluar Akun</span>
+      </button>
+    </nav>
+
+  </div>
+
+  <!-- MODAL: TAMBAH ANGGOTA (+ AI KTP Autofill) -->
   <div id="memberModal" class="modal-backdrop">
     <div class="modal-box">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
@@ -938,17 +1059,33 @@
           <label>Nama Lengkap Anggota</label>
           <input type="text" id="inName" required placeholder="Contoh: Agus Setiawan" />
         </div>
-        <div class="form-group">
-          <label>Jabatan / Status di Komunitas</label>
-          <input type="text" id="inRole" value="Anggota" required />
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+          <div class="form-group">
+            <label>Role / Hak Akses Sistem</label>
+            <select id="inAccessRole">
+              <option value="anggota">👤 Anggota Biasa</option>
+              <option value="bendahara">💰 Bendahara</option>
+              <option value="ketua">👑 Ketua / Admin</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Jabatan di Komunitas</label>
+            <input type="text" id="inRole" value="Anggota" required />
+          </div>
         </div>
-        <div class="form-group">
-          <label>Nomor WhatsApp Aktif</label>
-          <input type="tel" id="inPhone" required placeholder="08123456789" />
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+          <div class="form-group">
+            <label>Nomor WhatsApp (ID Login)</label>
+            <input type="tel" id="inPhone" required placeholder="08123456789" />
+          </div>
+          <div class="form-group">
+            <label>Kata Sandi / PIN Login</label>
+            <input type="text" id="inPin" value="1234" required placeholder="Contoh: 1234" />
+          </div>
         </div>
         <div style="display:flex; gap:8px; margin-top:16px;">
           <button type="button" class="btn btn-ghost" style="flex:1;" onclick="closeModal('memberModal')">Batal</button>
-          <button type="submit" class="btn btn-primary" style="flex:1.4;">Simpan &amp; Buat KTA</button>
+          <button type="submit" class="btn btn-primary" style="flex:1.4;">Simpan &amp; Buat Akun</button>
         </div>
       </form>
     </div>
@@ -957,13 +1094,13 @@
   <!-- MODAL: EDIT KOMUNITAS (Hanya Ketua) -->
   <div id="settingsModal" class="modal-backdrop">
     <div class="modal-box">
-      <h3 class="section-title" style="margin-bottom:12px;">⚙️ PENGATURAN KOMUNITAS &amp; PIN</h3>
+      <h3 class="section-title" style="margin-bottom:12px;">⚙️ PENGATURAN KOMUNITAS</h3>
       <form onsubmit="saveSettings(event)">
         <div class="form-group">
           <label>Nama Komunitas / Paguyuban / Klub</label>
           <input type="text" id="setCommName" required />
         </div>
-        <div class="grid" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
           <div class="form-group">
             <label>Iuran Bulanan (Rp)</label>
             <input type="number" id="setCommFee" required />
@@ -971,16 +1108,6 @@
           <div class="form-group">
             <label>Kode Awalan KTA</label>
             <input type="text" id="setCommPrefix" required placeholder="KMN-26" />
-          </div>
-        </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-          <div class="form-group">
-            <label>PIN Login Ketua</label>
-            <input type="text" id="setPinKetua" required />
-          </div>
-          <div class="form-group">
-            <label>PIN Login Bendahara</label>
-            <input type="text" id="setPinBendahara" required />
           </div>
         </div>
         <div style="display:flex; gap:8px; margin-top:16px;">
@@ -1005,15 +1132,11 @@
       fee: 50000,
       prefix: 'KMN-26',
       theme: 0,
-      pinKetua: '1111',
-      pinBendahara: '2222',
-      currentRole: 'ketua', // 'ketua' | 'bendahara' | 'anggota'
-      loggedInMemberId: 3,  // Default member account when in 'anggota' role
       members: [
-        { id: 1, kta: 'KMN-26-001', name: 'Budi Santoso', role: 'Ketua Umum', phone: '081234567801', paid: [1, 1, 1, 0, 0, 0] },
-        { id: 2, kta: 'KMN-26-002', name: 'Rina Wijaya', role: 'Bendahara', phone: '081234567802', paid: [1, 1, 1, 1, 0, 0] },
-        { id: 3, kta: 'KMN-26-003', name: 'Dimas Saputra', role: 'Humas & Event', phone: '081234567803', paid: [1, 0, 0, 0, 0, 0] },
-        { id: 4, kta: 'KMN-26-004', name: 'Hendra Gunawan', role: 'Anggota', phone: '081234567804', paid: [1, 1, 0, 0, 0, 0] }
+        { id: 1, kta: 'KMN-26-001', name: 'Budi Santoso', role: 'Ketua Umum', accessRole: 'ketua', phone: '081234567801', pin: '1111', paid: [1, 1, 1, 0, 0, 0] },
+        { id: 2, kta: 'KMN-26-002', name: 'Rina Wijaya', role: 'Bendahara', accessRole: 'bendahara', phone: '081234567802', pin: '2222', paid: [1, 1, 1, 1, 0, 0] },
+        { id: 3, kta: 'KMN-26-003', name: 'Dimas Saputra', role: 'Humas & Event', accessRole: 'anggota', phone: '081234567803', pin: '1234', paid: [1, 0, 0, 0, 0, 0] },
+        { id: 4, kta: 'KMN-26-004', name: 'Hendra Gunawan', role: 'Anggota', accessRole: 'anggota', phone: '081234567804', pin: '1234', paid: [1, 1, 0, 0, 0, 0] }
       ],
       txs: [
         { id: 1, type: 'in', desc: 'Donasi Sponsor Kopdar', amount: 250000 },
@@ -1021,14 +1144,18 @@
       ]
     };
 
-    let db = JSON.parse(localStorage.getItem('komunitasku_tersistem_v4')) || initialData;
-    if (!db.currentRole) db.currentRole = 'ketua';
-    if (!db.pinKetua) db.pinKetua = '1111';
-    if (!db.pinBendahara) db.pinBendahara = '2222';
-    if (!db.loggedInMemberId) db.loggedInMemberId = db.members[0]?.id || 1;
+    let db = JSON.parse(localStorage.getItem('komunitasku_tersistem_v5')) || initialData;
+    // Active Authenticated Session (null if logged out)
+    let activeUser = JSON.parse(sessionStorage.getItem('komunitasku_auth_user')) ||
+                     JSON.parse(localStorage.getItem('komunitasku_auth_user')) || null;
 
     function saveDB() {
-      localStorage.setItem('komunitasku_tersistem_v4', JSON.stringify(db));
+      localStorage.setItem('komunitasku_tersistem_v5', JSON.stringify(db));
+      if (activeUser) {
+        // Sync activeUser with updated member entry
+        const updated = db.members.find(m => m.id === activeUser.id);
+        if (updated) activeUser = updated;
+      }
       refreshUI();
     }
 
@@ -1044,92 +1171,110 @@
       window._tTimer = setTimeout(() => el.classList.remove('show'), 2300);
     }
 
-    // ==================== ROLE & PERMISSION ENGINE (RBAC) ====================
+    // ==================== REAL AUTHENTICATION ENGINE ====================
+    function togglePasswordVisibility() {
+      const input = document.getElementById('loginPassword');
+      const btn = document.getElementById('btnTogglePwd');
+      if (input.type === 'password') {
+        input.type = 'text';
+        btn.textContent = 'Sembunyi';
+      } else {
+        input.type = 'password';
+        btn.textContent = 'Lihat';
+      }
+    }
+
+    function fillLoginInput(idVal, pwdVal) {
+      document.getElementById('loginIdentifier').value = idVal;
+      document.getElementById('loginPassword').value = pwdVal;
+      document.getElementById('authErrorBox').classList.add('hidden');
+      toast('🔑 Form login terisi, silakan klik Masuk.');
+    }
+
+    function forgotPinAlert() {
+      const ketua = db.members.find(m => m.accessRole === 'ketua') || db.members[0];
+      toast(`Hubungi Ketua (${ketua.name}: ${ketua.phone}) untuk reset sandi.`);
+    }
+
+    function handleRealLogin(e) {
+      e.preventDefault();
+      const rawId = document.getElementById('loginIdentifier').value.trim().toLowerCase();
+      const pwd = document.getElementById('loginPassword').value.trim();
+      const errBox = document.getElementById('authErrorBox');
+
+      // Find matching member by Phone Number, KTA Number, or exact Name
+      const found = db.members.find(m =>
+        m.phone.toLowerCase() === rawId ||
+        m.kta.toLowerCase() === rawId ||
+        m.name.toLowerCase() === rawId
+      );
+
+      if (!found || String(found.pin || '1234') !== pwd) {
+        errBox.classList.remove('hidden');
+        document.getElementById('authErrorText').textContent = 'Nomor WA / No. KTA atau Kata Sandi salah!';
+        return;
+      }
+
+      errBox.classList.add('hidden');
+      activeUser = found;
+
+      const remember = document.getElementById('rememberSession').checked;
+      sessionStorage.setItem('komunitasku_auth_user', JSON.stringify(found));
+      if (remember) {
+        localStorage.setItem('komunitasku_auth_user', JSON.stringify(found));
+      } else {
+        localStorage.removeItem('komunitasku_auth_user');
+      }
+
+      document.getElementById('loginPassword').value = '';
+      renderAuthGate();
+      toast(`✅ Selamat datang, ${found.name} (${found.role})!`);
+    }
+
+    function handleLogout() {
+      activeUser = null;
+      sessionStorage.removeItem('komunitasku_auth_user');
+      localStorage.removeItem('komunitasku_auth_user');
+      renderAuthGate();
+      toast('🚪 Anda telah keluar dari sesi.');
+    }
+
+    function renderAuthGate() {
+      document.getElementById('authCommTitle').textContent = db.name.toUpperCase();
+      const authScreen = document.getElementById('authScreen');
+      const appShell = document.getElementById('appShell');
+
+      if (!activeUser) {
+        authScreen.classList.remove('hidden');
+        appShell.classList.add('hidden');
+      } else {
+        authScreen.classList.add('hidden');
+        appShell.classList.remove('hidden');
+        refreshUI();
+      }
+    }
+
+    // ==================== RBAC PERMISSION HELPERS ====================
+    function currentRole() {
+      return activeUser ? (activeUser.accessRole || 'anggota') : 'anggota';
+    }
     function canEditFinance() {
-      return db.currentRole === 'ketua' || db.currentRole === 'bendahara';
+      const r = currentRole();
+      return r === 'ketua' || r === 'bendahara';
     }
     function isKetua() {
-      return db.currentRole === 'ketua';
-    }
-
-    function quickSwitchRole(role) {
-      db.currentRole = role;
-      saveDB();
-      const labels = {
-        ketua: '👑 Mode Ketua Aktif (Full Akses)',
-        bendahara: '💰 Mode Bendahara Aktif (Akses Iuran & Kas)',
-        anggota: '👤 Mode Anggota Aktif (Transparansi Read-Only)'
-      };
-      toast(labels[role]);
-    }
-
-    function selectLoginRole(role) {
-      document.getElementById('selectedRoleInput').value = role;
-      ['ketua', 'bendahara', 'anggota'].forEach(r => {
-        document.getElementById('lcard-' + r).classList.toggle('selected', r === role);
-      });
-
-      const pinGroup = document.getElementById('pinInputGroup');
-      const memGroup = document.getElementById('memberLoginGroup');
-      const pinInput = document.getElementById('loginPinInput');
-      const pinLabel = document.getElementById('pinLabelText');
-
-      if (role === 'anggota') {
-        pinGroup.classList.add('hidden');
-        memGroup.classList.remove('hidden');
-      } else {
-        pinGroup.classList.remove('hidden');
-        memGroup.classList.add('hidden');
-        if (role === 'ketua') {
-          pinLabel.textContent = `Masukkan PIN Ketua (Demo: ${db.pinKetua})`;
-          pinInput.value = db.pinKetua;
-        } else {
-          pinLabel.textContent = `Masukkan PIN Bendahara (Demo: ${db.pinBendahara})`;
-          pinInput.value = db.pinBendahara;
-        }
-      }
-    }
-
-    function submitRoleLogin(e) {
-      e.preventDefault();
-      const role = document.getElementById('selectedRoleInput').value;
-      const pin = document.getElementById('loginPinInput').value.trim();
-
-      if (role === 'ketua' && pin !== db.pinKetua) {
-        toast('❌ PIN Ketua salah!');
-        return;
-      }
-      if (role === 'bendahara' && pin !== db.pinBendahara) {
-        toast('❌ PIN Bendahara salah!');
-        return;
-      }
-      if (role === 'anggota') {
-        db.loggedInMemberId = parseInt(document.getElementById('loginMemberSelect').value, 10);
-      }
-
-      db.currentRole = role;
-      closeModal('loginModal');
-      saveDB();
-      toast(`✅ Berhasil masuk sebagai ${role.toUpperCase()}`);
+      return currentRole() === 'ketua';
     }
 
     function applyRolePermissionsUI() {
-      const role = db.currentRole;
-      ['ketua', 'bendahara', 'anggota'].forEach(r => {
-        document.getElementById('rtab-' + r).classList.toggle('active', r === role);
-      });
+      if (!activeUser) return;
+      const role = currentRole();
+      const initials = activeUser.name.split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase();
 
-      const roleTextMap = {
-        ketua: '👑 Ketua',
-        bendahara: '💰 Bendahara',
-        anggota: '👤 Anggota'
-      };
-      document.getElementById('hdrRoleBtnText').textContent = roleTextMap[role];
-
-      const statusEl = document.getElementById('roleStatusLabel');
-      const bannerEl = document.getElementById('rolePermissionBanner');
-      const bannerTxt = document.getElementById('roleBannerText');
-      const selfBar = document.getElementById('anggotaSelfBar');
+      document.getElementById('sessAvatar').textContent = initials;
+      document.getElementById('sessUserName').textContent = activeUser.name;
+      document.getElementById('sessRoleBadge').textContent = activeUser.role;
+      document.getElementById('sessKtaCode').textContent = activeUser.kta;
 
       // Show/Hide Admin Controls
       document.getElementById('btnSettingsHeader').classList.toggle('hidden', !isKetua());
@@ -1137,34 +1282,31 @@
       document.getElementById('cashInputForm').classList.toggle('hidden', !canEditFinance());
       document.getElementById('cashReadonlyNotice').classList.toggle('hidden', canEditFinance());
 
+      const bannerEl = document.getElementById('rolePermissionBanner');
+      const bannerTxt = document.getElementById('roleBannerText');
+      const selfBar = document.getElementById('anggotaSelfBar');
+
       if (role === 'ketua') {
-        statusEl.innerHTML = `Login: <strong>👑 Ketua (Full Akses)</strong>`;
         bannerEl.className = 'power-result';
-        bannerTxt.textContent = '⚡ Mode Ketua: Anda dapat mengelola anggota, checklist iuran, kas & pengaturan.';
+        bannerTxt.textContent = '👑 Akses Ketua: Anda dapat mengelola anggota, checklist iuran, mutasi kas & pengaturan.';
         selfBar.classList.add('hidden');
       } else if (role === 'bendahara') {
-        statusEl.innerHTML = `Login: <strong>💰 Bendahara (Keuangan)</strong>`;
         bannerEl.className = 'power-result';
-        bannerTxt.textContent = '💰 Mode Bendahara: Klik bulan untuk catat Lunas, tagih WA, atau catat kas.';
+        bannerTxt.textContent = '💰 Akses Bendahara: Klik bulan untuk catat Lunas, kirim tagihan WA, atau catat kas.';
         selfBar.classList.add('hidden');
       } else {
-        const me = db.members.find(m => m.id === db.loggedInMemberId) || db.members[0];
-        statusEl.innerHTML = `Login: <strong>👤 ${me ? me.name : 'Anggota'} (Read-Only)</strong>`;
         bannerEl.className = 'power-result warn';
-        bannerTxt.textContent = '🔒 Mode Transparansi Anggota: Anda dapat melihat laporan kas & KTA (tidak bisa ubah data).';
+        bannerTxt.textContent = '🔒 Akses Anggota: Transparansi kas & status iuran (Read-Only).';
         selfBar.classList.remove('hidden');
-        if (me) {
-          document.getElementById('activeAnggotaName').textContent = `${me.name} (${me.kta})`;
-          document.getElementById('ktaMemberSelect').value = me.id;
-        }
+        document.getElementById('activeAnggotaName').textContent = `${activeUser.name} (${activeUser.kta})`;
       }
     }
 
     function confirmPayToTreasurerWA() {
-      const me = db.members.find(m => m.id === db.loggedInMemberId) || db.members[0];
-      const bendahara = db.members.find(m => m.role.toLowerCase().includes('bendahara')) || db.members[0];
+      if (!activeUser) return;
+      const bendahara = db.members.find(m => m.accessRole === 'bendahara') || db.members[0];
       const mIdx = parseInt(document.getElementById('activeMonthSelect').value, 10);
-      const msg = `Halo Bendahara *${db.name}* 🙏,\n\nSaya *${me.name}* (${me.kta}) ingin melakukan pembayaran/konfirmasi iuran bulan *${MONTHS[mIdx]} 2026* sebesar *${rp(db.fee)}*.\n\nBerikut saya lampirkan bukti transfernya. Terima kasih! 🤝`;
+      const msg = `Halo Bendahara *${db.name}* 🙏,\n\nSaya *${activeUser.name}* (${activeUser.kta}) ingin melakukan konfirmasi pembayaran iuran bulan *${MONTHS[mIdx]} 2026* sebesar *${rp(db.fee)}*.\n\nTerima kasih! 🤝`;
       const phone = (bendahara?.phone || '081234567802').replace(/^0/, '62').replace(/\D/g, '');
       window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, '_blank');
     }
@@ -1172,7 +1314,8 @@
     function switchView(view) {
       ['members', 'card', 'kas'].forEach(v => {
         document.getElementById('view-' + v).classList.toggle('hidden', v !== view);
-        document.getElementById('nav-' + v).classList.toggle('active', v === view);
+        const navBtn = document.getElementById('nav-' + v);
+        if (navBtn) navBtn.classList.toggle('active', v === view);
       });
       if (view === 'card') drawIDCard();
       if (view === 'kas') renderKas();
@@ -1203,7 +1346,7 @@
       box.innerHTML = list.map(m => {
         const isPaidMonth = !!m.paid[mIdx];
         const initials = m.name.split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase();
-        const isMe = db.currentRole === 'anggota' && m.id === db.loggedInMemberId;
+        const isMe = activeUser && m.id === activeUser.id;
 
         const pills = MONTHS.map((mName, idx) => `
           <div class="month-pill ${m.paid[idx] ? 'paid' : ''} ${!editable ? 'readonly' : ''}"
@@ -1246,8 +1389,8 @@
               <div class="member-avatar-row">
                 <div class="ic-box">${initials}</div>
                 <div>
-                  <div class="member-name">${m.name} ${isMe ? '<span style="font-size:11px;color:var(--brand);">(Anda)</span>' : ''}</div>
-                  <div class="member-meta">${m.kta} • ${editable ? m.phone : m.phone.slice(0, 6) + '••••'}</div>
+                  <div class="member-name">${m.name} ${isMe ? '<span style="font-size:11px;color:var(--brand);">(Akun Anda)</span>' : ''}</div>
+                  <div class="member-meta">${m.kta} • ${editable || isMe ? m.phone : m.phone.slice(0, 6) + '••••'}</div>
                 </div>
               </div>
               <span class="role-pill">${m.role}</span>
@@ -1261,7 +1404,7 @@
 
     function toggleMonth(memberId, monthIdx) {
       if (!canEditFinance()) {
-        toast('🔒 Hanya Ketua & Bendahara yang bisa mengubah status iuran!');
+        toast('🔒 Akses ditolak: Hanya Ketua & Bendahara yang dapat mengubah status iuran.');
         return;
       }
       const m = db.members.find(x => x.id === memberId);
@@ -1312,7 +1455,7 @@
       const canvas = document.getElementById('ktaCanvas');
       const ctx = canvas.getContext('2d');
       const selId = parseInt(document.getElementById('ktaMemberSelect').value, 10);
-      const m = db.members.find(x => x.id === selId) || db.members[0];
+      const m = db.members.find(x => x.id === selId) || activeUser || db.members[0];
       if (!m) return;
 
       const colors = THEMES[db.theme || 0];
@@ -1538,20 +1681,12 @@ _Dikelola rapi dengan Tersistem.com_`;
     function openModal(id) {
       if (id === 'settingsModal') {
         if (!isKetua()) {
-          toast('🔒 Hanya Role Ketua yang bisa mengubah pengaturan!');
+          toast('🔒 Hanya Ketua yang bisa mengubah pengaturan!');
           return;
         }
         document.getElementById('setCommName').value = db.name;
         document.getElementById('setCommFee').value = db.fee;
         document.getElementById('setCommPrefix').value = db.prefix;
-        document.getElementById('setPinKetua').value = db.pinKetua;
-        document.getElementById('setPinBendahara').value = db.pinBendahara;
-      }
-      if (id === 'loginModal') {
-        const memSelect = document.getElementById('loginMemberSelect');
-        memSelect.innerHTML = db.members.map(m => `<option value="${m.id}">${m.kta} — ${m.name}</option>`).join('');
-        memSelect.value = db.loggedInMemberId;
-        selectLoginRole(db.currentRole);
       }
       document.getElementById(id).classList.add('show');
     }
@@ -1564,21 +1699,29 @@ _Dikelola rapi dengan Tersistem.com_`;
       e.preventDefault();
       if (!canEditFinance()) return;
       const name = document.getElementById('inName').value.trim();
+      const accessRole = document.getElementById('inAccessRole').value;
       const role = document.getElementById('inRole').value.trim();
       const phone = document.getElementById('inPhone').value.trim();
+      const pin = document.getElementById('inPin').value.trim() || '1234';
       if (!name) return;
+
       const num = String(db.members.length + 1).padStart(3, '0');
+      const newKta = `${db.prefix}-${num}`;
       db.members.push({
         id: Date.now(),
-        kta: `${db.prefix}-${num}`,
-        name, role, phone,
+        kta: newKta,
+        name,
+        role,
+        accessRole,
+        phone,
+        pin,
         paid: [0, 0, 0, 0, 0, 0]
       });
       document.getElementById('inName').value = '';
       document.getElementById('inPhone').value = '';
       closeModal('memberModal');
       saveDB();
-      toast(`✅ ${name} berhasil ditambahkan!`);
+      toast(`✅ Akun ${name} (${newKta} / Sandi: ${pin}) berhasil dibuat!`);
     }
 
     function saveSettings(e) {
@@ -1587,11 +1730,9 @@ _Dikelola rapi dengan Tersistem.com_`;
       db.name = document.getElementById('setCommName').value.trim();
       db.fee = parseInt(document.getElementById('setCommFee').value, 10) || 50000;
       db.prefix = document.getElementById('setCommPrefix').value.trim();
-      db.pinKetua = document.getElementById('setPinKetua').value.trim() || '1111';
-      db.pinBendahara = document.getElementById('setPinBendahara').value.trim() || '2222';
       closeModal('settingsModal');
       saveDB();
-      toast('⚙️ Pengaturan komunitas & PIN berhasil disimpan!');
+      toast('⚙️ Pengaturan komunitas berhasil disimpan!');
     }
 
     function refreshUI() {
@@ -1611,7 +1752,11 @@ _Dikelola rapi dengan Tersistem.com_`;
       const sel = document.getElementById('ktaMemberSelect');
       const cur = sel.value;
       sel.innerHTML = db.members.map(m => `<option value="${m.id}">${m.kta} — ${m.name}</option>`).join('');
-      if (cur && db.members.some(m => String(m.id) === String(cur))) sel.value = cur;
+      if (cur && db.members.some(m => String(m.id) === String(cur))) {
+        sel.value = cur;
+      } else if (activeUser) {
+        sel.value = activeUser.id;
+      }
 
       applyRolePermissionsUI();
       renderMemberList();
@@ -1619,7 +1764,8 @@ _Dikelola rapi dengan Tersistem.com_`;
       drawIDCard();
     }
 
-    refreshUI();
+    // Boot Application through Auth Gate
+    renderAuthGate();
   </script>
 </body>
 </html>
