@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#1e40af" />
+  <title>KomunitasKu Lite — Iuran, Kas & Kartu Anggota</title>
+  <style>
+    :root {
+      --bg: #f1f5f9;
+      --card: #ffffff;
+      --text: #0f172a;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --success: #059669;
+      --success-bg: #d1fae5;
+      --warn: #d97706;
+      --warn-bg: #fef3c7;
+      --danger: #e11d48;
+      --danger-bg: #ffe4e6;
+      --radius: 14px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.4;
+      padding-bottom: 84px;
+    }
+    .container { max-width: 540px; margin: 0 auto; padding: 12px; }
+
+    /* Header */
+    .app-header {
+      background: linear-gradient(135deg, #1e3a8a, #2563eb);
+      color: #fff;
+      padding: 16px 14px 20px;
+      border-bottom-left-radius: 20px;
+      border-bottom-right-radius: 20px;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.18);
+    }
+    .header-top { max-width: 540px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+    .brand { display: flex; align-items: center; gap: 10px; }
+    .brand-icon {
+      width: 38px; height: 38px; border-radius: 10px; background: #fff; color: #1e3a8a;
+      font-weight: 800; font-size: 18px; display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .brand h1 { font-size: 16px; font-weight: 800; line-height: 1.2; }
+    .brand p { font-size: 12px; opacity: 0.85; margin-top: 2px; }
+    .btn-ghost {
+      background: rgba(255,255,255,0.16); border: 1px solid rgba(255,255,255,0.25);
+      color: #fff; padding: 7px 11px; border-radius: 9px; font-size: 12px; font-weight: 600; cursor: pointer;
+      white-space: nowrap;
+    }
+
+    /* Quick Stats Bar */
+    .stats-grid {
+      max-width: 540px; margin: -12px auto 6px; padding: 0 12px;
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;
+    }
+    .stat-box {
+      background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+      padding: 10px; text-align: center; box-shadow: 0 2px 6px rgba(15,23,42,0.04);
+    }
+    .stat-label { font-size: 10px; font-weight: 700; color: var(--muted); text-transform: uppercase; }
+    .stat-val { font-size: 15px; font-weight: 800; margin-top: 2px; color: var(--text); }
+    .stat-val.green { color: var(--success); }
+
+    /* Cards & Controls */
+    .card {
+      background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 14px; margin-bottom: 12px; box-shadow: 0 1px 3px rgba(15,23,42,0.03);
+    }
+    .section-title { font-size: 15px; font-weight: 800; margin-bottom: 2px; }
+    .section-sub { font-size: 12px; color: var(--muted); margin-bottom: 12px; }
+
+    .toolbar { display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
+    input, select, textarea {
+      width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 10px;
+      font-size: 14px; font-family: inherit; background: #f8fafc; color: var(--text);
+    }
+    input:focus, select:focus, textarea:focus { outline: 2px solid var(--primary); background: #fff; }
+
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+      padding: 11px 14px; border-radius: 10px; font-size: 13px; font-weight: 700;
+      border: none; cursor: pointer; transition: transform 0.08s ease; text-decoration: none;
+    }
+    .btn:active { transform: scale(0.97); }
+    .btn-primary { background: var(--primary); color: #fff; }
+    .btn-success { background: var(--success); color: #fff; }
+    .btn-warn { background: var(--warn-bg); color: var(--warn); }
+    .btn-outline { background: #f1f5f9; color: var(--text); border: 1px solid var(--border); }
+    .btn-block { width: 100%; }
+
+    /* Member Card Item (Mobile Friendly) */
+    .member-item {
+      border: 1px solid var(--border); border-radius: 12px; padding: 12px;
+      margin-bottom: 10px; background: #fff;
+    }
+    .member-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 10px; }
+    .member-name { font-size: 15px; font-weight: 800; color: var(--text); }
+    .member-meta { font-size: 12px; color: var(--muted); font-family: monospace; margin-top: 2px; }
+    .role-badge {
+      font-size: 11px; font-weight: 700; background: #eff6ff; color: var(--primary);
+      padding: 3px 8px; border-radius: 99px; white-space: nowrap;
+    }
+
+    /* Month Pills Grid */
+    .months-grid {
+      display: grid; grid-template-columns: repeat(6, 1fr); gap: 5px; margin-bottom: 10px;
+    }
+    .month-pill {
+      padding: 7px 2px; border-radius: 8px; font-size: 11px; font-weight: 700;
+      text-align: center; border: 1px solid var(--border); background: #f8fafc;
+      color: var(--muted); cursor: pointer; user-select: none;
+    }
+    .month-pill.paid {
+      background: var(--success-bg); color: var(--success); border-color: #6ee7b7;
+    }
+
+    .member-actions { display: flex; gap: 6px; }
+    .member-actions .btn { flex: 1; padding: 8px 10px; font-size: 12px; }
+
+    /* Native Canvas Holder */
+    .canvas-wrap {
+      width: 100%; overflow: hidden; border-radius: 14px;
+      box-shadow: 0 8px 20px rgba(15,23,42,0.14); margin: 10px 0 14px;
+      background: #0f172a;
+    }
+    canvas#ktaCanvas { width: 100%; height: auto; display: block; }
+
+    .theme-picker { display: flex; gap: 8px; margin: 8px 0 12px; }
+    .theme-dot {
+      flex: 1; height: 34px; border-radius: 8px; border: 2px solid transparent; cursor: pointer;
+    }
+    .theme-dot.active { border-color: #0f172a; transform: scale(1.03); }
+
+    /* Cashflow list */
+    .tx-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 13px;
+    }
+    .tx-row:last-child { border-bottom: none; }
+
+    /* Bottom Navigation Bar (Mobile App Feel) */
+    .bottom-nav {
+      position: fixed; bottom: 0; left: 0; right: 0; background: #fff;
+      border-top: 1px solid var(--border); display: flex; justify-content: space-around;
+      padding: 6px 8px calc(6px + env(safe-area-inset-bottom)); z-index: 40;
+      box-shadow: 0 -2px 10px rgba(15,23,42,0.05);
+    }
+    .nav-item {
+      flex: 1; max-width: 160px; background: none; border: none; padding: 6px 4px;
+      border-radius: 10px; display: flex; flex-direction: column; align-items: center;
+      gap: 2px; color: var(--muted); font-size: 11px; font-weight: 700; cursor: pointer;
+    }
+    .nav-item .icon { font-size: 18px; line-height: 1; }
+    .nav-item.active { color: var(--primary); background: #eff6ff; }
+
+    /* Modal */
+    .modal-backdrop {
+      position: fixed; inset: 0; background: rgba(15,23,42,0.55);
+      display: none; align-items: center; justify-content: center; padding: 16px; z-index: 50;
+    }
+    .modal-backdrop.show { display: flex; }
+    .modal-box {
+      background: #fff; width: 100%; max-width: 400px; border-radius: 16px;
+      padding: 16px; box-shadow: 0 12px 30px rgba(0,0,0,0.2);
+    }
+    .form-group { margin-bottom: 10px; }
+    .form-group label { display: block; font-size: 12px; font-weight: 700; margin-bottom: 4px; color: #334155; }
+
+    /* Toast */
+    #toast {
+      position: fixed; top: 14px; left: 50%; transform: translateX(-50%) translateY(-80px);
+      background: #0f172a; color: #fff; padding: 10px 16px; border-radius: 99px;
+      font-size: 12px; font-weight: 700; box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+      transition: transform 0.22s ease; z-index: 60; white-space: nowrap;
+    }
+    #toast.show { transform: translateX(-50%) translateY(0); }
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+
+  <!-- Toast Notification -->
+  <div id="toast">✅ Berhasil disimpan</div>
+
+  <!-- Top Header -->
+  <header class="app-header">
+    <div class="header-top">
+      <div class="brand">
+        <div class="brand-icon" id="hdrInitial">K</div>
+        <div>
+          <h1 id="hdrName">Komunitas Motor Nusantara</h1>
+          <p id="hdrSub">Iuran: Rp 50.000/bln</p>
+        </div>
+      </div>
+      <button class="btn-ghost" onclick="openModal('settingsModal')">⚙️ Edit</button>
+    </div>
+  </header>
+
+  <!-- Floating KPI Stats -->
+  <div class="stats-grid">
+    <div class="stat-box">
+      <div class="stat-label">Anggota</div>
+      <div class="stat-val" id="kpiMembers">0</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label" id="kpiPaidLabel">Lunas (Jan)</div>
+      <div class="stat-val green" id="kpiPaid">0/0</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">Saldo Kas</div>
+      <div class="stat-val" id="kpiSaldo">Rp 0</div>
+    </div>
+  </div>
+
+  <!-- Main Container -->
+  <main class="container">
+
+    <!-- ==================== VIEW 1: ANGGOTA & IURAN ==================== -->
+    <section id="view-members">
+      <div class="card">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+          <div>
+            <div class="section-title">Checklist Iuran Anggota</div>
+            <div class="section-sub" style="margin-bottom:0;">Tap nama bulan untuk ubah Lunas / Belum</div>
+          </div>
+          <button class="btn btn-primary" onclick="openModal('memberModal')" style="padding:9px 12px;">+ Anggota</button>
+        </div>
+
+        <div class="toolbar">
+          <select id="activeMonthSelect" onchange="refreshUI()" style="flex:1;">
+            <option value="0">Bulan Tagihan: Januari</option>
+            <option value="1">Bulan Tagihan: Februari</option>
+            <option value="2">Bulan Tagihan: Maret</option>
+            <option value="3">Bulan Tagihan: April</option>
+            <option value="4">Bulan Tagihan: Mei</option>
+            <option value="5">Bulan Tagihan: Juni</option>
+          </select>
+          <input type="search" id="searchMember" oninput="renderMemberList()" placeholder="🔍 Cari nama / No. KTA..." style="flex:1.2;" />
+        </div>
+
+        <div id="memberListContainer"></div>
+      </div>
+    </section>
+
+    <!-- ==================== VIEW 2: KARTU ANGGOTA (NATIVE CANVAS) ==================== -->
+    <section id="view-card" class="hidden">
+      <div class="card">
+        <div class="section-title">🪪 Kartu Tanda Anggota (KTA)</div>
+        <div class="section-sub">Super ringan, langsung digambar di perangkat tanpa loading server.</div>
+
+        <div class="form-group">
+          <label>Pilih Anggota</label>
+          <select id="ktaMemberSelect" onchange="drawIDCard()"></select>
+        </div>
+
+        <div class="form-group">
+          <label>Pilih Warna Kartu</label>
+          <div class="theme-picker">
+            <div class="theme-dot active" style="background:linear-gradient(135deg,#0f172a,#2563eb)" onclick="setTheme(0, this)"></div>
+            <div class="theme-dot" style="background:linear-gradient(135deg,#064e3b,#10b981)" onclick="setTheme(1, this)"></div>
+            <div class="theme-dot" style="background:linear-gradient(135deg,#4c1d95,#d97706)" onclick="setTheme(2, this)"></div>
+            <div class="theme-dot" style="background:linear-gradient(135deg,#7f1d1d,#ef4444)" onclick="setTheme(3, this)"></div>
+          </div>
+        </div>
+
+        <!-- Fast Native HTML5 Canvas (CR80 Aspect Ratio 856x540) -->
+        <div class="canvas-wrap">
+          <canvas id="ktaCanvas" width="856" height="540"></canvas>
+        </div>
+
+        <div style="display:flex; gap:8px;">
+          <button class="btn btn-primary" style="flex:1.3;" onclick="downloadCanvasPNG()">📥 Simpan Gambar KTA</button>
+          <button class="btn btn-success" style="flex:1;" onclick="sendKTAWhatsApp()">📲 Kirim WA</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== VIEW 3: KAS & LAPORAN GRUP WA ==================== -->
+    <section id="view-kas" class="hidden">
+      <div class="card">
+        <div class="section-title">📋 Generator Laporan Grup WA</div>
+        <div class="section-sub">Otomatis rekap siapa yang sudah bayar & saldo kas komunitas.</div>
+
+        <textarea id="waTextOutput" rows="11" readonly style="font-family:monospace; font-size:12px; background:#0f172a; color:#34d399; border:none; margin-bottom:10px;"></textarea>
+
+        <button class="btn btn-success btn-block" onclick="copyReportWA()">
+          📋 Salin Laporan & Paste di Grup WA
+        </button>
+      </div>
+
+      <div class="card">
+        <div class="section-title">💰 Catat Kas Masuk / Keluar</div>
+        <div class="section-sub">Iuran anggota sudah otomatis dihitung ke dalam saldo kas.</div>
+
+        <form onsubmit="addTransaction(event)" style="display:grid; grid-template-columns: 1fr 1fr; gap:8px; margin-bottom:12px;">
+          <select id="txType">
+            <option value="out">🔴 Pengeluaran</option>
+            <option value="in">🟢 Pemasukan Lain</option>
+          </select>
+          <input type="number" id="txAmount" required placeholder="Nominal (Rp)" />
+          <input type="text" id="txDesc" required placeholder="Keterangan (mis: Kopdar / Banner)" style="grid-column: span 2;" />
+          <button type="submit" class="btn btn-primary" style="grid-column: span 2;">+ Simpan Transaksi Kas</button>
+        </form>
+
+        <div id="txHistoryList"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Mobile Bottom Navigation -->
+  <nav class="bottom-nav">
+    <button class="nav-item active" id="nav-members" onclick="switchView('members')">
+      <span class="icon">👥</span>
+      <span>Iuran Anggota</span>
+    </button>
+    <button class="nav-item" id="nav-card" onclick="switchView('card')">
+      <span class="icon">🪪</span>
+      <span>Kartu KTA</span>
+    </button>
+    <button class="nav-item" id="nav-kas" onclick="switchView('kas')">
+      <span class="icon">📊</span>
+      <span>Kas & Laporan</span>
+    </button>
+  </nav>
+
+  <!-- MODAL: TAMBAH ANGGOTA -->
+  <div id="memberModal" class="modal-backdrop">
+    <div class="modal-box">
+      <div class="section-title" style="margin-bottom:10px;">Tambah Anggota Baru</div>
+      <form onsubmit="saveMember(event)">
+        <div class="form-group">
+          <label>Nama Lengkap</label>
+          <input type="text" id="inName" required placeholder="Contoh: Agus Setiawan" />
+        </div>
+        <div class="form-group">
+          <label>Jabatan / Posisi</label>
+          <input type="text" id="inRole" value="Anggota" required />
+        </div>
+        <div class="form-group">
+          <label>No. WhatsApp</label>
+          <input type="tel" id="inPhone" required placeholder="08123456789" />
+        </div>
+        <div style="display:flex; gap:8px; margin-top:14px;">
+          <button type="button" class="btn btn-outline" style="flex:1;" onclick="closeModal('memberModal')">Batal</button>
+          <button type="submit" class="btn btn-primary" style="flex:1.3;">Simpan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: EDIT KOMUNITAS -->
+  <div id="settingsModal" class="modal-backdrop">
+    <div class="modal-box">
+      <div class="section-title" style="margin-bottom:10px;">Pengaturan Komunitas</div>
+      <form onsubmit="saveSettings(event)">
+        <div class="form-group">
+          <label>Nama Komunitas / Paguyuban</label>
+          <input type="text" id="setCommName" required />
+        </div>
+        <div class="form-group">
+          <label>Iuran Bulanan (Rp)</label>
+          <input type="number" id="setCommFee" required />
+        </div>
+        <div class="form-group">
+          <label>Kode Awalan KTA</label>
+          <input type="text" id="setCommPrefix" required placeholder="KMN-2026" />
+        </div>
+        <div style="display:flex; gap:8px; margin-top:14px;">
+          <button type="button" class="btn btn-outline" style="flex:1;" onclick="closeModal('settingsModal')">Batal</button>
+          <button type="submit" class="btn btn-primary" style="flex:1.3;">Simpan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun'];
+    const THEMES = [
+      ['#0f172a', '#1e3a8a', '#2563eb'],
+      ['#064e3b', '#047857', '#10b981'],
+      ['#3b0764', '#6d28d9', '#d97706'],
+      ['#450a0a', '#b91c1c', '#ef4444']
+    ];
+
+    const initialData = {
+      name: 'Komunitas Motor Nusantara',
+      fee: 50000,
+      prefix: 'KMN-26',
+      theme: 0,
+      members: [
+        { id: 1, kta: 'KMN-26-001', name: 'Budi Santoso', role: 'Ketua', phone: '081234567801', paid: [1, 1, 1, 0, 0, 0] },
+        { id: 2, kta: 'KMN-26-002', name: 'Rina Wijaya', role: 'Bendahara', phone: '081234567802', paid: [1, 1, 1, 1, 0, 0] },
+        { id: 3, kta: 'KMN-26-003', name: 'Dimas Saputra', role: 'Anggota', phone: '081234567803', paid: [1, 0, 0, 0, 0, 0] },
+        { id: 4, kta: 'KMN-26-004', name: 'Hendra Gunawan', role: 'Anggota', phone: '081234567804', paid: [1, 1, 0, 0, 0, 0] }
+      ],
+      txs: [
+        { id: 1, type: 'in', desc: 'Donasi Sponsor Kopdar', amount: 250000 },
+        { id: 2, type: 'out', desc: 'Cetak Stiker & Banner', amount: 120000 }
+      ]
+    };
+
+    let db = JSON.parse(localStorage.getItem('komunitasku_lite_v2')) || initialData;
+
+    function saveDB() {
+      localStorage.setItem('komunitasku_lite_v2', JSON.stringify(db));
+      refreshUI();
+    }
+
+    function rp(n) {
+      return 'Rp ' + Number(n).toLocaleString('id-ID');
+    }
+
+    function toast(msg) {
+      const el = document.getElementById('toast');
+      el.textContent = msg;
+      el.classList.add('show');
+      clearTimeout(window._tTimer);
+      window._tTimer = setTimeout(() => el.classList.remove('show'), 2000);
+    }
+
+    function switchView(view) {
+      ['members', 'card', 'kas'].forEach(v => {
+        document.getElementById('view-' + v).classList.toggle('hidden', v !== view);
+        document.getElementById('nav-' + v).classList.toggle('active', v === view);
+      });
+      if (view === 'card') drawIDCard();
+      if (view === 'kas') renderKas();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function getCashSummary() {
+      let paidCount = 0;
+      db.members.forEach(m => m.paid.forEach(p => { if (p) paidCount++; }));
+      const totalIuran = paidCount * db.fee;
+      const totalIn = db.txs.filter(t => t.type === 'in').reduce((s, t) => s + t.amount, 0);
+      const totalOut = db.txs.filter(t => t.type === 'out').reduce((s, t) => s + t.amount, 0);
+      return { totalIuran, totalIn, totalOut, saldo: totalIuran + totalIn - totalOut };
+    }
+
+    function renderMemberList() {
+      const box = document.getElementById('memberListContainer');
+      const q = document.getElementById('searchMember').value.toLowerCase();
+      const mIdx = parseInt(document.getElementById('activeMonthSelect').value, 10);
+
+      const list = db.members.filter(m => m.name.toLowerCase().includes(q) || m.kta.toLowerCase().includes(q));
+      if (!list.length) {
+        box.innerHTML = `<div style="text-align:center; padding:24px; color:var(--muted); font-size:13px;">Tidak ada anggota ditemukan.</div>`;
+        return;
+      }
+
+      box.innerHTML = list.map(m => {
+        const isPaidMonth = !!m.paid[mIdx];
+        const pills = MONTHS.map((mName, idx) => `
+          <div class="month-pill ${m.paid[idx] ? 'paid' : ''}" onclick="toggleMonth(${m.id}, ${idx})">
+            ${mName}${m.paid[idx] ? ' ✓' : ''}
+          </div>
+        `).join('');
+
+        return `
+          <div class="member-item">
+            <div class="member-top">
+              <div>
+                <div class="member-name">${m.name}</div>
+                <div class="member-meta">${m.kta} • ${m.phone}</div>
+              </div>
+              <span class="role-badge">${m.role}</span>
+            </div>
+            <div class="months-grid">${pills}</div>
+            <div class="member-actions">
+              <button class="btn btn-outline" onclick="previewMemberKTA(${m.id})">🪪 Kartu KTA</button>
+              ${
+                isPaidMonth
+                  ? `<button class="btn" style="background:var(--success-bg); color:var(--success);" onclick="toggleMonth(${m.id}, ${mIdx})">✅ ${MONTHS[mIdx]} Lunas</button>`
+                  : `<button class="btn btn-warn" onclick="billMemberWA(${m.id}, ${mIdx})">📲 Tagih ${MONTHS[mIdx]}</button>`
+              }
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function toggleMonth(memberId, monthIdx) {
+      const m = db.members.find(x => x.id === memberId);
+      if (!m) return;
+      m.paid[monthIdx] = m.paid[monthIdx] ? 0 : 1;
+      saveDB();
+      toast(`${m.name} (${MONTHS[monthIdx]}): ${m.paid[monthIdx] ? 'LUNAS ✓' : 'Belum Bayar'}`);
+    }
+
+    function billMemberWA(memberId, monthIdx) {
+      const m = db.members.find(x => x.id === memberId);
+      if (!m) return;
+      const text = `Halo Kak *${m.name}* (${m.kta}) 🙏\n\nPengingat iuran *${db.name}* bulan *${MONTHS[monthIdx]} 2026* sebesar *${rp(db.fee)}*.\n\nTerima kasih atas dukungan & solidaritasnya! 🤝`;
+      const phone = m.phone.replace(/^0/, '62').replace(/\D/g, '');
+      window.open(`https://wa.me/${phone}?text=${encodeURIComponent(text)}`, '_blank');
+    }
+
+    function previewMemberKTA(memberId) {
+      document.getElementById('ktaMemberSelect').value = memberId;
+      switchView('card');
+    }
+
+    function setTheme(idx, el) {
+      db.theme = idx;
+      document.querySelectorAll('.theme-dot').forEach(d => d.classList.remove('active'));
+      if (el) el.classList.add('active');
+      saveDB();
+      drawIDCard();
+    }
+
+    // Zero-Dependency Pure HTML5 Canvas KTA Generator (Instant Mobile Render)
+    function drawIDCard() {
+      const canvas = document.getElementById('ktaCanvas');
+      const ctx = canvas.getContext('2d');
+      const selId = parseInt(document.getElementById('ktaMemberSelect').value, 10);
+      const m = db.members.find(x => x.id === selId) || db.members[0];
+      if (!m) return;
+
+      const colors = THEMES[db.theme || 0];
+      const W = canvas.width, H = canvas.height;
+
+      // 1. Background Gradient
+      const grad = ctx.createLinearGradient(0, 0, W, H);
+      grad.addColorStop(0, colors[0]);
+      grad.addColorStop(0.55, colors[1]);
+      grad.addColorStop(1, colors[2]);
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, W, H);
+
+      // Decorative circles
+      ctx.fillStyle = 'rgba(255,255,255,0.07)';
+      ctx.beginPath(); ctx.arc(W - 60, 60, 160, 0, Math.PI * 2); ctx.fill();
+      ctx.beginPath(); ctx.arc(80, H - 30, 130, 0, Math.PI * 2); ctx.fill();
+
+      // 2. Top Header Bar
+      ctx.fillStyle = '#ffffff';
+      ctx.beginPath();
+      ctx.roundRect(44, 38, 68, 68, 16);
+      ctx.fill();
+
+      ctx.fillStyle = colors[0];
+      ctx.font = '800 38px -apple-system, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(db.name.charAt(0).toUpperCase(), 78, 86);
+
+      ctx.textAlign = 'left';
+      ctx.fillStyle = 'rgba(255,255,255,0.75)';
+      ctx.font = '700 17px -apple-system, sans-serif';
+      ctx.fillText('KARTU TANDA ANGGOTA RESMI', 130, 62);
+
+      ctx.fillStyle = '#ffffff';
+      ctx.font = '800 28px -apple-system, sans-serif';
+      ctx.fillText(db.name.toUpperCase().substring(0, 28), 130, 96);
+
+      // Divider line
+      ctx.strokeStyle = 'rgba(255,255,255,0.2)';
+      ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.moveTo(44, 128); ctx.lineTo(W - 44, 128); ctx.stroke();
+
+      // 3. Avatar Initials Box
+      ctx.fillStyle = 'rgba(255,255,255,0.18)';
+      ctx.beginPath(); ctx.roundRect(44, 175, 140, 140, 26); ctx.fill();
+      ctx.strokeStyle = 'rgba(255,255,255,0.6)';
+      ctx.lineWidth = 3;
+      ctx.stroke();
+
+      const initials = m.name.split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase();
+      ctx.fillStyle = '#ffffff';
+      ctx.font = '800 54px -apple-system, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(initials, 114, 263);
+
+      // 4. Member Details
+      ctx.textAlign = 'left';
+      ctx.fillStyle = '#fde047';
+      ctx.font = '700 23px monospace';
+      ctx.fillText(m.kta, 212, 208);
+
+      ctx.fillStyle = '#ffffff';
+      ctx.font = '800 40px -apple-system, sans-serif';
+      ctx.fillText(m.name.substring(0, 20), 212, 256);
+
+      ctx.fillStyle = 'rgba(255,255,255,0.85)';
+      ctx.font = '600 22px -apple-system, sans-serif';
+      ctx.fillText(`Jabatan: ${m.role}  •  WA: ${m.phone}`, 212, 296);
+
+      // 5. Simulated QR Matrix Box (Zero External Library)
+      const qrX = W - 184, qrY = 175, qrSize = 140;
+      ctx.fillStyle = '#ffffff';
+      ctx.beginPath(); ctx.roundRect(qrX, qrY, qrSize, qrSize, 16); ctx.fill();
+
+      // Deterministic mini matrix barcode from KTA string
+      ctx.fillStyle = '#0f172a';
+      const seedStr = m.kta + m.name;
+      const cells = 9, pad = 16, cellW = (qrSize - pad * 2) / cells;
+      for (let r = 0; r < cells; r++) {
+        for (let c = 0; c < cells; c++) {
+          const isCorner = (r < 3 && c < 3) || (r < 3 && c >= cells - 3) || (r >= cells - 3 && c < 3);
+          const charCode = seedStr.charCodeAt((r * cells + c) % seedStr.length);
+          if (isCorner || (charCode + r * c) % 2 === 0) {
+            ctx.fillRect(qrX + pad + c * cellW, qrY + pad + r * cellW, cellW - 1.5, cellW - 1.5);
+          }
+        }
+      }
+
+      // 6. Bottom Footer
+      ctx.fillStyle = 'rgba(0,0,0,0.25)';
+      ctx.fillRect(0, H - 74, W, 74);
+
+      const mIdx = parseInt(document.getElementById('activeMonthSelect').value, 10);
+      const lunas = !!m.paid[mIdx];
+
+      ctx.fillStyle = 'rgba(255,255,255,0.85)';
+      ctx.font = '700 18px -apple-system, sans-serif';
+      ctx.fillText('STATUS ANGGOTA: AKTIF & TERVERIFIKASI', 44, H - 30);
+
+      ctx.textAlign = 'right';
+      ctx.fillStyle = lunas ? '#6ee7b7' : '#fde047';
+      ctx.font = '800 20px -apple-system, sans-serif';
+      ctx.fillText(`IURAN ${MONTHS[mIdx].toUpperCase()}: ${lunas ? 'LUNAS ✓' : 'BELUM LUNAS'}`, W - 44, H - 30);
+    }
+
+    function downloadCanvasPNG() {
+      const canvas = document.getElementById('ktaCanvas');
+      const selId = parseInt(document.getElementById('ktaMemberSelect').value, 10);
+      const m = db.members.find(x => x.id === selId) || db.members[0];
+      const fileName = `KTA-${m.kta}-${m.name.replace(/\s+/g, '-')}.png`;
+      const dataUrl = canvas.toDataURL('image/png');
+      if (window.AndroidNative && window.AndroidNative.saveBase64Png) {
+        window.AndroidNative.saveBase64Png(dataUrl, fileName);
+        return;
+      }
+      const a = document.createElement('a');
+      a.download = fileName;
+      a.href = dataUrl;
+      a.click();
+      toast('📥 Gambar Kartu KTA berhasil disimpan!');
+    }
+
+    function sendKTAWhatsApp() {
+      const selId = parseInt(document.getElementById('ktaMemberSelect').value, 10);
+      const m = db.members.find(x => x.id === selId) || db.members[0];
+      const msg = `Halo *${m.name}*! 🪪\n\nSelamat, Anda terdaftar sebagai anggota resmi *${db.name}*:\n• *No. KTA:* ${m.kta}\n• *Jabatan:* ${m.role}\n• *Status:* Aktif ✅`;
+      const phone = m.phone.replace(/^0/, '62').replace(/\D/g, '');
+      window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, '_blank');
+    }
+
+    function renderKas() {
+      const fin = getCashSummary();
+      const mIdx = parseInt(document.getElementById('activeMonthSelect').value, 10);
+      const mName = MONTHS[mIdx];
+
+      const paidMembers = db.members.filter(m => m.paid[mIdx]);
+      const unpaidMembers = db.members.filter(m => !m.paid[mIdx]);
+
+      const report = `📊 *LAPORAN IURAN & KAS ${db.name.toUpperCase()}*
+Bulan: *${mName} 2026* (${rp(db.fee)}/bln)
+
+✅ *SUDAH LUNAS (${paidMembers.length}):*
+${paidMembers.map((m, i) => `${i + 1}. ${m.name} ✓`).join('\n') || '- Belum ada -'}
+
+⏳ *BELUM BAYAR (${unpaidMembers.length}):*
+${unpaidMembers.map((m, i) => `${i + 1}. ${m.name}`).join('\n') || '- Lunas Semua! -'}
+
+💰 *SALDO KAS KOMUNITAS:*
+• Total Iuran Masuk: ${rp(fin.totalIuran)}
+• Pemasukan Lain: ${rp(fin.totalIn)}
+• Pengeluaran: ${rp(fin.totalOut)}
+——————————————
+🏦 *SALDO AKHIR: ${rp(fin.saldo)}*`;
+
+      document.getElementById('waTextOutput').value = report;
+
+      const listEl = document.getElementById('txHistoryList');
+      listEl.innerHTML = `
+        <div class="tx-row">
+          <div><strong>🟢 Akumulasi Iuran Anggota</strong><div style="font-size:11px;color:var(--muted);">Otomatis dari checklist bulanan</div></div>
+          <strong style="color:var(--success);">+ ${rp(fin.totalIuran)}</strong>
+        </div>
+      ` + db.txs.map(t => `
+        <div class="tx-row">
+          <div><strong>${t.type === 'in' ? '🟢' : '🔴'} ${t.desc}</strong></div>
+          <strong style="color:${t.type === 'in' ? 'var(--success)' : 'var(--danger)'};">
+            ${t.type === 'in' ? '+' : '-'} ${rp(t.amount)}
+          </strong>
+        </div>
+      `).join('');
+    }
+
+    function addTransaction(e) {
+      e.preventDefault();
+      const type = document.getElementById('txType').value;
+      const amount = parseInt(document.getElementById('txAmount').value, 10);
+      const desc = document.getElementById('txDesc').value.trim();
+      if (!amount || !desc) return;
+      db.txs.unshift({ id: Date.now(), type, amount, desc });
+      document.getElementById('txAmount').value = '';
+      document.getElementById('txDesc').value = '';
+      saveDB();
+      toast('💰 Transaksi kas berhasil dicatat!');
+    }
+
+    function copyReportWA() {
+      renderKas();
+      const txt = document.getElementById('waTextOutput').value;
+      if (window.AndroidNative && window.AndroidNative.copyToClipboard) {
+        window.AndroidNative.copyToClipboard(txt);
+        return;
+      }
+      navigator.clipboard.writeText(txt).then(() => toast('📋 Laporan disalin! Siap paste di Grup WA'));
+    }
+
+    function openModal(id) {
+      if (id === 'settingsModal') {
+        document.getElementById('setCommName').value = db.name;
+        document.getElementById('setCommFee').value = db.fee;
+        document.getElementById('setCommPrefix').value = db.prefix;
+      }
+      document.getElementById(id).classList.add('show');
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.remove('show');
+    }
+
+    function saveMember(e) {
+      e.preventDefault();
+      const name = document.getElementById('inName').value.trim();
+      const role = document.getElementById('inRole').value.trim();
+      const phone = document.getElementById('inPhone').value.trim();
+      if (!name) return;
+      const num = String(db.members.length + 1).padStart(3, '0');
+      db.members.push({
+        id: Date.now(),
+        kta: `${db.prefix}-${num}`,
+        name, role, phone,
+        paid: [0, 0, 0, 0, 0, 0]
+      });
+      document.getElementById('inName').value = '';
+      document.getElementById('inPhone').value = '';
+      closeModal('memberModal');
+      saveDB();
+      toast(`✅ ${name} berhasil ditambahkan!`);
+    }
+
+    function saveSettings(e) {
+      e.preventDefault();
+      db.name = document.getElementById('setCommName').value.trim();
+      db.fee = parseInt(document.getElementById('setCommFee').value, 10) || 50000;
+      db.prefix = document.getElementById('setCommPrefix').value.trim();
+      closeModal('settingsModal');
+      saveDB();
+      toast('⚙️ Pengaturan disimpan!');
+    }
+
+    function refreshUI() {
+      document.getElementById('hdrInitial').textContent = db.name.charAt(0).toUpperCase();
+      document.getElementById('hdrName').textContent = db.name;
+      document.getElementById('hdrSub').textContent = `Iuran: ${rp(db.fee)}/bln • Mobile Lite`;
+
+      const mIdx = parseInt(document.getElementById('activeMonthSelect').value, 10);
+      const paidNow = db.members.filter(m => m.paid[mIdx]).length;
+      const fin = getCashSummary();
+
+      document.getElementById('kpiMembers').textContent = db.members.length;
+      document.getElementById('kpiPaidLabel').textContent = `Lunas (${MONTHS[mIdx]})`;
+      document.getElementById('kpiPaid').textContent = `${paidNow}/${db.members.length}`;
+      document.getElementById('kpiSaldo').textContent = rp(fin.saldo);
+
+      const sel = document.getElementById('ktaMemberSelect');
+      const cur = sel.value;
+      sel.innerHTML = db.members.map(m => `<option value="${m.id}">${m.kta} — ${m.name}</option>`).join('');
+      if (cur && db.members.some(m => String(m.id) === String(cur))) sel.value = cur;
+
+      renderMemberList();
+      renderKas();
+      drawIDCard();
+    }
+
+    refreshUI();
+  </script>
+</body>
+</html>

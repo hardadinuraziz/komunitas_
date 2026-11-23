@@ -633,9 +633,15 @@
       const canvas = document.getElementById('ktaCanvas');
       const selId = parseInt(document.getElementById('ktaMemberSelect').value, 10);
       const m = db.members.find(x => x.id === selId) || db.members[0];
+      const fileName = `KTA-${m.kta}-${m.name.replace(/\s+/g, '-')}.png`;
+      const dataUrl = canvas.toDataURL('image/png');
+      if (window.AndroidNative && window.AndroidNative.saveBase64Png) {
+        window.AndroidNative.saveBase64Png(dataUrl, fileName);
+        return;
+      }
       const a = document.createElement('a');
-      a.download = `KTA-${m.kta}-${m.name.replace(/\s+/g, '-')}.png`;
-      a.href = canvas.toDataURL('image/png');
+      a.download = fileName;
+      a.href = dataUrl;
       a.click();
       toast('📥 Gambar Kartu KTA berhasil disimpan!');
     }
@@ -706,6 +712,10 @@ ${unpaidMembers.map((m, i) => `${i + 1}. ${m.name}`).join('\n') || '- Lunas Semu
     function copyReportWA() {
       renderKas();
       const txt = document.getElementById('waTextOutput').value;
+      if (window.AndroidNative && window.AndroidNative.copyToClipboard) {
+        window.AndroidNative.copyToClipboard(txt);
+        return;
+      }
       navigator.clipboard.writeText(txt).then(() => toast('📋 Laporan disalin! Siap paste di Grup WA'));
     }
 
