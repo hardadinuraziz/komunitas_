@@ -3,186 +3,549 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <meta name="theme-color" content="#1e40af" />
-  <title>KomunitasKu Lite — Iuran, Kas & Kartu Anggota</title>
+  <meta name="theme-color" content="#0f7a5a" />
+  <title>KomunitasKu by Tersistem — Aplikasi Iuran, Kas & Kartu Anggota</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
+    /* ==========================================================================
+       TERSISTEM OFFICIAL DESIGN SYSTEM (tersistem.com)
+       Emerald Primary (#059669 / #0f7a5a) + Warm Gold Accent (#d8a13c)
+       ========================================================================== */
     :root {
-      --bg: #f1f5f9;
-      --card: #ffffff;
-      --text: #0f172a;
+      --brand: #059669;
+      --brand-deep: #0f7a5a;
+      --brand-dark: #047857;
+      --brand-bg: #ecfdf5;
+      --brand-light: #e7f5ef;
+      --accent: #d8a13c;
+      --accent-soft: #fbf3e1;
+      --ink: #0f172a;
+      --ink-warm: #1c1917;
       --muted: #64748b;
-      --border: #e2e8f0;
-      --primary: #2563eb;
-      --primary-dark: #1d4ed8;
-      --success: #059669;
-      --success-bg: #d1fae5;
-      --warn: #d97706;
-      --warn-bg: #fef3c7;
-      --danger: #e11d48;
-      --danger-bg: #ffe4e6;
+      --line: #e2e8f0;
+      --border-warm: #ece8e1;
+      --bg: #ffffff;
+      --bg-soft: #faf8f3;
+      --danger: #b91c1c;
+      --danger-bg: #fdf1f1;
       --radius: 14px;
+      --radius-lg: 20px;
+      --shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      --shadow-emerald: 0 10px 30px -12px rgba(5, 150, 105, 0.28);
     }
-    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.4;
-      padding-bottom: 84px;
-    }
-    .container { max-width: 540px; margin: 0 auto; padding: 12px; }
 
-    /* Header */
-    .app-header {
-      background: linear-gradient(135deg, #1e3a8a, #2563eb);
-      color: #fff;
-      padding: 16px 14px 20px;
-      border-bottom-left-radius: 20px;
-      border-bottom-right-radius: 20px;
-      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.18);
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg-soft);
+      color: var(--ink);
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+      padding-bottom: 88px;
     }
-    .header-top { max-width: 540px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; gap: 10px; }
-    .brand { display: flex; align-items: center; gap: 10px; }
-    .brand-icon {
-      width: 38px; height: 38px; border-radius: 10px; background: #fff; color: #1e3a8a;
-      font-weight: 800; font-size: 18px; display: flex; align-items: center; justify-content: center;
+
+    /* Oswald Display Typography for Headings & Big Balances (Tersistem Signature) */
+    .oswald {
+      font-family: "Oswald", sans-serif;
+      letter-spacing: -0.01em;
+    }
+
+    .container { max-width: 580px; margin: 0 auto; padding: 0 14px; }
+
+    /* 1. Sticky Glass Header (Exact Tersistem Header) */
+    header.ts-header {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--line);
+    }
+    .ts-nav {
+      max-width: 580px;
+      margin: 0 auto;
+      padding: 0 14px;
+      height: 62px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .ts-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--ink);
+    }
+    .ts-logo-box {
+      width: 34px;
+      height: 34px;
+      border-radius: 9px;
+      background: var(--brand);
+      color: #fff;
+      font-weight: 800;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 3px 10px rgba(5, 150, 105, 0.25);
       flex-shrink: 0;
     }
-    .brand h1 { font-size: 16px; font-weight: 800; line-height: 1.2; }
-    .brand p { font-size: 12px; opacity: 0.85; margin-top: 2px; }
+    .ts-logo-text {
+      display: flex;
+      flex-direction: column;
+    }
+    .ts-logo-brand {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--brand);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      line-height: 1.1;
+    }
+    .ts-logo-title {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--ink);
+      line-height: 1.2;
+    }
+
+    /* 2. Tersistem Public Hero Balance Banner (.pub-hero) */
+    .pub-hero {
+      background: linear-gradient(135deg, #0b5e45 0%, #0f7a5a 55%, #059669 100%);
+      color: #fff;
+      border-radius: var(--radius-lg);
+      padding: 18px 16px;
+      margin: 14px 0 12px;
+      box-shadow: 0 10px 25px -8px rgba(15, 122, 90, 0.4);
+      position: relative;
+      overflow: hidden;
+    }
+    .pub-hero::after {
+      content: "";
+      position: absolute;
+      right: -30px;
+      top: -30px;
+      width: 130px;
+      height: 130px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.07);
+      pointer-events: none;
+    }
+    .pub-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .eyebrow-pill {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.16);
+      color: #ecfdf5;
+      padding: 4px 11px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+    }
+    .pub-saldo-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: rgba(255, 255, 255, 0.8);
+      font-weight: 600;
+    }
+    .pub-saldo {
+      font-family: "Oswald", sans-serif;
+      font-size: 34px;
+      font-weight: 700;
+      color: #fde047;
+      line-height: 1.1;
+      margin-top: 2px;
+    }
+
+    /* 3-Column Mini KPI Strip inside Hero */
+    .hero-kpis {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(255, 255, 255, 0.16);
+    }
+    .hero-kpi-item {
+      background: rgba(0, 0, 0, 0.15);
+      padding: 8px 10px;
+      border-radius: 10px;
+    }
+    .hero-kpi-label {
+      font-size: 10px;
+      color: rgba(255, 255, 255, 0.75);
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+    .hero-kpi-val {
+      font-family: "Oswald", sans-serif;
+      font-size: 18px;
+      font-weight: 600;
+      color: #fff;
+      margin-top: 1px;
+    }
+
+    /* 3. Tersistem Signature Cards & Hover Lift Animation (.18s) */
+    .ts-card {
+      background: var(--bg);
+      border: 1px solid var(--border-warm);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      margin-bottom: 14px;
+      box-shadow: var(--shadow);
+      transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
+    }
+    .ts-card-interactive {
+      background: var(--bg);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 14px;
+      margin-bottom: 10px;
+      transition: all 0.18s ease;
+    }
+    .ts-card-interactive:hover {
+      border-color: var(--brand);
+      box-shadow: var(--shadow-emerald);
+      transform: translateY(-3px);
+    }
+
+    /* Tersistem Power Result Callout Box */
+    .power-result {
+      background: var(--brand-light);
+      border-left: 3px solid var(--brand-deep);
+      padding: 10px 13px;
+      border-radius: 6px;
+      font-size: 12.5px;
+      color: var(--brand-dark);
+      font-weight: 600;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .section-title {
+      font-family: "Oswald", sans-serif;
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--ink-warm);
+      line-height: 1.2;
+    }
+    .section-sub {
+      font-size: 12.5px;
+      color: var(--muted);
+    }
+
+    /* 4. Tersistem Buttons & Micro-Interactions */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 10px 16px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 0.18s ease;
+      text-decoration: none;
+      font-family: inherit;
+    }
+    .btn:active { transform: scale(0.97); }
+    .btn-pill { border-radius: 999px; }
+    .btn-primary {
+      background: linear-gradient(180deg, #16a34a, #0f7a5a);
+      color: #fff;
+      box-shadow: 0 4px 14px rgba(15, 122, 90, 0.28);
+    }
+    .btn-primary:hover {
+      background: var(--brand-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(15, 122, 90, 0.36);
+    }
     .btn-ghost {
-      background: rgba(255,255,255,0.16); border: 1px solid rgba(255,255,255,0.25);
-      color: #fff; padding: 7px 11px; border-radius: 9px; font-size: 12px; font-weight: 600; cursor: pointer;
+      background: #fff;
+      color: var(--ink);
+      border-color: var(--line);
+    }
+    .btn-ghost:hover {
+      border-color: var(--brand);
+      color: var(--brand);
+    }
+    .btn-warn {
+      background: var(--accent-soft);
+      color: #92400e;
+      border-color: #fde68a;
+    }
+    .btn-warn:hover {
+      background: #fde68a;
+    }
+    .btn-block { width: 100%; }
+
+    /* Form Controls */
+    .toolbar { display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
+    input, select, textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      font-size: 13.5px;
+      font-family: inherit;
+      background: #f8fafc;
+      color: var(--ink);
+      transition: border-color 0.18s ease, box-shadow 0.18s ease;
+    }
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--brand);
+      background: #fff;
+      box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.12);
+    }
+
+    /* Member Item Elements */
+    .member-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .member-avatar-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .ic-box {
+      width: 40px;
+      height: 40px;
+      border-radius: 11px;
+      background: var(--brand-bg);
+      color: var(--brand-dark);
+      font-weight: 800;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      border: 1px solid #a7f3d0;
+    }
+    .member-name { font-size: 15px; font-weight: 800; color: var(--ink); }
+    .member-meta { font-size: 12px; color: var(--muted); font-family: monospace; }
+    .role-pill {
+      font-size: 11px;
+      font-weight: 700;
+      background: var(--brand-light);
+      color: var(--brand-dark);
+      padding: 3px 10px;
+      border-radius: 999px;
       white-space: nowrap;
     }
 
-    /* Quick Stats Bar */
-    .stats-grid {
-      max-width: 540px; margin: -12px auto 6px; padding: 0 12px;
-      display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;
-    }
-    .stat-box {
-      background: var(--card); border: 1px solid var(--border); border-radius: 12px;
-      padding: 10px; text-align: center; box-shadow: 0 2px 6px rgba(15,23,42,0.04);
-    }
-    .stat-label { font-size: 10px; font-weight: 700; color: var(--muted); text-transform: uppercase; }
-    .stat-val { font-size: 15px; font-weight: 800; margin-top: 2px; color: var(--text); }
-    .stat-val.green { color: var(--success); }
-
-    /* Cards & Controls */
-    .card {
-      background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
-      padding: 14px; margin-bottom: 12px; box-shadow: 0 1px 3px rgba(15,23,42,0.03);
-    }
-    .section-title { font-size: 15px; font-weight: 800; margin-bottom: 2px; }
-    .section-sub { font-size: 12px; color: var(--muted); margin-bottom: 12px; }
-
-    .toolbar { display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
-    input, select, textarea {
-      width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 10px;
-      font-size: 14px; font-family: inherit; background: #f8fafc; color: var(--text);
-    }
-    input:focus, select:focus, textarea:focus { outline: 2px solid var(--primary); background: #fff; }
-
-    .btn {
-      display: inline-flex; align-items: center; justify-content: center; gap: 6px;
-      padding: 11px 14px; border-radius: 10px; font-size: 13px; font-weight: 700;
-      border: none; cursor: pointer; transition: transform 0.08s ease; text-decoration: none;
-    }
-    .btn:active { transform: scale(0.97); }
-    .btn-primary { background: var(--primary); color: #fff; }
-    .btn-success { background: var(--success); color: #fff; }
-    .btn-warn { background: var(--warn-bg); color: var(--warn); }
-    .btn-outline { background: #f1f5f9; color: var(--text); border: 1px solid var(--border); }
-    .btn-block { width: 100%; }
-
-    /* Member Card Item (Mobile Friendly) */
-    .member-item {
-      border: 1px solid var(--border); border-radius: 12px; padding: 12px;
-      margin-bottom: 10px; background: #fff;
-    }
-    .member-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 10px; }
-    .member-name { font-size: 15px; font-weight: 800; color: var(--text); }
-    .member-meta { font-size: 12px; color: var(--muted); font-family: monospace; margin-top: 2px; }
-    .role-badge {
-      font-size: 11px; font-weight: 700; background: #eff6ff; color: var(--primary);
-      padding: 3px 8px; border-radius: 99px; white-space: nowrap;
-    }
-
-    /* Month Pills Grid */
+    /* 6-Month Matrix Pills */
     .months-grid {
-      display: grid; grid-template-columns: repeat(6, 1fr); gap: 5px; margin-bottom: 10px;
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 5px;
+      margin-bottom: 10px;
     }
     .month-pill {
-      padding: 7px 2px; border-radius: 8px; font-size: 11px; font-weight: 700;
-      text-align: center; border: 1px solid var(--border); background: #f8fafc;
-      color: var(--muted); cursor: pointer; user-select: none;
+      padding: 7px 2px;
+      border-radius: 8px;
+      font-size: 11px;
+      font-weight: 700;
+      text-align: center;
+      border: 1px solid var(--line);
+      background: #f8fafc;
+      color: var(--muted);
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.15s ease;
     }
+    .month-pill:hover { border-color: var(--brand); }
     .month-pill.paid {
-      background: var(--success-bg); color: var(--success); border-color: #6ee7b7;
+      background: var(--brand-bg);
+      color: var(--brand-dark);
+      border-color: #6ee7b7;
     }
 
     .member-actions { display: flex; gap: 6px; }
     .member-actions .btn { flex: 1; padding: 8px 10px; font-size: 12px; }
 
-    /* Native Canvas Holder */
+    /* KTA Canvas & Theme Picker */
     .canvas-wrap {
-      width: 100%; overflow: hidden; border-radius: 14px;
-      box-shadow: 0 8px 20px rgba(15,23,42,0.14); margin: 10px 0 14px;
-      background: #0f172a;
+      width: 100%;
+      overflow: hidden;
+      border-radius: 16px;
+      box-shadow: 0 12px 28px -8px rgba(15, 23, 42, 0.22);
+      margin: 10px 0 14px;
+      background: #0b5e45;
+      transition: transform 0.18s ease;
     }
     canvas#ktaCanvas { width: 100%; height: auto; display: block; }
-
     .theme-picker { display: flex; gap: 8px; margin: 8px 0 12px; }
     .theme-dot {
-      flex: 1; height: 34px; border-radius: 8px; border: 2px solid transparent; cursor: pointer;
+      flex: 1;
+      height: 36px;
+      border-radius: 10px;
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: transform 0.15s ease, border-color 0.15s ease;
     }
-    .theme-dot.active { border-color: #0f172a; transform: scale(1.03); }
+    .theme-dot.active {
+      border-color: var(--ink);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+    }
 
-    /* Cashflow list */
+    /* Cashflow Rows */
     .tx-row {
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 13px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 11px 0;
+      border-bottom: 1px solid var(--line);
+      font-size: 13px;
     }
     .tx-row:last-child { border-bottom: none; }
 
-    /* Bottom Navigation Bar (Mobile App Feel) */
+    /* Bottom Navigation Bar (Tersistem Emerald Active State) */
     .bottom-nav {
-      position: fixed; bottom: 0; left: 0; right: 0; background: #fff;
-      border-top: 1px solid var(--border); display: flex; justify-content: space-around;
-      padding: 6px 8px calc(6px + env(safe-area-inset-bottom)); z-index: 40;
-      box-shadow: 0 -2px 10px rgba(15,23,42,0.05);
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border-top: 1px solid var(--line);
+      display: flex;
+      justify-content: space-around;
+      padding: 6px 10px calc(6px + env(safe-area-inset-bottom));
+      z-index: 40;
+      box-shadow: 0 -4px 16px rgba(15, 23, 42, 0.04);
     }
     .nav-item {
-      flex: 1; max-width: 160px; background: none; border: none; padding: 6px 4px;
-      border-radius: 10px; display: flex; flex-direction: column; align-items: center;
-      gap: 2px; color: var(--muted); font-size: 11px; font-weight: 700; cursor: pointer;
+      flex: 1;
+      max-width: 170px;
+      background: none;
+      border: none;
+      padding: 7px 6px;
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.18s ease;
     }
     .nav-item .icon { font-size: 18px; line-height: 1; }
-    .nav-item.active { color: var(--primary); background: #eff6ff; }
+    .nav-item.active {
+      color: var(--brand-dark);
+      background: var(--brand-bg);
+    }
 
-    /* Modal */
+    /* Modals */
     .modal-backdrop {
-      position: fixed; inset: 0; background: rgba(15,23,42,0.55);
-      display: none; align-items: center; justify-content: center; padding: 16px; z-index: 50;
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.55);
+      backdrop-filter: blur(3px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      z-index: 50;
     }
     .modal-backdrop.show { display: flex; }
     .modal-box {
-      background: #fff; width: 100%; max-width: 400px; border-radius: 16px;
-      padding: 16px; box-shadow: 0 12px 30px rgba(0,0,0,0.2);
+      background: #fff;
+      width: 100%;
+      max-width: 410px;
+      border-radius: 20px;
+      padding: 18px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+      animation: modalPop 0.18s ease-out;
     }
-    .form-group { margin-bottom: 10px; }
-    .form-group label { display: block; font-size: 12px; font-weight: 700; margin-bottom: 4px; color: #334155; }
+    @keyframes modalPop {
+      from { opacity: 0; transform: translateY(10px) scale(0.98); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .form-group { margin-bottom: 11px; }
+    .form-group label {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 4px;
+      color: var(--ink);
+    }
+
+    /* View Transition Animation */
+    .view-panel {
+      animation: fadeSlideIn 0.2s ease-out;
+    }
+    @keyframes fadeSlideIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
 
     /* Toast */
     #toast {
-      position: fixed; top: 14px; left: 50%; transform: translateX(-50%) translateY(-80px);
-      background: #0f172a; color: #fff; padding: 10px 16px; border-radius: 99px;
-      font-size: 12px; font-weight: 700; box-shadow: 0 6px 16px rgba(0,0,0,0.2);
-      transition: transform 0.22s ease; z-index: 60; white-space: nowrap;
+      position: fixed;
+      top: 14px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-80px);
+      background: var(--ink);
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 999px;
+      font-size: 12.5px;
+      font-weight: 700;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.22);
+      transition: transform 0.22s ease;
+      z-index: 60;
+      white-space: nowrap;
+      border: 1px solid rgba(255,255,255,0.12);
     }
     #toast.show { transform: translateX(-50%) translateY(0); }
     .hidden { display: none !important; }
+
+    /* Tersistem Mini Footer */
+    .ts-footer {
+      text-align: center;
+      font-size: 12px;
+      color: var(--muted);
+      padding: 12px 0 20px;
+    }
+    .ts-footer a {
+      color: var(--brand-deep);
+      font-weight: 700;
+      text-decoration: none;
+    }
   </style>
 </head>
 <body>
@@ -190,58 +553,84 @@
   <!-- Toast Notification -->
   <div id="toast">✅ Berhasil disimpan</div>
 
-  <!-- Top Header -->
-  <header class="app-header">
-    <div class="header-top">
-      <div class="brand">
-        <div class="brand-icon" id="hdrInitial">K</div>
-        <div>
-          <h1 id="hdrName">Komunitas Motor Nusantara</h1>
-          <p id="hdrSub">Iuran: Rp 50.000/bln</p>
+  <!-- 1. Tersistem Sticky Glass Header -->
+  <header class="ts-header">
+    <nav class="ts-nav">
+      <div class="ts-logo">
+        <div class="ts-logo-box">T</div>
+        <div class="ts-logo-text">
+          <span class="ts-logo-brand">Tersistem.com</span>
+          <span class="ts-logo-title" id="hdrName">Komunitas Motor Nusantara</span>
         </div>
       </div>
-      <button class="btn-ghost" onclick="openModal('settingsModal')">⚙️ Edit</button>
-    </div>
+      <div style="display:flex; gap:6px;">
+        <button class="btn btn-ghost" style="padding:7px 11px; font-size:12px;" onclick="exportToExcelCSV()" title="Download Excel CSV">
+          📥 Excel
+        </button>
+        <button class="btn btn-ghost" style="padding:7px 11px; font-size:12px;" onclick="openModal('settingsModal')">
+          ⚙️ Edit
+        </button>
+      </div>
+    </nav>
   </header>
 
-  <!-- Floating KPI Stats -->
-  <div class="stats-grid">
-    <div class="stat-box">
-      <div class="stat-label">Anggota</div>
-      <div class="stat-val" id="kpiMembers">0</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-label" id="kpiPaidLabel">Lunas (Jan)</div>
-      <div class="stat-val green" id="kpiPaid">0/0</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-label">Saldo Kas</div>
-      <div class="stat-val" id="kpiSaldo">Rp 0</div>
-    </div>
-  </div>
-
-  <!-- Main Container -->
   <main class="container">
 
+    <!-- 2. Tersistem Signature Emerald & Gold Balance Banner (.pub-hero) -->
+    <div class="pub-hero">
+      <div class="pub-top">
+        <div>
+          <div class="pub-saldo-label">SALDO KAS KOMUNITAS TRANSPARAN</div>
+          <div class="pub-saldo" id="kpiSaldo">Rp 0</div>
+        </div>
+        <span class="eyebrow-pill" id="hdrSub">Iuran: Rp 50.000/bln</span>
+      </div>
+
+      <div class="hero-kpis">
+        <div class="hero-kpi-item">
+          <div class="hero-kpi-label">Total Anggota</div>
+          <div class="hero-kpi-val" id="kpiMembers">0 Orang</div>
+        </div>
+        <div class="hero-kpi-item">
+          <div class="hero-kpi-label" id="kpiPaidLabel">Lunas (Jan)</div>
+          <div class="hero-kpi-val" id="kpiPaid" style="color:#6ee7b7;">0 / 0</div>
+        </div>
+        <div class="hero-kpi-item">
+          <div class="hero-kpi-label">Total Iuran</div>
+          <div class="hero-kpi-val" id="kpiIuranTotal">Rp 0</div>
+        </div>
+      </div>
+    </div>
+
     <!-- ==================== VIEW 1: ANGGOTA & IURAN ==================== -->
-    <section id="view-members">
-      <div class="card">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+    <section id="view-members" class="view-panel">
+      <div class="ts-card">
+        <div class="section-head">
           <div>
-            <div class="section-title">Checklist Iuran Anggota</div>
-            <div class="section-sub" style="margin-bottom:0;">Tap nama bulan untuk ubah Lunas / Belum</div>
+            <h2 class="section-title">DAFTAR ANGGOTA & IURAN</h2>
+            <p class="section-sub">Klik tombol bulan untuk catat Lunas / Belum Bayar</p>
           </div>
-          <button class="btn btn-primary" onclick="openModal('memberModal')" style="padding:9px 12px;">+ Anggota</button>
+          <button class="btn btn-primary btn-pill" onclick="openModal('memberModal')">
+            + Anggota Baru
+          </button>
+        </div>
+
+        <!-- Tersistem Power Callout -->
+        <div class="power-result">
+          <span>⚡ Data tersimpan rapi & otomatis menghitung Saldo Kas di atas.</span>
+          <button onclick="copyReportWA()" style="background:none;border:none;color:var(--brand-deep);font-weight:800;font-size:12px;cursor:pointer;text-decoration:underline;white-space:nowrap;">
+            Salin WA →
+          </button>
         </div>
 
         <div class="toolbar">
           <select id="activeMonthSelect" onchange="refreshUI()" style="flex:1;">
-            <option value="0">Bulan Tagihan: Januari</option>
-            <option value="1">Bulan Tagihan: Februari</option>
-            <option value="2">Bulan Tagihan: Maret</option>
-            <option value="3">Bulan Tagihan: April</option>
-            <option value="4">Bulan Tagihan: Mei</option>
-            <option value="5">Bulan Tagihan: Juni</option>
+            <option value="0">Bulan Aktif: Januari</option>
+            <option value="1">Bulan Aktif: Februari</option>
+            <option value="2">Bulan Aktif: Maret</option>
+            <option value="3">Bulan Aktif: April</option>
+            <option value="4">Bulan Aktif: Mei</option>
+            <option value="5">Bulan Aktif: Juni</option>
           </select>
           <input type="search" id="searchMember" oninput="renderMemberList()" placeholder="🔍 Cari nama / No. KTA..." style="flex:1.2;" />
         </div>
@@ -250,24 +639,28 @@
       </div>
     </section>
 
-    <!-- ==================== VIEW 2: KARTU ANGGOTA (NATIVE CANVAS) ==================== -->
-    <section id="view-card" class="hidden">
-      <div class="card">
-        <div class="section-title">🪪 Kartu Tanda Anggota (KTA)</div>
-        <div class="section-sub">Super ringan, langsung digambar di perangkat tanpa loading server.</div>
+    <!-- ==================== VIEW 2: KARTU ANGGOTA (KTA DIGITAL) ==================== -->
+    <section id="view-card" class="view-panel hidden">
+      <div class="ts-card">
+        <div class="section-head">
+          <div>
+            <h2 class="section-title">🪪 CETAK KARTU ANGGOTA (KTA)</h2>
+            <p class="section-sub">Desain resmi ber-QR Matrix, siap simpan PNG atau kirim ke WA</p>
+          </div>
+        </div>
 
         <div class="form-group">
-          <label>Pilih Anggota</label>
+          <label>Pilih Anggota Komunitas</label>
           <select id="ktaMemberSelect" onchange="drawIDCard()"></select>
         </div>
 
         <div class="form-group">
-          <label>Pilih Warna Kartu</label>
+          <label>Tema Warna Kartu Resmi</label>
           <div class="theme-picker">
-            <div class="theme-dot active" style="background:linear-gradient(135deg,#0f172a,#2563eb)" onclick="setTheme(0, this)"></div>
-            <div class="theme-dot" style="background:linear-gradient(135deg,#064e3b,#10b981)" onclick="setTheme(1, this)"></div>
-            <div class="theme-dot" style="background:linear-gradient(135deg,#4c1d95,#d97706)" onclick="setTheme(2, this)"></div>
-            <div class="theme-dot" style="background:linear-gradient(135deg,#7f1d1d,#ef4444)" onclick="setTheme(3, this)"></div>
+            <div class="theme-dot active" style="background:linear-gradient(135deg,#064e3b,#059669)" onclick="setTheme(0, this)" title="Tersistem Emerald"></div>
+            <div class="theme-dot" style="background:linear-gradient(135deg,#0f172a,#2563eb)" onclick="setTheme(1, this)" title="Royal Blue"></div>
+            <div class="theme-dot" style="background:linear-gradient(135deg,#3b0764,#d97706)" onclick="setTheme(2, this)" title="Purple Gold"></div>
+            <div class="theme-dot" style="background:linear-gradient(135deg,#450a0a,#ef4444)" onclick="setTheme(3, this)" title="Crimson Red"></div>
           </div>
         </div>
 
@@ -277,46 +670,65 @@
         </div>
 
         <div style="display:flex; gap:8px;">
-          <button class="btn btn-primary" style="flex:1.3;" onclick="downloadCanvasPNG()">📥 Simpan Gambar KTA</button>
-          <button class="btn btn-success" style="flex:1;" onclick="sendKTAWhatsApp()">📲 Kirim WA</button>
+          <button class="btn btn-primary btn-pill" style="flex:1.3;" onclick="downloadCanvasPNG()">
+            📥 Download KTA (PNG)
+          </button>
+          <button class="btn btn-ghost btn-pill" style="flex:1;" onclick="sendKTAWhatsApp()">
+            📲 Kirim ke WA
+          </button>
         </div>
       </div>
     </section>
 
     <!-- ==================== VIEW 3: KAS & LAPORAN GRUP WA ==================== -->
-    <section id="view-kas" class="hidden">
-      <div class="card">
-        <div class="section-title">📋 Generator Laporan Grup WA</div>
-        <div class="section-sub">Otomatis rekap siapa yang sudah bayar & saldo kas komunitas.</div>
+    <section id="view-kas" class="view-panel hidden">
+      <div class="ts-card">
+        <div class="section-head">
+          <div>
+            <h2 class="section-title">📋 GENERATOR LAPORAN GRUP WA</h2>
+            <p class="section-sub">Transparansi kas 100% tanpa perlu ketik manual di WhatsApp</p>
+          </div>
+          <button class="btn btn-ghost" style="padding:7px 12px;font-size:12px;" onclick="exportToExcelCSV()">
+            📥 Export Excel
+          </button>
+        </div>
 
-        <textarea id="waTextOutput" rows="11" readonly style="font-family:monospace; font-size:12px; background:#0f172a; color:#34d399; border:none; margin-bottom:10px;"></textarea>
+        <textarea id="waTextOutput" rows="11" readonly style="font-family:monospace; font-size:12px; background:#0f172a; color:#6ee7b7; border:none; margin-bottom:12px; border-radius:14px; padding:14px;"></textarea>
 
-        <button class="btn btn-success btn-block" onclick="copyReportWA()">
-          📋 Salin Laporan & Paste di Grup WA
+        <button class="btn btn-primary btn-pill btn-block" onclick="copyReportWA()">
+          📋 Salin Laporan & Bagikan ke Grup WA
         </button>
       </div>
 
-      <div class="card">
-        <div class="section-title">💰 Catat Kas Masuk / Keluar</div>
-        <div class="section-sub">Iuran anggota sudah otomatis dihitung ke dalam saldo kas.</div>
+      <div class="ts-card">
+        <div class="section-head">
+          <div>
+            <h2 class="section-title">💰 CATAT PEMASUKAN & PENGELUARAN</h2>
+            <p class="section-sub">Iuran bulanan anggota sudah otomatis masuk ke saldo kas</p>
+          </div>
+        </div>
 
-        <form onsubmit="addTransaction(event)" style="display:grid; grid-template-columns: 1fr 1fr; gap:8px; margin-bottom:12px;">
+        <form onsubmit="addTransaction(event)" style="display:grid; grid-template-columns: 1fr 1fr; gap:8px; margin-bottom:14px;">
           <select id="txType">
-            <option value="out">🔴 Pengeluaran</option>
+            <option value="out">🔴 Pengeluaran Kas</option>
             <option value="in">🟢 Pemasukan Lain</option>
           </select>
           <input type="number" id="txAmount" required placeholder="Nominal (Rp)" />
-          <input type="text" id="txDesc" required placeholder="Keterangan (mis: Kopdar / Banner)" style="grid-column: span 2;" />
-          <button type="submit" class="btn btn-primary" style="grid-column: span 2;">+ Simpan Transaksi Kas</button>
+          <input type="text" id="txDesc" required placeholder="Keterangan (mis: Konsumsi Kopdar / Cetak Banner)" style="grid-column: span 2;" />
+          <button type="submit" class="btn btn-primary" style="grid-column: span 2;">+ Simpan Catatan Kas</button>
         </form>
 
         <div id="txHistoryList"></div>
       </div>
     </section>
 
+    <footer class="ts-footer">
+      Bagian dari ekosistem <a href="https://tersistem.com" target="_blank">Tersistem.com</a> — Usaha &amp; Komunitas Lebih Rapi Tanpa Ribet
+    </footer>
+
   </main>
 
-  <!-- Mobile Bottom Navigation -->
+  <!-- Mobile Bottom Navigation Bar -->
   <nav class="bottom-nav">
     <button class="nav-item active" id="nav-members" onclick="switchView('members')">
       <span class="icon">👥</span>
@@ -328,30 +740,36 @@
     </button>
     <button class="nav-item" id="nav-kas" onclick="switchView('kas')">
       <span class="icon">📊</span>
-      <span>Kas & Laporan</span>
+      <span>Kas &amp; Laporan</span>
     </button>
   </nav>
 
-  <!-- MODAL: TAMBAH ANGGOTA -->
+  <!-- MODAL: TAMBAH ANGGOTA (+ AI KTP Autofill Demo seperti Aplikasi Warga Tersistem) -->
   <div id="memberModal" class="modal-backdrop">
     <div class="modal-box">
-      <div class="section-title" style="margin-bottom:10px;">Tambah Anggota Baru</div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+        <h3 class="section-title">TAMBAH ANGGOTA BARU</h3>
+        <label style="background:var(--brand-light);color:var(--brand-dark);padding:5px 10px;border-radius:999px;font-size:11px;font-weight:800;cursor:pointer;">
+          📸 Scan Foto KTP
+          <input type="file" accept="image/*" style="display:none;" onchange="simulateKTPScan(this)" />
+        </label>
+      </div>
       <form onsubmit="saveMember(event)">
         <div class="form-group">
-          <label>Nama Lengkap</label>
+          <label>Nama Lengkap Anggota</label>
           <input type="text" id="inName" required placeholder="Contoh: Agus Setiawan" />
         </div>
         <div class="form-group">
-          <label>Jabatan / Posisi</label>
+          <label>Jabatan / Status di Komunitas</label>
           <input type="text" id="inRole" value="Anggota" required />
         </div>
         <div class="form-group">
-          <label>No. WhatsApp</label>
+          <label>Nomor WhatsApp Aktif</label>
           <input type="tel" id="inPhone" required placeholder="08123456789" />
         </div>
-        <div style="display:flex; gap:8px; margin-top:14px;">
-          <button type="button" class="btn btn-outline" style="flex:1;" onclick="closeModal('memberModal')">Batal</button>
-          <button type="submit" class="btn btn-primary" style="flex:1.3;">Simpan</button>
+        <div style="display:flex; gap:8px; margin-top:16px;">
+          <button type="button" class="btn btn-ghost" style="flex:1;" onclick="closeModal('memberModal')">Batal</button>
+          <button type="submit" class="btn btn-primary" style="flex:1.4;">Simpan &amp; Buat KTA</button>
         </div>
       </form>
     </div>
@@ -360,23 +778,23 @@
   <!-- MODAL: EDIT KOMUNITAS -->
   <div id="settingsModal" class="modal-backdrop">
     <div class="modal-box">
-      <div class="section-title" style="margin-bottom:10px;">Pengaturan Komunitas</div>
+      <h3 class="section-title" style="margin-bottom:12px;">PENGATURAN KOMUNITAS</h3>
       <form onsubmit="saveSettings(event)">
         <div class="form-group">
-          <label>Nama Komunitas / Paguyuban</label>
+          <label>Nama Komunitas / Paguyuban / Klub</label>
           <input type="text" id="setCommName" required />
         </div>
         <div class="form-group">
-          <label>Iuran Bulanan (Rp)</label>
+          <label>Nominal Iuran Bulanan (Rp)</label>
           <input type="number" id="setCommFee" required />
         </div>
         <div class="form-group">
-          <label>Kode Awalan KTA</label>
-          <input type="text" id="setCommPrefix" required placeholder="KMN-2026" />
+          <label>Kode Awalan Nomor KTA</label>
+          <input type="text" id="setCommPrefix" required placeholder="KMN-26" />
         </div>
-        <div style="display:flex; gap:8px; margin-top:14px;">
-          <button type="button" class="btn btn-outline" style="flex:1;" onclick="closeModal('settingsModal')">Batal</button>
-          <button type="submit" class="btn btn-primary" style="flex:1.3;">Simpan</button>
+        <div style="display:flex; gap:8px; margin-top:16px;">
+          <button type="button" class="btn btn-ghost" style="flex:1;" onclick="closeModal('settingsModal')">Batal</button>
+          <button type="submit" class="btn btn-primary" style="flex:1.4;">Simpan Perubahan</button>
         </div>
       </form>
     </div>
@@ -384,9 +802,10 @@
 
   <script>
     const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun'];
+    // Theme 0 is Tersistem Official Emerald + Gold
     const THEMES = [
+      ['#064e3b', '#0f7a5a', '#059669'],
       ['#0f172a', '#1e3a8a', '#2563eb'],
-      ['#064e3b', '#047857', '#10b981'],
       ['#3b0764', '#6d28d9', '#d97706'],
       ['#450a0a', '#b91c1c', '#ef4444']
     ];
@@ -397,21 +816,21 @@
       prefix: 'KMN-26',
       theme: 0,
       members: [
-        { id: 1, kta: 'KMN-26-001', name: 'Budi Santoso', role: 'Ketua', phone: '081234567801', paid: [1, 1, 1, 0, 0, 0] },
+        { id: 1, kta: 'KMN-26-001', name: 'Budi Santoso', role: 'Ketua Umum', phone: '081234567801', paid: [1, 1, 1, 0, 0, 0] },
         { id: 2, kta: 'KMN-26-002', name: 'Rina Wijaya', role: 'Bendahara', phone: '081234567802', paid: [1, 1, 1, 1, 0, 0] },
-        { id: 3, kta: 'KMN-26-003', name: 'Dimas Saputra', role: 'Anggota', phone: '081234567803', paid: [1, 0, 0, 0, 0, 0] },
+        { id: 3, kta: 'KMN-26-003', name: 'Dimas Saputra', role: 'Humas & Event', phone: '081234567803', paid: [1, 0, 0, 0, 0, 0] },
         { id: 4, kta: 'KMN-26-004', name: 'Hendra Gunawan', role: 'Anggota', phone: '081234567804', paid: [1, 1, 0, 0, 0, 0] }
       ],
       txs: [
         { id: 1, type: 'in', desc: 'Donasi Sponsor Kopdar', amount: 250000 },
-        { id: 2, type: 'out', desc: 'Cetak Stiker & Banner', amount: 120000 }
+        { id: 2, type: 'out', desc: 'Cetak Stiker & Banner Komunitas', amount: 120000 }
       ]
     };
 
-    let db = JSON.parse(localStorage.getItem('komunitasku_lite_v2')) || initialData;
+    let db = JSON.parse(localStorage.getItem('komunitasku_tersistem_v3')) || initialData;
 
     function saveDB() {
-      localStorage.setItem('komunitasku_lite_v2', JSON.stringify(db));
+      localStorage.setItem('komunitasku_tersistem_v3', JSON.stringify(db));
       refreshUI();
     }
 
@@ -424,7 +843,7 @@
       el.textContent = msg;
       el.classList.add('show');
       clearTimeout(window._tTimer);
-      window._tTimer = setTimeout(() => el.classList.remove('show'), 2000);
+      window._tTimer = setTimeout(() => el.classList.remove('show'), 2200);
     }
 
     function switchView(view) {
@@ -459,6 +878,7 @@
 
       box.innerHTML = list.map(m => {
         const isPaidMonth = !!m.paid[mIdx];
+        const initials = m.name.split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase();
         const pills = MONTHS.map((mName, idx) => `
           <div class="month-pill ${m.paid[idx] ? 'paid' : ''}" onclick="toggleMonth(${m.id}, ${idx})">
             ${mName}${m.paid[idx] ? ' ✓' : ''}
@@ -466,20 +886,23 @@
         `).join('');
 
         return `
-          <div class="member-item">
+          <div class="ts-card-interactive">
             <div class="member-top">
-              <div>
-                <div class="member-name">${m.name}</div>
-                <div class="member-meta">${m.kta} • ${m.phone}</div>
+              <div class="member-avatar-row">
+                <div class="ic-box">${initials}</div>
+                <div>
+                  <div class="member-name">${m.name}</div>
+                  <div class="member-meta">${m.kta} • ${m.phone}</div>
+                </div>
               </div>
-              <span class="role-badge">${m.role}</span>
+              <span class="role-pill">${m.role}</span>
             </div>
             <div class="months-grid">${pills}</div>
             <div class="member-actions">
-              <button class="btn btn-outline" onclick="previewMemberKTA(${m.id})">🪪 Kartu KTA</button>
+              <button class="btn btn-ghost" onclick="previewMemberKTA(${m.id})">🪪 Kartu KTA</button>
               ${
                 isPaidMonth
-                  ? `<button class="btn" style="background:var(--success-bg); color:var(--success);" onclick="toggleMonth(${m.id}, ${mIdx})">✅ ${MONTHS[mIdx]} Lunas</button>`
+                  ? `<button class="btn" style="background:var(--brand-bg); color:var(--brand-dark); border-color:#a7f3d0;" onclick="toggleMonth(${m.id}, ${mIdx})">✅ ${MONTHS[mIdx]} Lunas</button>`
                   : `<button class="btn btn-warn" onclick="billMemberWA(${m.id}, ${mIdx})">📲 Tagih ${MONTHS[mIdx]}</button>`
               }
             </div>
@@ -517,7 +940,6 @@
       drawIDCard();
     }
 
-    // Zero-Dependency Pure HTML5 Canvas KTA Generator (Instant Mobile Render)
     function drawIDCard() {
       const canvas = document.getElementById('ktaCanvas');
       const ctx = canvas.getContext('2d');
@@ -548,18 +970,18 @@
       ctx.fill();
 
       ctx.fillStyle = colors[0];
-      ctx.font = '800 38px -apple-system, sans-serif';
+      ctx.font = '800 38px "Plus Jakarta Sans", -apple-system, sans-serif';
       ctx.textAlign = 'center';
-      ctx.fillText(db.name.charAt(0).toUpperCase(), 78, 86);
+      ctx.fillText('T', 78, 86);
 
       ctx.textAlign = 'left';
-      ctx.fillStyle = 'rgba(255,255,255,0.75)';
-      ctx.font = '700 17px -apple-system, sans-serif';
-      ctx.fillText('KARTU TANDA ANGGOTA RESMI', 130, 62);
+      ctx.fillStyle = 'rgba(255,255,255,0.8)';
+      ctx.font = '700 16px "Plus Jakarta Sans", sans-serif';
+      ctx.fillText('KARTU TANDA ANGGOTA RESMI • TERSISTEM', 130, 62);
 
       ctx.fillStyle = '#ffffff';
-      ctx.font = '800 28px -apple-system, sans-serif';
-      ctx.fillText(db.name.toUpperCase().substring(0, 28), 130, 96);
+      ctx.font = '700 29px "Oswald", sans-serif';
+      ctx.fillText(db.name.toUpperCase().substring(0, 30), 130, 97);
 
       // Divider line
       ctx.strokeStyle = 'rgba(255,255,255,0.2)';
@@ -575,7 +997,7 @@
 
       const initials = m.name.split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase();
       ctx.fillStyle = '#ffffff';
-      ctx.font = '800 54px -apple-system, sans-serif';
+      ctx.font = '800 54px "Plus Jakarta Sans", sans-serif';
       ctx.textAlign = 'center';
       ctx.fillText(initials, 114, 263);
 
@@ -586,19 +1008,18 @@
       ctx.fillText(m.kta, 212, 208);
 
       ctx.fillStyle = '#ffffff';
-      ctx.font = '800 40px -apple-system, sans-serif';
-      ctx.fillText(m.name.substring(0, 20), 212, 256);
+      ctx.font = '700 40px "Oswald", sans-serif';
+      ctx.fillText(m.name.substring(0, 22), 212, 256);
 
-      ctx.fillStyle = 'rgba(255,255,255,0.85)';
-      ctx.font = '600 22px -apple-system, sans-serif';
+      ctx.fillStyle = 'rgba(255,255,255,0.88)';
+      ctx.font = '600 21px "Plus Jakarta Sans", sans-serif';
       ctx.fillText(`Jabatan: ${m.role}  •  WA: ${m.phone}`, 212, 296);
 
-      // 5. Simulated QR Matrix Box (Zero External Library)
+      // 5. QR Matrix Box
       const qrX = W - 184, qrY = 175, qrSize = 140;
       ctx.fillStyle = '#ffffff';
       ctx.beginPath(); ctx.roundRect(qrX, qrY, qrSize, qrSize, 16); ctx.fill();
 
-      // Deterministic mini matrix barcode from KTA string
       ctx.fillStyle = '#0f172a';
       const seedStr = m.kta + m.name;
       const cells = 9, pad = 16, cellW = (qrSize - pad * 2) / cells;
@@ -619,13 +1040,13 @@
       const mIdx = parseInt(document.getElementById('activeMonthSelect').value, 10);
       const lunas = !!m.paid[mIdx];
 
-      ctx.fillStyle = 'rgba(255,255,255,0.85)';
-      ctx.font = '700 18px -apple-system, sans-serif';
+      ctx.fillStyle = 'rgba(255,255,255,0.88)';
+      ctx.font = '700 18px "Plus Jakarta Sans", sans-serif';
       ctx.fillText('STATUS ANGGOTA: AKTIF & TERVERIFIKASI', 44, H - 30);
 
       ctx.textAlign = 'right';
       ctx.fillStyle = lunas ? '#6ee7b7' : '#fde047';
-      ctx.font = '800 20px -apple-system, sans-serif';
+      ctx.font = '800 20px "Plus Jakarta Sans", sans-serif';
       ctx.fillText(`IURAN ${MONTHS[mIdx].toUpperCase()}: ${lunas ? 'LUNAS ✓' : 'BELUM LUNAS'}`, W - 44, H - 30);
     }
 
@@ -654,6 +1075,38 @@
       window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, '_blank');
     }
 
+    // Export Data Anggota & Status Iuran ke File Excel (.CSV)
+    function exportToExcelCSV() {
+      const headers = ['No KTA', 'Nama Anggota', 'Jabatan', 'WhatsApp', ...MONTHS.map(m => 'Iuran ' + m)];
+      const rows = db.members.map(m => [
+        m.kta,
+        `"${m.name}"`,
+        `"${m.role}"`,
+        `'${m.phone}`,
+        ...m.paid.map(p => p ? 'LUNAS' : 'BELUM')
+      ]);
+      const csvContent = 'data:text/csv;charset=utf-8,' + [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+      const link = document.createElement('a');
+      link.setAttribute('href', encodeURI(csvContent));
+      link.setAttribute('download', `Data-Iuran-${db.name.replace(/\s+/g, '-')}.csv`);
+      link.click();
+      toast('📥 Data berhasil diekspor ke Excel (.CSV)!');
+    }
+
+    // Simulasi AI Scan KTP (Fitur Viral Tersistem)
+    function simulateKTPScan(input) {
+      if (!input.files || !input.files[0]) return;
+      toast('🤖 AI Tersistem sedang membaca foto KTP...');
+      setTimeout(() => {
+        const sampleNames = ['Wahyu Hidayat', 'Siti Nurhaliza', 'Reza Rahadian', 'Dedi Kurniawan'];
+        const pick = sampleNames[Math.floor(Math.random() * sampleNames.length)];
+        document.getElementById('inName').value = pick;
+        document.getElementById('inRole').value = 'Anggota';
+        document.getElementById('inPhone').value = '0813' + Math.floor(10000000 + Math.random() * 89999999);
+        toast('✅ Data KTP berhasil terbaca otomatis!');
+      }, 650);
+    }
+
     function renderKas() {
       const fin = getCashSummary();
       const mIdx = parseInt(document.getElementById('activeMonthSelect').value, 10);
@@ -676,7 +1129,8 @@ ${unpaidMembers.map((m, i) => `${i + 1}. ${m.name}`).join('\n') || '- Lunas Semu
 • Pemasukan Lain: ${rp(fin.totalIn)}
 • Pengeluaran: ${rp(fin.totalOut)}
 ——————————————
-🏦 *SALDO AKHIR: ${rp(fin.saldo)}*`;
+🏦 *SALDO AKHIR: ${rp(fin.saldo)}*
+_Dikelola rapi dengan Tersistem.com_`;
 
       document.getElementById('waTextOutput').value = report;
 
@@ -684,12 +1138,12 @@ ${unpaidMembers.map((m, i) => `${i + 1}. ${m.name}`).join('\n') || '- Lunas Semu
       listEl.innerHTML = `
         <div class="tx-row">
           <div><strong>🟢 Akumulasi Iuran Anggota</strong><div style="font-size:11px;color:var(--muted);">Otomatis dari checklist bulanan</div></div>
-          <strong style="color:var(--success);">+ ${rp(fin.totalIuran)}</strong>
+          <strong style="color:var(--brand-dark);">+ ${rp(fin.totalIuran)}</strong>
         </div>
       ` + db.txs.map(t => `
         <div class="tx-row">
           <div><strong>${t.type === 'in' ? '🟢' : '🔴'} ${t.desc}</strong></div>
-          <strong style="color:${t.type === 'in' ? 'var(--success)' : 'var(--danger)'};">
+          <strong style="color:${t.type === 'in' ? 'var(--brand-dark)' : 'var(--danger)'};">
             ${t.type === 'in' ? '+' : '-'} ${rp(t.amount)}
           </strong>
         </div>
@@ -763,17 +1217,17 @@ ${unpaidMembers.map((m, i) => `${i + 1}. ${m.name}`).join('\n') || '- Lunas Semu
     }
 
     function refreshUI() {
-      document.getElementById('hdrInitial').textContent = db.name.charAt(0).toUpperCase();
       document.getElementById('hdrName').textContent = db.name;
-      document.getElementById('hdrSub').textContent = `Iuran: ${rp(db.fee)}/bln • Mobile Lite`;
+      document.getElementById('hdrSub').textContent = `Iuran: ${rp(db.fee)}/bln`;
 
       const mIdx = parseInt(document.getElementById('activeMonthSelect').value, 10);
       const paidNow = db.members.filter(m => m.paid[mIdx]).length;
       const fin = getCashSummary();
 
-      document.getElementById('kpiMembers').textContent = db.members.length;
+      document.getElementById('kpiMembers').textContent = `${db.members.length} Orang`;
       document.getElementById('kpiPaidLabel').textContent = `Lunas (${MONTHS[mIdx]})`;
-      document.getElementById('kpiPaid').textContent = `${paidNow}/${db.members.length}`;
+      document.getElementById('kpiPaid').textContent = `${paidNow} / ${db.members.length}`;
+      document.getElementById('kpiIuranTotal').textContent = rp(fin.totalIuran);
       document.getElementById('kpiSaldo').textContent = rp(fin.saldo);
 
       const sel = document.getElementById('ktaMemberSelect');
