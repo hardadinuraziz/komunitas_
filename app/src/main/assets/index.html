@@ -3,171 +3,116 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <meta name="theme-color" content="#eaeff6" />
-  <meta name="description" content="KomunitasKu — Pengelolaan iuran, agenda RSVP, kas, dan kartu anggota komunitas." />
+  <meta name="theme-color" content="#ecf1f8" />
+  <meta name="description" content="KomunitasKu — Iuran, agenda, kas, dan KTA komunitas." />
   <title>KomunitasKu</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #eaeff6;
-      --surface: #eaeff6;
-      --surface-hi: #f1f5fb;
-      --sd: rgba(148, 166, 194, 0.54);
-      --sl: rgba(255, 255, 255, 0.92);
+      --bg: #ecf1f8;
+      --hi: #f4f7fc;
+      --sd: rgba(145, 165, 196, 0.48);
+      --sl: rgba(255, 255, 255, 0.94);
 
-      --neu-out: 7px 7px 15px var(--sd), -7px -7px 15px var(--sl);
-      --neu-out-sm: 4px 4px 9px var(--sd), -4px -4px 9px var(--sl);
-      --neu-out-xs: 2.5px 2.5px 5px var(--sd), -2.5px -2.5px 5px var(--sl);
-      --neu-in: inset 4px 4px 8px var(--sd), inset -4px -4px 8px var(--sl);
-      --neu-in-sm: inset 2.5px 2.5px 5px var(--sd), inset -2.5px -2.5px 5px var(--sl);
+      --out: 6px 6px 14px var(--sd), -6px -6px 14px var(--sl);
+      --out-sm: 3.5px 3.5px 8px var(--sd), -3.5px -3.5px 8px var(--sl);
+      --out-xs: 2px 2px 5px var(--sd), -2px -2px 5px var(--sl);
+      --in: inset 3.5px 3.5px 7px var(--sd), inset -3.5px -3.5px 7px var(--sl);
+      --in-sm: inset 2px 2px 4.5px var(--sd), inset -2px -2px 4.5px var(--sl);
 
-      --bevel: 1px solid rgba(255, 255, 255, 0.58);
-      --bevel-in: 1px solid rgba(255, 255, 255, 0.38);
+      --line: 1px solid rgba(255, 255, 255, 0.65);
+      --line-in: 1px solid rgba(255, 255, 255, 0.35);
 
       --ink: #0f172a;
       --ink-2: #475569;
-      --muted: #64748b;
+      --muted: #7c8da6;
 
-      --accent: #2563eb;
-      --accent-hi: #1d4ed8;
-      --accent-soft: rgba(37, 99, 235, 0.11);
-      --warn: #b45309;
-      --warn-soft: rgba(180, 83, 9, 0.11);
-      --danger: #be123c;
-      --danger-soft: rgba(190, 18, 60, 0.10);
+      --blue: #2563eb;
+      --blue-deep: #1d4ed8;
+      --blue-soft: rgba(37, 99, 235, 0.10);
+      --amber: #d97706;
+      --rose: #e11d48;
 
-      --r-sm: 11px;
-      --r-md: 16px;
-      --r-lg: 22px;
-      --r-pill: 999px;
+      --r-sm: 12px;
+      --r-md: 18px;
+      --r-lg: 24px;
+      --pill: 999px;
       --ease: cubic-bezier(0.22, 1, 0.36, 1);
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    html { scroll-behavior: smooth; }
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 
     body {
-      font-family: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-family: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, sans-serif;
       background: var(--bg);
       color: var(--ink);
-      line-height: 1.45;
+      line-height: 1.4;
       -webkit-font-smoothing: antialiased;
       min-height: 100vh;
     }
 
-    .mono {
-      font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
-      font-variant-numeric: tabular-nums;
-    }
-
+    .mono { font-family: "JetBrains Mono", ui-monospace, monospace; font-variant-numeric: tabular-nums; }
     .num { font-variant-numeric: tabular-nums; }
     .hidden { display: none !important; }
 
     svg.ico {
-      width: 17px;
-      height: 17px;
+      width: 18px;
+      height: 18px;
       stroke: currentColor;
-      stroke-width: 1.9;
+      stroke-width: 1.85;
       stroke-linecap: round;
       stroke-linejoin: round;
       fill: none;
       flex-shrink: 0;
     }
 
-    /* ========================================================================
-       NEUMORPHIC PRIMITIVES
-       ======================================================================== */
-    .neu-card {
-      background: linear-gradient(145deg, var(--surface-hi), var(--surface));
-      border: var(--bevel);
+    /* ==================== PRIMITIVES ==================== */
+    .card {
+      background: linear-gradient(145deg, var(--hi), var(--bg));
+      border: var(--line);
       border-radius: var(--r-lg);
-      box-shadow: var(--neu-out);
-      padding: 18px;
-    }
-
-    .neu-item {
-      background: linear-gradient(145deg, var(--surface-hi), var(--surface));
-      border: var(--bevel);
-      border-radius: var(--r-md);
-      box-shadow: var(--neu-out-sm);
-      padding: 14px;
-      transition: transform 0.18s var(--ease), box-shadow 0.18s var(--ease);
-    }
-
-    .neu-well {
-      background: var(--bg);
-      border: var(--bevel-in);
-      border-radius: var(--r-md);
-      box-shadow: var(--neu-in);
+      box-shadow: var(--out);
     }
 
     .btn {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 7px;
+      gap: 6px;
       padding: 10px 16px;
-      border-radius: var(--r-sm);
-      border: var(--bevel);
-      background: linear-gradient(145deg, var(--surface-hi), var(--surface));
+      border-radius: var(--pill);
+      border: var(--line);
+      background: linear-gradient(145deg, var(--hi), var(--bg));
       color: var(--ink);
       font-family: inherit;
       font-size: 13px;
       font-weight: 600;
       cursor: pointer;
-      box-shadow: var(--neu-out-sm);
-      transition: transform 0.15s var(--ease), box-shadow 0.15s var(--ease), color 0.15s ease;
-      text-decoration: none;
+      box-shadow: var(--out-sm);
+      transition: transform 0.14s var(--ease), box-shadow 0.14s var(--ease), color 0.14s ease;
       user-select: none;
     }
 
-    .btn:hover { color: var(--accent); }
-
-    .btn:active {
-      box-shadow: var(--neu-in-sm);
-      transform: translateY(0.5px);
-    }
-
-    .btn-pill { border-radius: var(--r-pill); }
+    .btn:active { box-shadow: var(--in-sm); transform: scale(0.98); }
     .btn-block { width: 100%; }
 
-    .btn-primary {
+    .btn-blue {
       background: linear-gradient(145deg, #3b82f6, #2563eb);
-      color: #ffffff;
-      border: 1px solid rgba(255, 255, 255, 0.22);
-      box-shadow: 5px 5px 14px rgba(37, 99, 235, 0.30), -4px -4px 10px var(--sl), inset 0 1px 1px rgba(255, 255, 255, 0.30);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      box-shadow: 5px 5px 14px rgba(37, 99, 235, 0.30), -4px -4px 10px var(--sl), inset 0 1px 1px rgba(255, 255, 255, 0.32);
+    }
+    .btn-blue:active {
+      box-shadow: inset 3px 3px 7px rgba(15, 42, 110, 0.45), inset -2px -2px 5px rgba(255, 255, 255, 0.15);
     }
 
-    .btn-primary:hover {
-      color: #ffffff;
-      background: linear-gradient(145deg, #2563eb, #1d4ed8);
-    }
+    .btn-rose { color: var(--rose); }
+    .btn-amber { color: var(--amber); }
+    .btn-ink-blue { color: var(--blue); }
 
-    .btn-primary:active {
-      box-shadow: inset 3px 3px 7px rgba(17, 45, 115, 0.45), inset -2px -2px 5px rgba(255, 255, 255, 0.15);
-    }
-
-    .btn-accent-soft {
-      color: var(--accent);
-    }
-
-    .btn-warn {
-      color: var(--warn);
-    }
-
-    .btn-danger {
-      color: var(--danger);
-    }
-
-    .icon-btn {
+    .ico-btn {
       width: 38px;
       height: 38px;
       padding: 0;
@@ -175,30 +120,26 @@
       flex-shrink: 0;
     }
 
-    .icon-btn.sm {
-      width: 32px;
-      height: 32px;
-    }
+    .ico-btn.sm { width: 32px; height: 32px; }
 
-    /* Form Controls */
     input, select, textarea {
       width: 100%;
-      padding: 11px 13px;
+      padding: 11px 14px;
       border-radius: var(--r-sm);
-      border: var(--bevel-in);
+      border: var(--line-in);
       background: var(--bg);
       color: var(--ink);
       font-family: inherit;
       font-size: 13.5px;
       font-weight: 500;
-      box-shadow: var(--neu-in);
-      transition: box-shadow 0.18s ease;
+      box-shadow: var(--in);
+      transition: box-shadow 0.16s ease;
       appearance: none;
       -webkit-appearance: none;
     }
 
     select {
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23475569' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
       background-repeat: no-repeat;
       background-position: right 12px center;
       padding-right: 34px;
@@ -206,49 +147,23 @@
     }
 
     input::placeholder, textarea::placeholder { color: var(--muted); font-weight: 400; }
-
     input:focus, select:focus, textarea:focus {
       outline: none;
-      box-shadow: var(--neu-in), 0 0 0 2px rgba(37, 99, 235, 0.30);
-    }
-
-    input[type="checkbox"] {
-      width: 18px;
-      height: 18px;
-      padding: 0;
-      border-radius: 6px;
-      cursor: pointer;
-      display: grid;
-      place-content: center;
-      flex-shrink: 0;
-    }
-
-    input[type="checkbox"]:checked {
-      background: var(--accent);
-      box-shadow: var(--neu-out-xs);
-    }
-
-    input[type="checkbox"]:checked::after {
-      content: "";
-      width: 9px;
-      height: 5px;
-      border-left: 2px solid #fff;
-      border-bottom: 2px solid #fff;
-      transform: rotate(-45deg) translate(0.5px, -0.5px);
+      box-shadow: var(--in), 0 0 0 2px rgba(37, 99, 235, 0.28);
     }
 
     /* Segmented Track */
-    .seg-track {
+    .seg {
       display: flex;
       gap: 4px;
       padding: 4px;
-      border-radius: var(--r-pill);
+      border-radius: var(--pill);
       background: var(--bg);
-      border: var(--bevel-in);
-      box-shadow: var(--neu-in);
+      border: var(--line-in);
+      box-shadow: var(--in);
     }
 
-    .seg-btn {
+    .seg-b {
       flex: 1;
       border: 1px solid transparent;
       background: transparent;
@@ -256,115 +171,88 @@
       font-family: inherit;
       font-size: 12px;
       font-weight: 600;
-      padding: 7px 10px;
-      border-radius: var(--r-pill);
+      padding: 7px 8px;
+      border-radius: var(--pill);
       cursor: pointer;
-      transition: all 0.18s var(--ease);
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 5px;
+      transition: all 0.16s var(--ease);
       white-space: nowrap;
     }
 
-    .seg-btn.active {
-      background: linear-gradient(145deg, var(--surface-hi), var(--surface));
-      color: var(--ink);
-      border-color: rgba(255, 255, 255, 0.55);
-      box-shadow: var(--neu-out-xs);
+    .seg-b.on {
+      background: linear-gradient(145deg, var(--hi), var(--bg));
+      color: var(--blue);
+      border-color: rgba(255, 255, 255, 0.65);
+      box-shadow: var(--out-xs);
+    }
+    .seg-b.on-amber {
+      background: linear-gradient(145deg, var(--hi), var(--bg));
+      color: var(--amber);
+      border-color: rgba(255, 255, 255, 0.65);
+      box-shadow: var(--out-xs);
+    }
+    .seg-b.on-rose {
+      background: linear-gradient(145deg, var(--hi), var(--bg));
+      color: var(--rose);
+      border-color: rgba(255, 255, 255, 0.65);
+      box-shadow: var(--out-xs);
     }
 
-    .seg-btn.active-hadir {
-      background: linear-gradient(145deg, var(--surface-hi), var(--surface));
-      color: var(--accent);
-      border-color: rgba(255, 255, 255, 0.55);
-      box-shadow: var(--neu-out-xs);
-    }
-
-    .seg-btn.active-ragu {
-      background: linear-gradient(145deg, var(--surface-hi), var(--surface));
-      color: var(--warn);
-      border-color: rgba(255, 255, 255, 0.55);
-      box-shadow: var(--neu-out-xs);
-    }
-
-    .seg-btn.active-tidak {
-      background: linear-gradient(145deg, var(--surface-hi), var(--surface));
-      color: var(--danger);
-      border-color: rgba(255, 255, 255, 0.55);
-      box-shadow: var(--neu-out-xs);
-    }
-
-    /* ========================================================================
-       1. LOGIN SCREEN
-       ======================================================================== */
-    .auth-screen {
+    /* ==================== LOGIN ==================== */
+    .auth-wrap {
       min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 24px 16px;
+      padding: 24px 18px;
     }
 
-    .auth-card {
+    .auth-box {
       width: 100%;
-      max-width: 380px;
-      padding: 30px 24px 26px;
-      animation: fadeUp 0.25s var(--ease);
+      max-width: 348px;
+      padding: 32px 24px 26px;
+      animation: fadeUp 0.24s var(--ease);
     }
 
-    .auth-head {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      margin-bottom: 24px;
-    }
-
-    .brand-mark {
-      width: 56px;
-      height: 56px;
-      border-radius: 18px;
-      background: linear-gradient(145deg, var(--surface-hi), var(--surface));
-      border: var(--bevel);
-      box-shadow: var(--neu-out);
+    .auth-emblem {
+      width: 52px;
+      height: 52px;
+      margin: 0 auto 14px;
+      border-radius: 16px;
+      background: linear-gradient(145deg, var(--hi), var(--bg));
+      border: var(--line);
+      box-shadow: var(--out);
       display: flex;
       align-items: center;
       justify-content: center;
-      color: var(--accent);
-      margin-bottom: 14px;
+      color: var(--blue);
     }
 
-    .brand-mark svg { width: 26px; height: 26px; }
+    .auth-emblem svg { width: 24px; height: 24px; }
 
-    .auth-title {
-      font-size: 19px;
+    .auth-name {
+      text-align: center;
+      font-size: 17px;
       font-weight: 800;
       letter-spacing: -0.02em;
-      color: var(--ink);
+      margin-bottom: 24px;
     }
 
-    .auth-error {
-      background: var(--danger-soft);
-      color: var(--danger);
-      border-radius: var(--r-sm);
-      padding: 9px 12px;
-      font-size: 12.5px;
+    .auth-err {
+      text-align: center;
+      font-size: 12px;
       font-weight: 600;
-      margin-bottom: 14px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
+      color: var(--rose);
+      margin-bottom: 12px;
     }
 
     .pwd-wrap { position: relative; }
     .pwd-eye {
       position: absolute;
-      right: 8px;
+      right: 6px;
       top: 50%;
       transform: translateY(-50%);
-      width: 32px;
-      height: 32px;
+      width: 34px;
+      height: 34px;
       border: none;
       background: transparent;
       color: var(--muted);
@@ -372,492 +260,396 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      border-radius: 50%;
     }
-    .pwd-eye:hover { color: var(--ink); }
 
-    .auth-row {
+    .quick-row {
       display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin: 14px 0 20px;
-      font-size: 12.5px;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 20px;
+    }
+
+    .quick-pill {
+      padding: 6px 12px;
+      font-size: 11.5px;
       color: var(--ink-2);
     }
 
-    .auth-link {
-      color: var(--accent);
-      font-weight: 600;
-      text-decoration: none;
-    }
-
-    .demo-row {
-      margin-top: 20px;
-      padding-top: 16px;
-      border-top: 1px solid rgba(163, 177, 198, 0.35);
-    }
-
-    .demo-label {
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--muted);
-      text-align: center;
-      margin-bottom: 10px;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-    }
-
-    .demo-pills {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-    }
-
-    .demo-pill {
-      padding: 8px 6px;
-      font-size: 12px;
-      border-radius: var(--r-pill);
-    }
-
-    /* ========================================================================
-       2. APP SHELL
-       ======================================================================== */
+    /* ==================== SHELL ==================== */
     .shell {
-      max-width: 540px;
+      max-width: 480px;
       margin: 0 auto;
-      padding: 14px 16px 104px;
+      padding: 16px 16px 104px;
     }
 
-    /* Compact Top Bar */
-    .top-bar {
+    /* Ultra-minimal Header */
+    .top {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 10px;
+      gap: 12px;
       margin-bottom: 18px;
     }
 
-    .user-chip {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      min-width: 0;
+    .top-title {
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: -0.025em;
+      color: var(--ink);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
-    .avatar-neu {
-      width: 40px;
-      height: 40px;
+    .avatar-btn {
+      width: 38px;
+      height: 38px;
       border-radius: 50%;
-      background: linear-gradient(145deg, var(--surface-hi), var(--surface));
-      border: var(--bevel);
-      box-shadow: var(--neu-out-sm);
+      border: var(--line);
+      background: linear-gradient(145deg, var(--hi), var(--bg));
+      box-shadow: var(--out-sm);
+      color: var(--blue);
+      font-size: 12.5px;
+      font-weight: 800;
+      cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 13px;
-      font-weight: 800;
-      color: var(--accent);
       flex-shrink: 0;
+      transition: transform 0.14s var(--ease), box-shadow 0.14s var(--ease);
     }
 
-    .top-meta { min-width: 0; }
-    .top-comm {
-      font-size: 14.5px;
-      font-weight: 800;
-      letter-spacing: -0.015em;
-      color: var(--ink);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    .top-user {
-      font-size: 11.5px;
-      color: var(--muted);
-      font-weight: 500;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+    .avatar-btn:active { box-shadow: var(--in-sm); transform: scale(0.96); }
+
+    /* ==================== IURAN VIEW ==================== */
+    .hero-slim {
+      padding: 16px 18px;
+      margin-bottom: 14px;
     }
 
-    .top-actions {
+    .hero-row {
       display: flex;
       align-items: center;
-      gap: 8px;
-      flex-shrink: 0;
-    }
-
-    /* Summary Card */
-    .summary-card {
-      margin-bottom: 18px;
-      padding: 18px 18px 14px;
-    }
-
-    .summary-top {
-      display: flex;
       justify-content: space-between;
-      align-items: flex-start;
       gap: 10px;
     }
 
-    .micro-label {
-      font-size: 10.5px;
-      font-weight: 700;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      color: var(--muted);
-    }
-
-    .saldo-val {
-      font-size: 29px;
+    .saldo-big {
+      font-size: 26px;
       font-weight: 800;
       letter-spacing: -0.03em;
-      color: var(--ink);
-      line-height: 1.15;
-      margin-top: 2px;
+      line-height: 1.1;
     }
 
-    .fee-chip {
-      padding: 5px 11px;
-      border-radius: var(--r-pill);
+    .stat-pill {
+      padding: 4px 10px;
+      border-radius: var(--pill);
+      background: var(--bg);
+      box-shadow: var(--in-sm);
       font-size: 11.5px;
       font-weight: 700;
-      color: var(--accent);
-      background: var(--bg);
-      box-shadow: var(--neu-in-sm);
+      color: var(--blue);
       white-space: nowrap;
     }
 
-    .neu-progress {
-      height: 6px;
-      border-radius: var(--r-pill);
+    .rail {
+      height: 5px;
+      border-radius: var(--pill);
       background: var(--bg);
-      box-shadow: var(--neu-in-sm);
-      margin-top: 13px;
+      box-shadow: var(--in-sm);
+      margin-top: 12px;
       overflow: hidden;
     }
 
-    .neu-progress-fill {
+    .rail-fill {
       height: 100%;
       width: 0%;
-      border-radius: var(--r-pill);
+      border-radius: var(--pill);
       background: linear-gradient(90deg, #2563eb, #60a5fa);
       transition: width 0.35s var(--ease);
     }
 
-    .kpi-strip {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      margin-top: 12px;
-      padding-top: 12px;
-      border-top: 1px solid rgba(148, 166, 194, 0.30);
-    }
-
-    .kpi-cell {
-      display: flex;
-      flex-direction: column;
-      gap: 1px;
-    }
-
-    .kpi-val {
-      font-size: 15.5px;
-      font-weight: 800;
-      color: var(--ink);
-      letter-spacing: -0.015em;
-    }
-
-    .kpi-val.accent { color: var(--accent); }
-
-    .kpi-lbl {
-      font-size: 11px;
-      color: var(--muted);
-      font-weight: 500;
-    }
-
-    /* View Header & Controls */
-    .view-bar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      margin-bottom: 14px;
-    }
-
-    .view-title {
-      font-size: 16px;
-      font-weight: 800;
-      letter-spacing: -0.02em;
-      color: var(--ink);
-    }
-
-    .toolbar {
-      display: flex;
-      align-items: center;
-      gap: 9px;
-      margin-bottom: 14px;
-    }
-
-    .search-box {
-      position: relative;
-      flex: 1.3;
-    }
-
-    .search-box svg {
-      position: absolute;
-      left: 12px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--muted);
-      pointer-events: none;
-    }
-
-    .search-box input { padding-left: 36px; }
-
-    .stack {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    /* Member Card */
-    .member-head {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      margin-bottom: 12px;
-    }
-
-    .member-id {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      min-width: 0;
-    }
-
-    .member-avatar {
-      width: 36px;
-      height: 36px;
-      border-radius: 12px;
-      background: var(--bg);
-      box-shadow: var(--neu-in-sm);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 12px;
-      font-weight: 800;
-      color: var(--accent);
-      flex-shrink: 0;
-    }
-
-    .member-name {
-      font-size: 14.5px;
-      font-weight: 700;
-      color: var(--ink);
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .me-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: var(--accent);
-      display: inline-block;
-    }
-
-    .member-sub {
-      font-size: 11.5px;
-      color: var(--muted);
-    }
-
-    .tag-pill {
-      padding: 4px 10px;
-      border-radius: var(--r-pill);
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--ink-2);
-      background: var(--bg);
-      box-shadow: var(--neu-in-sm);
-      white-space: nowrap;
-      flex-shrink: 0;
-    }
-
-    .tag-pill.accent { color: var(--accent); }
-
-    /* Tactile Month Toggles */
-    .months-grid {
+    /* Horizontal Month Strip */
+    .month-bar {
       display: grid;
       grid-template-columns: repeat(6, 1fr);
       gap: 6px;
       margin-bottom: 12px;
     }
 
-    .m-pill {
-      padding: 7px 2px;
-      border-radius: 10px;
+    .m-tab {
+      padding: 7px 0;
+      border-radius: 11px;
+      border: var(--line);
+      background: linear-gradient(145deg, var(--hi), var(--bg));
+      box-shadow: var(--out-xs);
+      color: var(--muted);
+      font-family: inherit;
       font-size: 11.5px;
       font-weight: 600;
-      text-align: center;
-      color: var(--muted);
-      background: linear-gradient(145deg, var(--surface-hi), var(--surface));
-      border: var(--bevel);
-      box-shadow: var(--neu-out-xs);
       cursor: pointer;
-      user-select: none;
-      transition: all 0.16s var(--ease);
+      transition: all 0.15s var(--ease);
     }
 
-    .m-pill:active:not(.readonly) {
-      box-shadow: var(--neu-in-sm);
-    }
-
-    .m-pill.paid {
+    .m-tab.on {
       background: var(--bg);
-      color: var(--accent);
+      color: var(--blue);
       font-weight: 700;
-      border: var(--bevel-in);
-      box-shadow: var(--neu-in-sm);
+      border: var(--line-in);
+      box-shadow: var(--in-sm);
     }
 
-    .m-pill.readonly { cursor: default; }
-
-    .card-actions {
+    .search-row {
       display: flex;
       align-items: center;
-      gap: 8px;
-    }
-
-    .card-actions .btn {
-      flex: 1;
-      padding: 8px 10px;
-      font-size: 12px;
-    }
-
-    .card-actions .icon-btn { flex: 0 0 34px; width: 34px; height: 34px; }
-
-    .status-chip {
-      flex: 1;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 5px;
-      padding: 8px 10px;
-      border-radius: var(--r-sm);
-      font-size: 12px;
-      font-weight: 700;
-      background: var(--bg);
-      box-shadow: var(--neu-in-sm);
-    }
-
-    .status-chip.paid { color: var(--accent); }
-    .status-chip.unpaid { color: var(--warn); }
-
-    /* Self Action Strip (Anggota) */
-    .self-strip {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      padding: 11px 14px;
-      margin-bottom: 12px;
-    }
-
-    /* Agenda Card */
-    .agenda-top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-      margin-bottom: 8px;
-    }
-
-    .agenda-title {
-      font-size: 15.5px;
-      font-weight: 700;
-      color: var(--ink);
-      letter-spacing: -0.015em;
-      margin-bottom: 10px;
-    }
-
-    .agenda-meta {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px 14px;
-      font-size: 12px;
-      color: var(--ink-2);
-      margin-bottom: 10px;
-    }
-
-    .meta-item {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-    }
-
-    .meta-item svg { width: 14px; height: 14px; color: var(--accent); }
-
-    .agenda-note {
-      font-size: 12px;
-      color: var(--muted);
-      margin-bottom: 12px;
-      padding: 8px 11px;
-      border-radius: var(--r-sm);
-      background: var(--bg);
-      box-shadow: var(--neu-in-sm);
-    }
-
-    .attendee-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-      margin-top: 11px;
-    }
-
-    .attendee-chips {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 5px;
-      flex: 1;
-    }
-
-    .attendee-chip {
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--ink-2);
-      padding: 3px 9px;
-      border-radius: var(--r-pill);
-      background: var(--bg);
-      box-shadow: var(--neu-in-sm);
-    }
-
-    /* Kas View */
-    .fin-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
       gap: 10px;
       margin-bottom: 14px;
     }
 
-    .fin-tile {
-      padding: 12px 11px;
-      border-radius: var(--r-md);
-      background: linear-gradient(145deg, var(--surface-hi), var(--surface));
-      border: var(--bevel);
-      box-shadow: var(--neu-out-sm);
+    .search-box {
+      position: relative;
+      flex: 1;
     }
 
-    .fin-val {
+    .search-box svg {
+      position: absolute;
+      left: 13px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 16px;
+      height: 16px;
+      color: var(--muted);
+      pointer-events: none;
+    }
+
+    .search-box input {
+      padding: 10px 14px 10px 36px;
+      border-radius: var(--pill);
+      font-size: 13px;
+    }
+
+    /* Compact Member Rows */
+    .list-card {
+      padding: 6px 14px;
+    }
+
+    .m-row {
+      padding: 11px 0;
+      border-bottom: 1px solid rgba(145, 165, 196, 0.24);
+    }
+
+    .m-row:last-child { border-bottom: none; }
+
+    .m-main {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      cursor: pointer;
+    }
+
+    .m-left {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      min-width: 0;
+      flex: 1;
+    }
+
+    .m-av {
+      width: 36px;
+      height: 36px;
+      border-radius: 12px;
+      background: var(--bg);
+      box-shadow: var(--in-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11.5px;
+      font-weight: 800;
+      color: var(--blue);
+      flex-shrink: 0;
+    }
+
+    .m-info { min-width: 0; }
+
+    .m-name {
       font-size: 14px;
+      font-weight: 700;
+      color: var(--ink);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .m-role {
+      font-size: 11.5px;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    .me-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--blue);
+      flex-shrink: 0;
+    }
+
+    .m-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    /* Tactile Check Switch */
+    .check-orb {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      border: var(--line);
+      background: linear-gradient(145deg, var(--hi), var(--bg));
+      box-shadow: var(--out-xs);
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.16s var(--ease);
+    }
+
+    .check-orb.paid {
+      background: var(--bg);
+      border: var(--line-in);
+      box-shadow: var(--in-sm);
+      color: var(--blue);
+    }
+
+    .check-orb.ro { cursor: default; }
+
+    /* Expandable Member Details */
+    .m-drawer {
+      margin-top: 12px;
+      padding-top: 10px;
+      border-top: 1px dashed rgba(145, 165, 196, 0.30);
+      animation: fadeUp 0.16s var(--ease);
+    }
+
+    .m-meta-line {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11.5px;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    .mini-months {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+
+    .mini-m {
+      padding: 6px 0;
+      border-radius: 9px;
+      font-size: 11px;
+      font-weight: 600;
+      text-align: center;
+      color: var(--muted);
+      background: linear-gradient(145deg, var(--hi), var(--bg));
+      border: var(--line);
+      box-shadow: var(--out-xs);
+      cursor: pointer;
+    }
+
+    .mini-m.paid {
+      background: var(--bg);
+      color: var(--blue);
+      border: var(--line-in);
+      box-shadow: var(--in-sm);
+    }
+
+    .mini-m.ro { cursor: default; }
+
+    .drawer-acts {
+      display: flex;
+      gap: 8px;
+    }
+
+    .drawer-acts .btn {
+      flex: 1;
+      padding: 7px 10px;
+      font-size: 12px;
+    }
+
+    /* ==================== AGENDA VIEW ==================== */
+    .view-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+
+    .view-h {
+      font-size: 15px;
       font-weight: 800;
       letter-spacing: -0.02em;
-      margin-top: 3px;
     }
 
-    .tx-list {
-      padding: 4px 14px;
+    .stack { display: flex; flex-direction: column; gap: 12px; }
+
+    .ag-card { padding: 15px 16px; }
+
+    .ag-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 6px;
+    }
+
+    .ag-title {
+      font-size: 14.5px;
+      font-weight: 700;
+      letter-spacing: -0.015em;
+      line-height: 1.3;
+    }
+
+    .ag-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px 12px;
+      font-size: 11.5px;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+
+    .ag-who {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 9px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* ==================== KAS VIEW ==================== */
+    .kas-hero {
+      padding: 18px;
+      margin-bottom: 14px;
+    }
+
+    .kas-io {
+      display: flex;
+      gap: 16px;
+      margin-top: 10px;
+      font-size: 12.5px;
+      font-weight: 700;
     }
 
     .tx-row {
@@ -865,68 +657,58 @@
       align-items: center;
       justify-content: space-between;
       gap: 10px;
-      padding: 12px 0;
-      border-bottom: 1px solid rgba(163, 177, 198, 0.30);
+      padding: 11px 0;
+      border-bottom: 1px solid rgba(145, 165, 196, 0.24);
     }
 
     .tx-row:last-child { border-bottom: none; }
 
-    .tx-left {
+    .tx-l {
       display: flex;
       align-items: center;
       gap: 10px;
       min-width: 0;
     }
 
-    .tx-dir {
-      width: 32px;
-      height: 32px;
+    .tx-dot {
+      width: 30px;
+      height: 30px;
       border-radius: 50%;
       background: var(--bg);
-      box-shadow: var(--neu-in-sm);
+      box-shadow: var(--in-sm);
       display: flex;
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
     }
 
-    .tx-dir.in { color: var(--accent); }
-    .tx-dir.out { color: var(--danger); }
+    .tx-dot.in { color: var(--blue); }
+    .tx-dot.out { color: var(--rose); }
 
-    .tx-desc {
+    .tx-t {
       font-size: 13px;
       font-weight: 600;
-      color: var(--ink);
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
 
-    .tx-meta {
-      font-size: 11px;
-      color: var(--muted);
-    }
+    .tx-d { font-size: 11px; color: var(--muted); }
 
-    .tx-right {
+    .tx-r {
       display: flex;
       align-items: center;
       gap: 6px;
       flex-shrink: 0;
     }
 
-    .tx-amt {
-      font-size: 13px;
-      font-weight: 700;
-      white-space: nowrap;
-    }
+    .tx-v { font-size: 13px; font-weight: 700; white-space: nowrap; }
+    .tx-v.in { color: var(--blue); }
+    .tx-v.out { color: var(--rose); }
 
-    .tx-amt.in { color: var(--accent); }
-    .tx-amt.out { color: var(--danger); }
-
-    .del-x {
+    .x-btn {
       width: 24px;
       height: 24px;
-      border-radius: 50%;
       border: none;
       background: transparent;
       color: var(--muted);
@@ -935,160 +717,139 @@
       align-items: center;
       justify-content: center;
     }
-    .del-x:hover { color: var(--danger); }
 
-    /* KTA Card View */
-    .kta-controls {
+    /* ==================== KTA VIEW ==================== */
+    .kta-bar {
       display: flex;
       align-items: center;
       gap: 10px;
       margin-bottom: 14px;
     }
 
-    .theme-dots {
+    .swatches {
       display: flex;
-      gap: 8px;
+      gap: 7px;
       padding: 5px 8px;
-      border-radius: var(--r-pill);
+      border-radius: var(--pill);
       background: var(--bg);
-      box-shadow: var(--neu-in-sm);
+      box-shadow: var(--in-sm);
       flex-shrink: 0;
     }
 
-    .theme-dot {
-      width: 24px;
-      height: 24px;
+    .sw {
+      width: 22px;
+      height: 22px;
       border-radius: 50%;
       border: 2px solid transparent;
       cursor: pointer;
-      transition: transform 0.16s var(--ease), box-shadow 0.16s var(--ease);
+      transition: transform 0.15s var(--ease);
     }
 
-    .theme-dot.active {
-      transform: scale(1.12);
-      border-color: #ffffff;
+    .sw.on {
+      transform: scale(1.14);
+      border-color: #fff;
       box-shadow: 0 2px 8px rgba(15, 23, 42, 0.35);
     }
 
-    .canvas-frame {
+    .frame {
       padding: 10px;
       border-radius: var(--r-lg);
       background: var(--bg);
-      box-shadow: var(--neu-in);
+      box-shadow: var(--in);
       margin-bottom: 14px;
     }
 
-    .canvas-inner {
+    .frame-in {
       border-radius: 14px;
       overflow: hidden;
       box-shadow: 0 8px 20px -6px rgba(15, 23, 42, 0.25);
     }
 
-    canvas#ktaCanvas {
-      width: 100%;
-      height: auto;
-      display: block;
-    }
+    canvas#ktaCanvas { width: 100%; height: auto; display: block; }
 
-    /* Report Preview */
-    .report-box {
+    /* ==================== LAPORAN VIEW ==================== */
+    .rep-box {
       font-family: "JetBrains Mono", monospace;
       font-size: 12px;
       line-height: 1.6;
       color: var(--ink);
       background: var(--bg);
-      box-shadow: var(--neu-in);
-      border: var(--bevel-in);
+      box-shadow: var(--in);
+      border: var(--line-in);
       border-radius: var(--r-md);
       padding: 14px;
       margin: 14px 0;
       resize: none;
     }
 
-    /* Floating Neumorphic Bottom Navigation */
-    .bottom-dock {
+    /* ==================== EXPANDING FLOATING DOCK ==================== */
+    .dock {
       position: fixed;
       left: 50%;
-      bottom: calc(12px + env(safe-area-inset-bottom));
+      bottom: calc(14px + env(safe-area-inset-bottom));
       transform: translateX(-50%);
-      width: calc(100% - 28px);
-      max-width: 508px;
-      background: linear-gradient(145deg, #eef2f7, #e5ebf2);
-      border: var(--bevel);
-      border-radius: 24px;
-      box-shadow: 9px 9px 20px rgba(148, 163, 184, 0.62), -6px -6px 16px rgba(255, 255, 255, 0.92);
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 4px;
+      width: calc(100% - 32px);
+      max-width: 448px;
+      background: linear-gradient(145deg, #f3f6fb, #e8eef6);
+      border: var(--line);
+      border-radius: var(--pill);
+      box-shadow: 8px 8px 20px rgba(135, 155, 188, 0.58), -6px -6px 16px rgba(255, 255, 255, 0.94);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       padding: 6px;
+      gap: 4px;
       z-index: 40;
     }
 
-    .nav-tab {
+    .d-tab {
       position: relative;
+      height: 44px;
+      flex: 1;
       border: 1px solid transparent;
       background: transparent;
-      border-radius: 18px;
-      padding: 8px 2px 7px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 3px;
-      color: var(--muted);
-      font-family: inherit;
-      font-size: 10.5px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.18s var(--ease);
-    }
-
-    .nav-tab svg { width: 19px; height: 19px; }
-
-    .nav-tab.active {
-      background: var(--bg);
-      color: var(--accent);
-      font-weight: 700;
-      border-color: rgba(255, 255, 255, 0.32);
-      box-shadow: var(--neu-in-sm);
-    }
-
-    .nav-tab::after {
-      content: "";
-      width: 4px;
-      height: 4px;
-      border-radius: 50%;
-      background: var(--accent);
-      margin-top: 1px;
-      opacity: 0;
-      transition: opacity 0.18s ease;
-    }
-
-    .nav-tab.active::after {
-      opacity: 1;
-    }
-
-    .nav-dot {
-      position: absolute;
-      top: 5px;
-      right: 16px;
-      min-width: 15px;
-      height: 15px;
-      padding: 0 4px;
-      border-radius: var(--r-pill);
-      background: var(--accent);
-      color: #fff;
-      font-size: 9.5px;
-      font-weight: 700;
-      display: flex;
+      border-radius: var(--pill);
+      display: inline-flex;
       align-items: center;
       justify-content: center;
+      gap: 6px;
+      color: var(--muted);
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s var(--ease);
     }
 
-    /* Modals */
-    .modal-backdrop {
+    .d-tab span.lbl { display: none; }
+
+    .d-tab.on {
+      flex: 1.75;
+      background: var(--bg);
+      color: var(--blue);
+      border-color: rgba(255, 255, 255, 0.35);
+      box-shadow: var(--in-sm);
+    }
+
+    .d-tab.on span.lbl { display: inline; }
+
+    .d-badge {
+      position: absolute;
+      top: 7px;
+      right: calc(50% - 14px);
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--blue);
+    }
+
+    .d-tab.on .d-badge { display: none; }
+
+    /* ==================== MODALS & SHEET ==================== */
+    .backdrop {
       position: fixed;
       inset: 0;
-      background: rgba(30, 41, 59, 0.32);
+      background: rgba(15, 23, 42, 0.28);
       backdrop-filter: blur(6px);
       -webkit-backdrop-filter: blur(6px);
       display: none;
@@ -1098,103 +859,83 @@
       z-index: 50;
     }
 
-    .modal-backdrop.show { display: flex; }
+    .backdrop.show { display: flex; }
 
-    .modal-box {
+    .modal {
       width: 100%;
-      max-width: 410px;
-      max-height: 90vh;
+      max-width: 390px;
+      max-height: 88vh;
       overflow-y: auto;
       background: var(--bg);
-      border: var(--bevel);
+      border: var(--line);
       border-radius: var(--r-lg);
       padding: 20px;
-      box-shadow: 14px 14px 32px rgba(30, 41, 59, 0.24), -8px -8px 22px rgba(255, 255, 255, 0.65);
+      box-shadow: 14px 14px 30px rgba(15, 23, 42, 0.22), -8px -8px 20px rgba(255, 255, 255, 0.7);
       animation: fadeUp 0.18s var(--ease);
     }
 
-    .modal-head {
+    .m-head {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 10px;
       margin-bottom: 16px;
     }
 
-    .modal-title {
-      font-size: 16px;
-      font-weight: 800;
-      color: var(--ink);
+    .m-title { font-size: 15.5px; font-weight: 800; }
+
+    .fg { margin-bottom: 11px; }
+    .fg label { display: block; font-size: 11px; font-weight: 700; color: var(--muted); margin-bottom: 4px; }
+    .g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .m-foot { display: flex; gap: 10px; margin-top: 16px; }
+
+    .menu-item {
+      width: 100%;
+      justify-content: flex-start;
+      padding: 12px 16px;
+      border-radius: var(--r-sm);
+      margin-bottom: 10px;
     }
 
-    .form-group { margin-bottom: 12px; }
-    .form-group label {
-      display: block;
-      font-size: 11.5px;
-      font-weight: 700;
-      color: var(--ink-2);
-      margin-bottom: 5px;
-    }
-
-    .grid-2 {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-    }
-
-    .modal-foot {
-      display: flex;
-      gap: 10px;
-      margin-top: 18px;
-    }
-
-    .empty-state {
+    .empty {
       text-align: center;
-      padding: 28px 14px;
-      font-size: 13px;
+      padding: 28px 12px;
+      font-size: 12.5px;
       color: var(--muted);
     }
 
-    .view-panel { animation: fadeUp 0.2s var(--ease); }
+    .view { animation: fadeUp 0.18s var(--ease); }
 
     @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(8px); }
+      from { opacity: 0; transform: translateY(6px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* Toast */
     #toast {
       position: fixed;
-      bottom: calc(92px + env(safe-area-inset-bottom));
+      bottom: calc(80px + env(safe-area-inset-bottom));
       left: 50%;
-      transform: translateX(-50%) translateY(14px);
+      transform: translateX(-50%) translateY(12px);
       opacity: 0;
       pointer-events: none;
       background: var(--ink);
       color: #f8fafc;
-      padding: 9px 18px;
-      border-radius: var(--r-pill);
-      font-size: 12.5px;
+      padding: 8px 16px;
+      border-radius: var(--pill);
+      font-size: 12px;
       font-weight: 600;
       box-shadow: 0 10px 24px rgba(15, 23, 42, 0.24);
-      transition: transform 0.22s var(--ease), opacity 0.22s ease;
+      transition: transform 0.2s var(--ease), opacity 0.2s ease;
       z-index: 60;
       white-space: nowrap;
-      max-width: 92vw;
-      overflow: hidden;
-      text-overflow: ellipsis;
     }
 
-    #toast.show {
-      opacity: 1;
-      transform: translateX(-50%) translateY(0);
-    }
+    #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
     @media print {
-      .no-print, .top-bar, .summary-card, .bottom-dock { display: none !important; }
+      .no-print, .top, .dock { display: none !important; }
       body { background: #fff; }
       .shell { max-width: 100%; padding: 0; }
-      .neu-card { box-shadow: none; border: none; background: #fff; padding: 0; }
+      .card { box-shadow: none; border: none; background: #fff; }
     }
   </style>
 </head>
@@ -1202,426 +943,324 @@
 
   <div id="toast" role="status" aria-live="polite"></div>
 
-  <!-- ========================================================================
-       1. LOGIN SCREEN
-       ======================================================================== -->
-  <div id="authScreen" class="auth-screen">
-    <div class="neu-card auth-card">
-      <div class="auth-head">
-        <div class="brand-mark" aria-hidden="true">
-          <svg class="ico" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-        </div>
-        <h1 class="auth-title" id="authCommTitle">Komunitas Motor Nusantara</h1>
+  <!-- ==================== 1. LOGIN ==================== -->
+  <div id="authScreen" class="auth-wrap">
+    <div class="card auth-box">
+      <div class="auth-emblem" aria-hidden="true">
+        <svg class="ico" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
       </div>
+      <h1 class="auth-name" id="authCommTitle">Komunitas Motor Nusantara</h1>
 
-      <div id="authErrorBox" class="auth-error hidden">
-        <svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-        <span id="authErrorText">Akun atau PIN salah.</span>
-      </div>
+      <div id="authErrorBox" class="auth-err hidden">Akun atau PIN salah</div>
 
       <form onsubmit="handleRealLogin(event)">
-        <div class="form-group">
-          <label for="loginIdentifier">No. WA / KTA</label>
-          <input type="text" id="loginIdentifier" required autocomplete="username" placeholder="081234567801 atau KMN-26-001" />
+        <div class="fg">
+          <input type="text" id="loginIdentifier" required autocomplete="username" placeholder="No. WA / KTA" aria-label="No. WA atau KTA" />
         </div>
-
-        <div class="form-group">
-          <label for="loginPassword">PIN</label>
+        <div class="fg">
           <div class="pwd-wrap">
-            <input type="password" id="loginPassword" required autocomplete="current-password" placeholder="••••" style="padding-right:42px;" />
-            <button type="button" class="pwd-eye" onclick="togglePasswordVisibility()" id="btnTogglePwd" aria-label="Tampilkan PIN">
+            <input type="password" id="loginPassword" required autocomplete="current-password" placeholder="PIN" aria-label="PIN" style="padding-right:40px;" />
+            <button type="button" class="pwd-eye" onclick="togglePasswordVisibility()" id="btnTogglePwd" aria-label="Lihat PIN">
               <svg class="ico" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
             </button>
           </div>
         </div>
-
-        <div class="auth-row">
-          <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-weight:500;">
-            <input type="checkbox" id="rememberSession" checked />
-            Ingat saya
-          </label>
-          <a href="javascript:void(0)" class="auth-link" onclick="forgotPinAlert()">Lupa PIN?</a>
-        </div>
-
-        <button type="submit" class="btn btn-primary btn-pill btn-block" style="padding:12px;">
-          Masuk
-        </button>
+        <button type="submit" class="btn btn-blue btn-block" style="padding:12px;margin-top:6px;">Masuk</button>
       </form>
 
-      <div class="demo-row">
-        <div class="demo-label">Akses Cepat</div>
-        <div class="demo-pills">
-          <button type="button" class="btn demo-pill" onclick="fillLoginInput('081234567801','1111')">Ketua</button>
-          <button type="button" class="btn demo-pill" onclick="fillLoginInput('081234567802','2222')">Bendahara</button>
-          <button type="button" class="btn demo-pill" onclick="fillLoginInput('KMN-26-003','1234')">Anggota</button>
-        </div>
+      <div class="quick-row">
+        <button type="button" class="btn quick-pill" onclick="fillLoginInput('081234567801','1111')">Ketua</button>
+        <button type="button" class="btn quick-pill" onclick="fillLoginInput('081234567802','2222')">Bendahara</button>
+        <button type="button" class="btn quick-pill" onclick="fillLoginInput('KMN-26-003','1234')">Anggota</button>
       </div>
     </div>
   </div>
 
-  <!-- ========================================================================
-       2. APPLICATION SHELL
-       ======================================================================== -->
+  <!-- ==================== 2. APP SHELL ==================== -->
   <div id="appShell" class="hidden">
     <main class="shell">
 
-      <!-- Top Bar -->
-      <header class="top-bar no-print">
-        <div class="user-chip">
-          <div class="avatar-neu" id="sessAvatar">BS</div>
-          <div class="top-meta">
-            <div class="top-comm" id="hdrName">Komunitas Motor Nusantara</div>
-            <div class="top-user"><span id="sessUserName">Budi Santoso</span> · <span id="sessRoleBadge">Ketua Umum</span></div>
-          </div>
-        </div>
-
-        <div class="top-actions">
-          <button class="btn icon-btn" onclick="exportToExcelCSV()" title="Ekspor CSV" aria-label="Ekspor CSV">
-            <svg class="ico" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          </button>
-          <button id="btnSettingsHeader" class="btn icon-btn" onclick="openModal('settingsModal')" title="Pengaturan" aria-label="Pengaturan">
-            <svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-          </button>
-          <button class="btn icon-btn btn-danger" onclick="handleLogout()" title="Keluar" aria-label="Keluar">
-            <svg class="ico" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-          </button>
-        </div>
+      <!-- Minimal Top Bar -->
+      <header class="top no-print">
+        <span class="top-title" id="hdrName">Komunitas Motor Nusantara</span>
+        <button class="avatar-btn" id="sessAvatar" onclick="openModal('accountModal')" aria-label="Akun">BS</button>
       </header>
 
-      <!-- Tactile Balance Summary -->
-      <section class="neu-card summary-card no-print" aria-label="Ringkasan">
-        <div class="summary-top">
-          <div>
-            <div class="micro-label">Saldo Kas</div>
-            <div class="saldo-val num" id="kpiSaldo">Rp 0</div>
+      <!-- ==================== TAB 1: IURAN ==================== -->
+      <section id="view-members" class="view">
+        <div class="card hero-slim">
+          <div class="hero-row">
+            <div class="saldo-big num" id="kpiSaldo">Rp 0</div>
+            <span class="stat-pill num" id="kpiPaid">0/0</span>
           </div>
-          <span class="fee-chip num" id="hdrSub">Rp 50.000/bln</span>
+          <div class="rail"><div class="rail-fill" id="kpiPaidBar"></div></div>
         </div>
 
-        <div class="neu-progress" aria-hidden="true">
-          <div class="neu-progress-fill" id="kpiPaidBar"></div>
-        </div>
+        <div class="month-bar" id="monthBar"></div>
 
-        <div class="kpi-strip">
-          <div class="kpi-cell">
-            <span class="kpi-val num" id="kpiMembers">0</span>
-            <span class="kpi-lbl">Anggota</span>
-          </div>
-          <div class="kpi-cell">
-            <span class="kpi-val accent num" id="kpiPaid">0/0</span>
-            <span class="kpi-lbl" id="kpiPaidLabel">Lunas Jan</span>
-          </div>
-          <div class="kpi-cell">
-            <span class="kpi-val num" id="kpiAgendaCount">0</span>
-            <span class="kpi-lbl">Agenda</span>
-          </div>
-        </div>
-      </section>
-
-      <!-- ==================== 1. IURAN & ANGGOTA ==================== -->
-      <section id="view-members" class="view-panel">
-        <div id="anggotaSelfBar" class="neu-item self-strip hidden">
-          <div>
-            <div class="micro-label">Iuran Saya</div>
-            <div style="font-size:13.5px;font-weight:700;" id="activeAnggotaName">Dimas Saputra</div>
-          </div>
-          <button class="btn btn-primary btn-pill" style="padding:8px 14px;font-size:12px;" onclick="confirmPayToTreasurerWA()">
-            Konfirmasi WA
-          </button>
-        </div>
-
-        <div class="toolbar">
-          <select id="activeMonthSelect" onchange="refreshUI()" style="flex:0.85;" aria-label="Pilih bulan">
-            <option value="0">Januari</option>
-            <option value="1">Februari</option>
-            <option value="2">Maret</option>
-            <option value="3">April</option>
-            <option value="4">Mei</option>
-            <option value="5">Juni</option>
-          </select>
+        <div class="search-row">
           <div class="search-box">
             <svg class="ico" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-            <input type="search" id="searchMember" oninput="renderMemberList()" placeholder="Cari anggota..." aria-label="Cari anggota" />
+            <input type="search" id="searchMember" oninput="renderMemberList()" placeholder="Cari..." aria-label="Cari anggota" />
           </div>
-          <button id="btnAddMember" class="btn btn-primary icon-btn" onclick="openModal('memberModal')" title="Tambah Anggota" aria-label="Tambah Anggota">
+          <button id="btnAddMember" class="btn btn-blue ico-btn" onclick="openModal('memberModal')" aria-label="Tambah Anggota">
             <svg class="ico" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
           </button>
-        </div>
-
-        <div id="memberListContainer" class="stack"></div>
-      </section>
-
-      <!-- ==================== 2. AGENDA & RSVP ==================== -->
-      <section id="view-agenda" class="view-panel hidden">
-        <div class="view-bar">
-          <h2 class="view-title">Agenda</h2>
-          <button id="btnAddAgenda" class="btn btn-primary btn-pill" style="padding:8px 14px;font-size:12.5px;" onclick="openModal('agendaModal')">
-            <svg class="ico" viewBox="0 0 24 24" style="width:15px;height:15px;"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-            Buat
+          <button id="btnSelfPay" class="btn btn-blue hidden" style="padding:9px 14px;font-size:12px;" onclick="confirmPayToTreasurerWA()">
+            Bayar
           </button>
         </div>
 
+        <div class="card list-card" id="memberListContainer"></div>
+      </section>
+
+      <!-- ==================== TAB 2: AGENDA ==================== -->
+      <section id="view-agenda" class="view hidden">
+        <div class="view-head">
+          <h2 class="view-h">Agenda</h2>
+          <button id="btnAddAgenda" class="btn btn-blue ico-btn sm" onclick="openModal('agendaModal')" aria-label="Buat Agenda">
+            <svg class="ico" viewBox="0 0 24 24" style="width:16px;height:16px;"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </button>
+        </div>
         <div id="agendaListContainer" class="stack"></div>
       </section>
 
-      <!-- ==================== 3. BUKU KAS ==================== -->
-      <section id="view-kas" class="view-panel hidden">
-        <div class="view-bar">
-          <h2 class="view-title">Kas</h2>
-          <div style="display:flex;gap:8px;align-items:center;">
-            <button class="btn icon-btn sm" onclick="exportKasToCSV()" title="Unduh CSV" aria-label="Unduh CSV Kas">
-              <svg class="ico" viewBox="0 0 24 24" style="width:15px;height:15px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-            </button>
-            <button id="btnAddTx" class="btn btn-primary btn-pill" style="padding:8px 14px;font-size:12.5px;" onclick="openModal('txModal')">
-              <svg class="ico" viewBox="0 0 24 24" style="width:15px;height:15px;"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-              Catat
-            </button>
+      <!-- ==================== TAB 3: KAS ==================== -->
+      <section id="view-kas" class="view hidden">
+        <div class="card kas-hero">
+          <div class="hero-row">
+            <div class="saldo-big num" id="finNetSaldo">Rp 0</div>
+            <div style="display:flex;gap:8px;">
+              <button class="btn ico-btn sm" onclick="exportKasToCSV()" aria-label="CSV">
+                <svg class="ico" viewBox="0 0 24 24" style="width:15px;height:15px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              </button>
+              <button id="btnAddTx" class="btn btn-blue ico-btn sm" onclick="openModal('txModal')" aria-label="Catat Kas">
+                <svg class="ico" viewBox="0 0 24 24" style="width:16px;height:16px;"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              </button>
+            </div>
+          </div>
+          <div class="kas-io num">
+            <span style="color:var(--blue);">↓ <span id="finTotalIn">Rp 0</span></span>
+            <span style="color:var(--rose);">↑ <span id="finTotalOut">Rp 0</span></span>
           </div>
         </div>
 
-        <div class="fin-grid">
-          <div class="fin-tile">
-            <div class="micro-label">Masuk</div>
-            <div class="fin-val num" style="color:var(--accent);" id="finTotalIn">Rp 0</div>
-          </div>
-          <div class="fin-tile">
-            <div class="micro-label">Keluar</div>
-            <div class="fin-val num" style="color:var(--danger);" id="finTotalOut">Rp 0</div>
-          </div>
-          <div class="fin-tile">
-            <div class="micro-label">Saldo</div>
-            <div class="fin-val num" id="finNetSaldo">Rp 0</div>
-          </div>
+        <div class="seg" style="margin-bottom:14px;">
+          <button class="seg-b on" id="fkp-all" onclick="setKasFilter('all')">Semua</button>
+          <button class="seg-b" id="fkp-in" onclick="setKasFilter('in')">Masuk</button>
+          <button class="seg-b" id="fkp-out" onclick="setKasFilter('out')">Keluar</button>
         </div>
 
-        <div class="seg-track" style="margin-bottom:14px;">
-          <button class="seg-btn active" id="fkp-all" onclick="setKasFilter('all')">Semua</button>
-          <button class="seg-btn" id="fkp-in" onclick="setKasFilter('in')">Masuk</button>
-          <button class="seg-btn" id="fkp-out" onclick="setKasFilter('out')">Keluar</button>
-        </div>
-
-        <div class="neu-card tx-list" id="txHistoryList"></div>
+        <div class="card list-card" id="txHistoryList"></div>
       </section>
 
-      <!-- ==================== 4. KTA DIGITAL ==================== -->
-      <section id="view-card" class="view-panel hidden">
+      <!-- ==================== TAB 4: KTA ==================== -->
+      <section id="view-card" class="view hidden">
         <div class="no-print">
-          <div class="view-bar">
-            <h2 class="view-title">Kartu Anggota</h2>
-            <button class="btn btn-pill" style="padding:7px 13px;font-size:12px;" onclick="toggleMassPrintKTA()">
-              <svg class="ico" viewBox="0 0 24 24" style="width:15px;height:15px;"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
-              Cetak A4
-            </button>
-          </div>
-
-          <div class="kta-controls">
-            <select id="ktaMemberSelect" onchange="drawIDCard()" style="flex:1;" aria-label="Pilih anggota"></select>
-            <div class="theme-dots" role="radiogroup" aria-label="Tema kartu">
-              <button type="button" class="theme-dot active" style="background:linear-gradient(135deg,#0f2447,#2563eb)" onclick="setTheme(0,this)" title="Cobalt"></button>
-              <button type="button" class="theme-dot" style="background:linear-gradient(135deg,#0c4a6e,#0ea5e9)" onclick="setTheme(1,this)" title="Ocean"></button>
-              <button type="button" class="theme-dot" style="background:linear-gradient(135deg,#0f172a,#334155)" onclick="setTheme(2,this)" title="Slate"></button>
-              <button type="button" class="theme-dot" style="background:linear-gradient(135deg,#450a18,#be123c)" onclick="setTheme(3,this)" title="Crimson"></button>
+          <div class="kta-bar">
+            <select id="ktaMemberSelect" onchange="drawIDCard()" style="flex:1;" aria-label="Anggota"></select>
+            <div class="swatches" role="radiogroup" aria-label="Warna">
+              <button type="button" class="sw on" style="background:linear-gradient(135deg,#0f2447,#2563eb)" onclick="setTheme(0,this)" aria-label="Cobalt"></button>
+              <button type="button" class="sw" style="background:linear-gradient(135deg,#0c4a6e,#0ea5e9)" onclick="setTheme(1,this)" aria-label="Ocean"></button>
+              <button type="button" class="sw" style="background:linear-gradient(135deg,#0f172a,#334155)" onclick="setTheme(2,this)" aria-label="Slate"></button>
+              <button type="button" class="sw" style="background:linear-gradient(135deg,#450a18,#be123c)" onclick="setTheme(3,this)" aria-label="Crimson"></button>
             </div>
           </div>
 
-          <div class="canvas-frame">
-            <div class="canvas-inner">
+          <div class="frame">
+            <div class="frame-in">
               <canvas id="ktaCanvas" width="856" height="540"></canvas>
             </div>
           </div>
 
           <div style="display:flex;gap:10px;">
-            <button class="btn btn-primary btn-pill" style="flex:1.25;" onclick="downloadCanvasPNG()">
-              <svg class="ico" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-              Simpan PNG
+            <button class="btn btn-blue" style="flex:1.2;" onclick="downloadCanvasPNG()">
+              <svg class="ico" viewBox="0 0 24 24" style="width:16px;height:16px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Simpan
             </button>
-            <button class="btn btn-pill" style="flex:1;" onclick="sendKTAWhatsApp()">
-              <svg class="ico" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-              Kirim WA
+            <button class="btn" style="flex:1;" onclick="sendKTAWhatsApp()">
+              <svg class="ico" viewBox="0 0 24 24" style="width:16px;height:16px;"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+              WA
+            </button>
+            <button class="btn ico-btn" onclick="toggleMassPrintKTA()" title="Cetak A4" aria-label="Cetak A4">
+              <svg class="ico" viewBox="0 0 24 24" style="width:16px;height:16px;"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
             </button>
           </div>
         </div>
 
-        <div id="massKtaSheetCard" class="neu-card hidden" style="margin-top:16px;">
-          <div class="view-bar no-print">
-            <h3 class="view-title">Lembar A4 (<span id="massKtaCount">0</span>)</h3>
-            <button class="btn btn-primary btn-pill" style="padding:7px 14px;font-size:12px;" onclick="window.print()">Print</button>
+        <div id="massKtaSheetCard" class="card hidden" style="padding:16px;margin-top:14px;">
+          <div class="view-head no-print">
+            <h3 class="view-h">A4 (<span id="massKtaCount">0</span>)</h3>
+            <button class="btn btn-blue" style="padding:7px 14px;font-size:12px;" onclick="window.print()">Print</button>
           </div>
           <div id="massKtaGrid" style="display:grid;grid-template-columns:1fr;gap:12px;"></div>
         </div>
       </section>
 
-      <!-- ==================== 5. LAPORAN WA ==================== -->
-      <section id="view-laporan" class="view-panel hidden">
-        <div class="view-bar">
-          <h2 class="view-title">Laporan WA</h2>
+      <!-- ==================== TAB 5: LAPORAN ==================== -->
+      <section id="view-laporan" class="view hidden">
+        <div class="seg">
+          <button class="seg-b on" id="rep-kas" onclick="setReportMode('kas')">Kas</button>
+          <button class="seg-b" id="rep-agenda" onclick="setReportMode('agenda')">Agenda</button>
         </div>
 
-        <div class="seg-track">
-          <button class="seg-btn active" id="rep-kas" onclick="setReportMode('kas')">Kas &amp; Iuran</button>
-          <button class="seg-btn" id="rep-agenda" onclick="setReportMode('agenda')">Agenda</button>
-        </div>
+        <textarea id="waTextOutput" class="rep-box" rows="13" readonly aria-label="Laporan"></textarea>
 
-        <textarea id="waTextOutput" class="report-box" rows="13" readonly aria-label="Pratinjau laporan WhatsApp"></textarea>
-
-        <button class="btn btn-primary btn-pill btn-block" onclick="copyReportWA()">
-          <svg class="ico" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-          Salin untuk WA
+        <button class="btn btn-blue btn-block" onclick="copyReportWA()">
+          <svg class="ico" viewBox="0 0 24 24" style="width:16px;height:16px;"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          Salin
         </button>
       </section>
 
     </main>
 
-    <!-- Floating Neumorphic Dock -->
-    <nav class="bottom-dock no-print" aria-label="Menu utama">
-      <button class="nav-tab active" id="nav-members" onclick="switchView('members')">
+    <!-- Expanding Floating Dock -->
+    <nav class="dock no-print" aria-label="Navigasi">
+      <button class="d-tab on" id="nav-members" onclick="switchView('members')" aria-label="Iuran">
         <svg class="ico" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-        <span>Iuran</span>
+        <span class="lbl">Iuran</span>
       </button>
-      <button class="nav-tab" id="nav-agenda" onclick="switchView('agenda')">
-        <svg class="ico" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-        <span>Agenda</span>
-        <span class="nav-dot" id="navAgendaBadge">2</span>
+      <button class="d-tab" id="nav-agenda" onclick="switchView('agenda')" aria-label="Agenda">
+        <svg class="ico" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        <span class="lbl">Agenda</span>
+        <span class="d-badge" id="navAgendaBadge"></span>
       </button>
-      <button class="nav-tab" id="nav-kas" onclick="switchView('kas')">
+      <button class="d-tab" id="nav-kas" onclick="switchView('kas')" aria-label="Kas">
         <svg class="ico" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
-        <span>Kas</span>
+        <span class="lbl">Kas</span>
       </button>
-      <button class="nav-tab" id="nav-card" onclick="switchView('card')">
-        <svg class="ico" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><circle cx="8" cy="11" r="2.5"/><path d="M14 10h4"/><path d="M14 14h4"/></svg>
-        <span>KTA</span>
+      <button class="d-tab" id="nav-card" onclick="switchView('card')" aria-label="KTA">
+        <svg class="ico" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><circle cx="8" cy="11" r="2.2"/><path d="M14 10h4"/><path d="M14 14h4"/></svg>
+        <span class="lbl">KTA</span>
       </button>
-      <button class="nav-tab" id="nav-laporan" onclick="switchView('laporan')">
+      <button class="d-tab" id="nav-laporan" onclick="switchView('laporan')" aria-label="Laporan">
         <svg class="ico" viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
-        <span>Laporan</span>
+        <span class="lbl">WA</span>
       </button>
     </nav>
   </div>
 
+  <!-- MODAL: AKUN & MENU -->
+  <div id="accountModal" class="backdrop" onclick="backdropClose(event,'accountModal')">
+    <div class="modal">
+      <div class="m-head">
+        <div>
+          <div class="m-title" id="accName">Budi Santoso</div>
+          <div style="font-size:12px;color:var(--muted);" class="mono" id="accMeta">Ketua Umum · KMN-26-001</div>
+        </div>
+        <button class="btn ico-btn sm" onclick="closeModal('accountModal')" aria-label="Tutup">
+          <svg class="ico" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
+      <button class="btn menu-item" onclick="closeModal('accountModal');exportToExcelCSV()">
+        <svg class="ico" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Ekspor CSV
+      </button>
+      <button id="btnSettingsMenu" class="btn menu-item" onclick="closeModal('accountModal');openModal('settingsModal')">
+        <svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        Pengaturan
+      </button>
+      <button class="btn menu-item btn-rose" style="margin-bottom:0;" onclick="closeModal('accountModal');handleLogout()">
+        <svg class="ico" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Keluar
+      </button>
+    </div>
+  </div>
+
   <!-- MODAL: CATAT KAS -->
-  <div id="txModal" class="modal-backdrop" onclick="backdropClose(event,'txModal')">
-    <div class="modal-box">
-      <div class="modal-head">
-        <h3 class="modal-title">Catat Kas</h3>
-        <button class="btn icon-btn sm" onclick="closeModal('txModal')" aria-label="Tutup">
+  <div id="txModal" class="backdrop" onclick="backdropClose(event,'txModal')">
+    <div class="modal">
+      <div class="m-head">
+        <h3 class="m-title">Catat Kas</h3>
+        <button class="btn ico-btn sm" onclick="closeModal('txModal')" aria-label="Tutup">
           <svg class="ico" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
         </button>
       </div>
       <form onsubmit="addTransaction(event)">
-        <div class="grid-2">
-          <div class="form-group">
+        <div class="g2">
+          <div class="fg">
             <label>Jenis</label>
             <select id="txType">
-              <option value="in">Pemasukan</option>
-              <option value="out">Pengeluaran</option>
+              <option value="in">Masuk</option>
+              <option value="out">Keluar</option>
             </select>
           </div>
-          <div class="form-group">
+          <div class="fg">
             <label>Kategori</label>
             <select id="txCategory">
               <option value="Konsumsi">Konsumsi</option>
-              <option value="Donasi & Sponsor">Donasi / Sponsor</option>
+              <option value="Donasi">Donasi</option>
               <option value="Perlengkapan">Perlengkapan</option>
-              <option value="Dana Sosial">Dana Sosial</option>
+              <option value="Sosial">Sosial</option>
               <option value="Operasional">Operasional</option>
             </select>
           </div>
         </div>
-        <div class="grid-2">
-          <div class="form-group">
-            <label>Nominal (Rp)</label>
-            <input type="number" id="txAmount" required placeholder="50000" min="1" />
-          </div>
-          <div class="form-group">
-            <label>Tanggal</label>
-            <input type="date" id="txDate" required />
-          </div>
+        <div class="g2">
+          <div class="fg"><label>Nominal</label><input type="number" id="txAmount" required placeholder="50000" min="1" /></div>
+          <div class="fg"><label>Tanggal</label><input type="date" id="txDate" required /></div>
         </div>
-        <div class="form-group">
-          <label>Keterangan</label>
-          <input type="text" id="txDesc" required placeholder="Konsumsi kopdar" />
-        </div>
-        <div class="modal-foot">
-          <button type="button" class="btn btn-pill" style="flex:1;" onclick="closeModal('txModal')">Batal</button>
-          <button type="submit" class="btn btn-primary btn-pill" style="flex:1.3;">Simpan</button>
+        <div class="fg"><label>Keterangan</label><input type="text" id="txDesc" required placeholder="Konsumsi kopdar" /></div>
+        <div class="m-foot">
+          <button type="button" class="btn" style="flex:1;" onclick="closeModal('txModal')">Batal</button>
+          <button type="submit" class="btn btn-blue" style="flex:1.2;">Simpan</button>
         </div>
       </form>
     </div>
   </div>
 
   <!-- MODAL: BUAT AGENDA -->
-  <div id="agendaModal" class="modal-backdrop" onclick="backdropClose(event,'agendaModal')">
-    <div class="modal-box">
-      <div class="modal-head">
-        <h3 class="modal-title">Agenda Baru</h3>
-        <button class="btn icon-btn sm" onclick="closeModal('agendaModal')" aria-label="Tutup">
+  <div id="agendaModal" class="backdrop" onclick="backdropClose(event,'agendaModal')">
+    <div class="modal">
+      <div class="m-head">
+        <h3 class="m-title">Agenda</h3>
+        <button class="btn ico-btn sm" onclick="closeModal('agendaModal')" aria-label="Tutup">
           <svg class="ico" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
         </button>
       </div>
       <form onsubmit="saveNewAgenda(event)">
-        <div class="form-group">
-          <label>Judul</label>
-          <input type="text" id="agTitle" required placeholder="Kopdar Bulanan" />
-        </div>
-        <div class="grid-2">
-          <div class="form-group">
+        <div class="fg"><label>Judul</label><input type="text" id="agTitle" required placeholder="Kopdar Bulanan" /></div>
+        <div class="g2">
+          <div class="fg">
             <label>Kategori</label>
             <select id="agType">
               <option value="Kopdar">Kopdar</option>
               <option value="Rapat">Rapat</option>
               <option value="Touring">Touring</option>
-              <option value="Bakti Sosial">Bakti Sosial</option>
+              <option value="Baksos">Baksos</option>
             </select>
           </div>
-          <div class="form-group">
-            <label>HTM (Rp)</label>
-            <input type="number" id="agFee" value="0" min="0" />
-          </div>
+          <div class="fg"><label>HTM</label><input type="number" id="agFee" value="0" min="0" /></div>
         </div>
-        <div class="grid-2">
-          <div class="form-group">
-            <label>Tanggal</label>
-            <input type="date" id="agDate" required />
-          </div>
-          <div class="form-group">
-            <label>Jam</label>
-            <input type="time" id="agTime" value="19:30" required />
-          </div>
+        <div class="g2">
+          <div class="fg"><label>Tanggal</label><input type="date" id="agDate" required /></div>
+          <div class="fg"><label>Jam</label><input type="time" id="agTime" value="19:30" required /></div>
         </div>
-        <div class="form-group">
-          <label>Lokasi</label>
-          <input type="text" id="agLocation" required placeholder="Kopi Senja, Jl. Sudirman" />
-        </div>
-        <div class="form-group">
-          <label>Catatan</label>
-          <input type="text" id="agNotes" placeholder="Opsional" />
-        </div>
-        <div class="modal-foot">
-          <button type="button" class="btn btn-pill" style="flex:1;" onclick="closeModal('agendaModal')">Batal</button>
-          <button type="submit" class="btn btn-primary btn-pill" style="flex:1.3;">Terbitkan</button>
+        <div class="fg"><label>Lokasi</label><input type="text" id="agLocation" required placeholder="Kopi Senja" /></div>
+        <div class="fg"><label>Catatan</label><input type="text" id="agNotes" placeholder="Opsional" /></div>
+        <div class="m-foot">
+          <button type="button" class="btn" style="flex:1;" onclick="closeModal('agendaModal')">Batal</button>
+          <button type="submit" class="btn btn-blue" style="flex:1.2;">Simpan</button>
         </div>
       </form>
     </div>
   </div>
 
   <!-- MODAL: TAMBAH ANGGOTA -->
-  <div id="memberModal" class="modal-backdrop" onclick="backdropClose(event,'memberModal')">
-    <div class="modal-box">
-      <div class="modal-head">
-        <h3 class="modal-title">Anggota Baru</h3>
-        <label class="btn btn-pill btn-accent-soft" style="padding:6px 12px;font-size:11.5px;">
-          <svg class="ico" viewBox="0 0 24 24" style="width:14px;height:14px;"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+  <div id="memberModal" class="backdrop" onclick="backdropClose(event,'memberModal')">
+    <div class="modal">
+      <div class="m-head">
+        <h3 class="m-title">Anggota</h3>
+        <label class="btn btn-ink-blue" style="padding:6px 12px;font-size:11.5px;">
           Scan KTP
           <input type="file" accept="image/*" style="display:none;" onchange="simulateKTPScan(this)" />
         </label>
       </div>
       <form onsubmit="saveMember(event)">
-        <div class="form-group">
-          <label>Nama</label>
-          <input type="text" id="inName" required placeholder="Agus Setiawan" />
-        </div>
-        <div class="grid-2">
-          <div class="form-group">
+        <div class="fg"><label>Nama</label><input type="text" id="inName" required placeholder="Agus Setiawan" /></div>
+        <div class="g2">
+          <div class="fg">
             <label>Akses</label>
             <select id="inAccessRole">
               <option value="anggota">Anggota</option>
@@ -1629,56 +1268,38 @@
               <option value="ketua">Ketua</option>
             </select>
           </div>
-          <div class="form-group">
-            <label>Jabatan</label>
-            <input type="text" id="inRole" value="Anggota" required />
-          </div>
+          <div class="fg"><label>Jabatan</label><input type="text" id="inRole" value="Anggota" required /></div>
         </div>
-        <div class="grid-2">
-          <div class="form-group">
-            <label>No. WA</label>
-            <input type="tel" id="inPhone" required placeholder="08123456789" />
-          </div>
-          <div class="form-group">
-            <label>PIN</label>
-            <input type="text" id="inPin" value="1234" required />
-          </div>
+        <div class="g2">
+          <div class="fg"><label>No. WA</label><input type="tel" id="inPhone" required placeholder="08123456789" /></div>
+          <div class="fg"><label>PIN</label><input type="text" id="inPin" value="1234" required /></div>
         </div>
-        <div class="modal-foot">
-          <button type="button" class="btn btn-pill" style="flex:1;" onclick="closeModal('memberModal')">Batal</button>
-          <button type="submit" class="btn btn-primary btn-pill" style="flex:1.3;">Simpan</button>
+        <div class="m-foot">
+          <button type="button" class="btn" style="flex:1;" onclick="closeModal('memberModal')">Batal</button>
+          <button type="submit" class="btn btn-blue" style="flex:1.2;">Simpan</button>
         </div>
       </form>
     </div>
   </div>
 
-  <!-- MODAL: PENGATURAN (Ketua) -->
-  <div id="settingsModal" class="modal-backdrop" onclick="backdropClose(event,'settingsModal')">
-    <div class="modal-box">
-      <div class="modal-head">
-        <h3 class="modal-title">Pengaturan</h3>
-        <button class="btn icon-btn sm" onclick="closeModal('settingsModal')" aria-label="Tutup">
+  <!-- MODAL: PENGATURAN -->
+  <div id="settingsModal" class="backdrop" onclick="backdropClose(event,'settingsModal')">
+    <div class="modal">
+      <div class="m-head">
+        <h3 class="m-title">Pengaturan</h3>
+        <button class="btn ico-btn sm" onclick="closeModal('settingsModal')" aria-label="Tutup">
           <svg class="ico" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
         </button>
       </div>
       <form onsubmit="saveSettings(event)">
-        <div class="form-group">
-          <label>Nama Komunitas</label>
-          <input type="text" id="setCommName" required />
+        <div class="fg"><label>Nama Komunitas</label><input type="text" id="setCommName" required /></div>
+        <div class="g2">
+          <div class="fg"><label>Iuran / bln</label><input type="number" id="setCommFee" required min="0" /></div>
+          <div class="fg"><label>Prefix KTA</label><input type="text" id="setCommPrefix" required /></div>
         </div>
-        <div class="grid-2">
-          <div class="form-group">
-            <label>Iuran / bln (Rp)</label>
-            <input type="number" id="setCommFee" required min="0" />
-          </div>
-          <div class="form-group">
-            <label>Prefix KTA</label>
-            <input type="text" id="setCommPrefix" required placeholder="KMN-26" />
-          </div>
-        </div>
-        <div class="modal-foot">
-          <button type="button" class="btn btn-pill" style="flex:1;" onclick="closeModal('settingsModal')">Batal</button>
-          <button type="submit" class="btn btn-primary btn-pill" style="flex:1.3;">Simpan</button>
+        <div class="m-foot">
+          <button type="button" class="btn" style="flex:1;" onclick="closeModal('settingsModal')">Batal</button>
+          <button type="submit" class="btn btn-blue" style="flex:1.2;">Simpan</button>
         </div>
       </form>
     </div>
@@ -1694,21 +1315,20 @@
     ];
 
     const ICO = {
-      card: '<svg class="ico" viewBox="0 0 24 24" style="width:14px;height:14px;"><rect x="2" y="4" width="20" height="16" rx="2"/><circle cx="8" cy="11" r="2"/><path d="M14 10h4"/><path d="M14 14h4"/></svg>',
-      check: '<svg class="ico" viewBox="0 0 24 24" style="width:14px;height:14px;"><polyline points="20 6 9 17 4 12"/></svg>',
+      check: '<svg class="ico" viewBox="0 0 24 24" style="width:15px;height:15px;"><polyline points="20 6 9 17 4 12"/></svg>',
       send: '<svg class="ico" viewBox="0 0 24 24" style="width:14px;height:14px;"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>',
-      trash: '<svg class="ico" viewBox="0 0 24 24" style="width:14px;height:14px;"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>',
-      cal: '<svg class="ico" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>',
-      clock: '<svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
-      pin: '<svg class="ico" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>',
+      card: '<svg class="ico" viewBox="0 0 24 24" style="width:14px;height:14px;"><rect x="2" y="4" width="20" height="16" rx="2"/><circle cx="8" cy="11" r="2"/><path d="M14 10h4"/><path d="M14 14h4"/></svg>',
+      trash: '<svg class="ico" viewBox="0 0 24 24" style="width:14px;height:14px;"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>',
       share: '<svg class="ico" viewBox="0 0 24 24" style="width:14px;height:14px;"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>',
-      arrowDown: '<svg class="ico" viewBox="0 0 24 24" style="width:14px;height:14px;"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>',
-      arrowUp: '<svg class="ico" viewBox="0 0 24 24" style="width:14px;height:14px;"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>',
+      down: '<svg class="ico" viewBox="0 0 24 24" style="width:14px;height:14px;"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>',
+      up: '<svg class="ico" viewBox="0 0 24 24" style="width:14px;height:14px;"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>',
       x: '<svg class="ico" viewBox="0 0 24 24" style="width:13px;height:13px;"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>',
       eye: '<svg class="ico" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>',
       eyeOff: '<svg class="ico" viewBox="0 0 24 24"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>'
     };
 
+    let activeMonth = 0;
+    let expandedMemberId = null;
     let kasFilter = 'all';
     let reportMode = 'kas';
 
@@ -1718,37 +1338,37 @@
       prefix: 'KMN-26',
       theme: 0,
       members: [
-        { id: 1, kta: 'KMN-26-001', name: 'Budi Santoso', role: 'Ketua Umum', accessRole: 'ketua', phone: '081234567801', pin: '1111', paid: [1, 1, 1, 0, 0, 0] },
+        { id: 1, kta: 'KMN-26-001', name: 'Budi Santoso', role: 'Ketua', accessRole: 'ketua', phone: '081234567801', pin: '1111', paid: [1, 1, 1, 0, 0, 0] },
         { id: 2, kta: 'KMN-26-002', name: 'Rina Wijaya', role: 'Bendahara', accessRole: 'bendahara', phone: '081234567802', pin: '2222', paid: [1, 1, 1, 1, 0, 0] },
         { id: 3, kta: 'KMN-26-003', name: 'Dimas Saputra', role: 'Humas', accessRole: 'anggota', phone: '081234567803', pin: '1234', paid: [1, 0, 0, 0, 0, 0] },
         { id: 4, kta: 'KMN-26-004', name: 'Hendra Gunawan', role: 'Anggota', accessRole: 'anggota', phone: '081234567804', pin: '1234', paid: [1, 1, 0, 0, 0, 0] }
       ],
       txs: [
-        { id: 1, type: 'in', category: 'Donasi & Sponsor', desc: 'Sponsor Kopdar Awal Tahun', amount: 350000, date: '2026-01-15' },
-        { id: 2, type: 'out', category: 'Perlengkapan', desc: 'Stiker & Banner Komunitas', amount: 150000, date: '2026-02-10' },
-        { id: 3, type: 'out', category: 'Konsumsi', desc: 'Konsumsi Kopdar Bulanan', amount: 120000, date: '2026-03-05' }
+        { id: 1, type: 'in', category: 'Donasi', desc: 'Sponsor Kopdar', amount: 350000, date: '2026-01-15' },
+        { id: 2, type: 'out', category: 'Perlengkapan', desc: 'Stiker & Banner', amount: 150000, date: '2026-02-10' },
+        { id: 3, type: 'out', category: 'Konsumsi', desc: 'Konsumsi Kopdar', amount: 120000, date: '2026-03-05' }
       ],
       agendas: [
         {
           id: 101,
-          title: 'Kopdar Wajib & Bahas Touring',
+          title: 'Kopdar & Bahas Touring',
           type: 'Kopdar',
           date: '2026-11-28',
           time: '19:30',
-          location: 'Kopi Senja, Jl. Merdeka 45',
+          location: 'Kopi Senja',
           fee: 25000,
-          notes: 'Pakai kaos atau jaket komunitas.',
+          notes: '',
           rsvps: { '1': 'hadir', '2': 'hadir', '3': 'hadir', '4': 'ragu' }
         },
         {
           id: 102,
-          title: 'Bakti Sosial & Santunan',
-          type: 'Bakti Sosial',
+          title: 'Bakti Sosial',
+          type: 'Baksos',
           date: '2026-12-06',
           time: '09:00',
           location: 'Yayasan Al-Ikhlas',
           fee: 0,
-          notes: 'Donasi sukarela lewat Bendahara.',
+          notes: '',
           rsvps: { '1': 'hadir', '2': 'hadir' }
         }
       ]
@@ -1769,20 +1389,15 @@
       refreshUI();
     }
 
-    function rp(n) {
-      return 'Rp ' + Number(n).toLocaleString('id-ID');
-    }
-
-    function escapeHtml(s) {
-      return String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-    }
+    function rp(n) { return 'Rp ' + Number(n).toLocaleString('id-ID'); }
+    function esc(s) { return String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
 
     function toast(msg) {
       const el = document.getElementById('toast');
       el.textContent = msg;
       el.classList.add('show');
       clearTimeout(window._tTimer);
-      window._tTimer = setTimeout(() => el.classList.remove('show'), 2200);
+      window._tTimer = setTimeout(() => el.classList.remove('show'), 2000);
     }
 
     function copyText(txt, okMsg) {
@@ -1811,10 +1426,10 @@
 
     // ==================== AUTH ====================
     function togglePasswordVisibility() {
-      const input = document.getElementById('loginPassword');
+      const inp = document.getElementById('loginPassword');
       const btn = document.getElementById('btnTogglePwd');
-      const isPwd = input.type === 'password';
-      input.type = isPwd ? 'text' : 'password';
+      const isPwd = inp.type === 'password';
+      inp.type = isPwd ? 'text' : 'password';
       btn.innerHTML = isPwd ? ICO.eyeOff : ICO.eye;
     }
 
@@ -1822,20 +1437,12 @@
       document.getElementById('loginIdentifier').value = idVal;
       document.getElementById('loginPassword').value = pwdVal;
       document.getElementById('authErrorBox').classList.add('hidden');
-      toast('Siap masuk');
-    }
-
-    function forgotPinAlert() {
-      const ketua = db.members.find(m => m.accessRole === 'ketua') || db.members[0];
-      toast(`Hubungi ${ketua.name} (${ketua.phone})`);
     }
 
     function handleRealLogin(e) {
       e.preventDefault();
       const rawId = document.getElementById('loginIdentifier').value.trim().toLowerCase();
       const pwd = document.getElementById('loginPassword').value.trim();
-      const errBox = document.getElementById('authErrorBox');
-
       const found = db.members.find(m =>
         m.phone.toLowerCase() === rawId ||
         m.kta.toLowerCase() === rawId ||
@@ -1843,46 +1450,36 @@
       );
 
       if (!found || String(found.pin || '1234') !== pwd) {
-        errBox.classList.remove('hidden');
-        document.getElementById('authErrorText').textContent = 'Akun atau PIN tidak cocok.';
+        document.getElementById('authErrorBox').classList.remove('hidden');
         return;
       }
 
-      errBox.classList.add('hidden');
+      document.getElementById('authErrorBox').classList.add('hidden');
       activeUser = found;
-
-      const remember = document.getElementById('rememberSession').checked;
       sessionStorage.setItem('komunitasku_auth_user', JSON.stringify(found));
-      if (remember) {
-        localStorage.setItem('komunitasku_auth_user', JSON.stringify(found));
-      } else {
-        localStorage.removeItem('komunitasku_auth_user');
-      }
-
+      localStorage.setItem('komunitasku_auth_user', JSON.stringify(found));
       document.getElementById('loginPassword').value = '';
       renderAuthGate();
-      toast(`Halo, ${found.name}`);
     }
 
     function handleLogout() {
       activeUser = null;
+      expandedMemberId = null;
       sessionStorage.removeItem('komunitasku_auth_user');
       localStorage.removeItem('komunitasku_auth_user');
       renderAuthGate();
-      toast('Keluar');
     }
 
     function renderAuthGate() {
       document.getElementById('authCommTitle').textContent = db.name;
-      const authScreen = document.getElementById('authScreen');
-      const appShell = document.getElementById('appShell');
-
+      const auth = document.getElementById('authScreen');
+      const app = document.getElementById('appShell');
       if (!activeUser) {
-        authScreen.classList.remove('hidden');
-        appShell.classList.add('hidden');
+        auth.classList.remove('hidden');
+        app.classList.add('hidden');
       } else {
-        authScreen.classList.add('hidden');
-        appShell.classList.remove('hidden');
+        auth.classList.add('hidden');
+        app.classList.remove('hidden');
         document.getElementById('txDate').valueAsDate = new Date();
         document.getElementById('agDate').valueAsDate = new Date();
         refreshUI();
@@ -1894,42 +1491,26 @@
     function canEditFinance() { const r = currentRole(); return r === 'ketua' || r === 'bendahara'; }
     function isKetua() { return currentRole() === 'ketua'; }
 
-    function applyRolePermissionsUI() {
+    function applyRoleUI() {
       if (!activeUser) return;
       const initials = activeUser.name.split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase();
-
       document.getElementById('sessAvatar').textContent = initials;
-      document.getElementById('sessUserName').textContent = activeUser.name;
-      document.getElementById('sessRoleBadge').textContent = activeUser.role;
+      document.getElementById('accName').textContent = activeUser.name;
+      document.getElementById('accMeta').textContent = `${activeUser.role} · ${activeUser.kta}`;
 
-      document.getElementById('btnSettingsHeader').classList.toggle('hidden', !isKetua());
+      document.getElementById('btnSettingsMenu').classList.toggle('hidden', !isKetua());
       document.getElementById('btnAddMember').classList.toggle('hidden', !canEditFinance());
       document.getElementById('btnAddAgenda').classList.toggle('hidden', !canEditFinance());
       document.getElementById('btnAddTx').classList.toggle('hidden', !canEditFinance());
 
-      const selfBar = document.getElementById('anggotaSelfBar');
-      if (canEditFinance()) {
-        selfBar.classList.add('hidden');
-      } else {
-        selfBar.classList.remove('hidden');
-        document.getElementById('activeAnggotaName').textContent = `${activeUser.name} · ${activeUser.kta}`;
-      }
-    }
-
-    function confirmPayToTreasurerWA() {
-      if (!activeUser) return;
-      const bendahara = db.members.find(m => m.accessRole === 'bendahara') || db.members[0];
-      const mIdx = parseInt(document.getElementById('activeMonthSelect').value, 10);
-      const msg = `Halo Bendahara *${db.name}*,\n\nSaya *${activeUser.name}* (${activeUser.kta}) konfirmasi pembayaran iuran *${MONTHS[mIdx]} 2026* sebesar *${rp(db.fee)}*. Terima kasih.`;
-      const phone = (bendahara?.phone || '081234567802').replace(/^0/, '62').replace(/\D/g, '');
-      window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, '_blank');
+      const needSelfPay = !canEditFinance() && !activeUser.paid[activeMonth];
+      document.getElementById('btnSelfPay').classList.toggle('hidden', !needSelfPay);
     }
 
     function switchView(view) {
       ['members', 'agenda', 'kas', 'card', 'laporan'].forEach(v => {
         document.getElementById('view-' + v).classList.toggle('hidden', v !== view);
-        const navBtn = document.getElementById('nav-' + v);
-        if (navBtn) navBtn.classList.toggle('active', v === view);
+        document.getElementById('nav-' + v).classList.toggle('on', v === view);
       });
       if (view === 'card') drawIDCard();
       if (view === 'kas') renderKas();
@@ -1944,191 +1525,171 @@
       const totalIuran = paidCount * db.fee;
       const totalIn = db.txs.filter(t => t.type === 'in').reduce((s, t) => s + t.amount, 0);
       const totalOut = db.txs.filter(t => t.type === 'out').reduce((s, t) => s + t.amount, 0);
-      return {
-        totalIuran,
-        totalIn,
-        allIn: totalIuran + totalIn,
-        totalOut,
-        saldo: totalIuran + totalIn - totalOut
-      };
+      return { totalIuran, totalIn, allIn: totalIuran + totalIn, totalOut, saldo: totalIuran + totalIn - totalOut };
     }
 
-    // ==================== 1. ANGGOTA & IURAN ====================
+    // ==================== 1. IURAN ====================
+    function renderMonthBar() {
+      document.getElementById('monthBar').innerHTML = MONTHS.map((m, i) => `
+        <button class="m-tab ${i === activeMonth ? 'on' : ''}" onclick="setMonth(${i})">${m}</button>
+      `).join('');
+    }
+
+    function setMonth(idx) {
+      activeMonth = idx;
+      refreshUI();
+    }
+
+    function toggleExpand(id) {
+      expandedMemberId = expandedMemberId === id ? null : id;
+      renderMemberList();
+    }
+
     function renderMemberList() {
       const box = document.getElementById('memberListContainer');
       const q = document.getElementById('searchMember').value.toLowerCase();
-      const mIdx = parseInt(document.getElementById('activeMonthSelect').value, 10);
       const editable = canEditFinance();
-
       const list = db.members.filter(m => m.name.toLowerCase().includes(q) || m.kta.toLowerCase().includes(q));
+
       if (!list.length) {
-        box.innerHTML = `<div class="empty-state">Tidak ditemukan.</div>`;
+        box.innerHTML = `<div class="empty">Kosong</div>`;
         return;
       }
 
       box.innerHTML = list.map(m => {
-        const isPaidMonth = !!m.paid[mIdx];
-        const initials = m.name.split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase();
+        const paid = !!m.paid[activeMonth];
+        const ini = m.name.split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase();
         const isMe = activeUser && m.id === activeUser.id;
-        const phoneMask = editable || isMe ? m.phone : m.phone.slice(0, 6) + '••••';
+        const open = expandedMemberId === m.id;
+        const phone = editable || isMe ? m.phone : m.phone.slice(0, 6) + '••••';
 
-        const pills = MONTHS.map((mName, idx) => `
-          <div class="m-pill ${m.paid[idx] ? 'paid' : ''} ${!editable ? 'readonly' : ''}"
-               onclick="toggleMonth(${m.id}, ${idx})">
-            ${mName}
+        const drawer = open ? `
+          <div class="m-drawer">
+            <div class="m-meta-line mono">
+              <span>${esc(m.kta)}</span>
+              <span>${esc(phone)}</span>
+            </div>
+            <div class="mini-months">
+              ${MONTHS.map((mn, i) => `
+                <div class="mini-m ${m.paid[i] ? 'paid' : ''} ${!editable ? 'ro' : ''}" onclick="event.stopPropagation();toggleMonth(${m.id},${i})">${mn}</div>
+              `).join('')}
+            </div>
+            <div class="drawer-acts">
+              <button class="btn" onclick="event.stopPropagation();previewMemberKTA(${m.id})">${ICO.card} KTA</button>
+              ${editable && !paid ? `<button class="btn btn-amber" onclick="event.stopPropagation();billMemberWA(${m.id},${activeMonth})">${ICO.send} Tagih</button>` : ''}
+              ${isKetua() ? `<button class="btn ico-btn sm btn-rose" style="flex:0 0 34px;" onclick="event.stopPropagation();deleteMember(${m.id})" aria-label="Hapus">${ICO.trash}</button>` : ''}
+            </div>
           </div>
-        `).join('');
-
-        let actions = '';
-        if (editable) {
-          actions = `
-            <button class="btn" onclick="previewMemberKTA(${m.id})">${ICO.card} KTA</button>
-            ${
-              isPaidMonth
-                ? `<button class="btn btn-accent-soft" onclick="toggleMonth(${m.id}, ${mIdx})">${ICO.check} Lunas</button>`
-                : `<button class="btn btn-warn" onclick="billMemberWA(${m.id}, ${mIdx})">${ICO.send} Tagih</button>`
-            }
-            ${isKetua() ? `<button class="btn icon-btn btn-danger" title="Hapus" onclick="deleteMember(${m.id})">${ICO.trash}</button>` : ''}
-          `;
-        } else {
-          actions = `
-            <button class="btn" onclick="previewMemberKTA(${m.id})">${ICO.card} KTA</button>
-            ${
-              isPaidMonth
-                ? `<span class="status-chip paid">${ICO.check} Lunas</span>`
-                : (isMe
-                    ? `<button class="btn btn-primary" onclick="confirmPayToTreasurerWA()">Bayar ${MONTHS[mIdx]}</button>`
-                    : `<span class="status-chip unpaid">Belum</span>`)
-            }
-          `;
-        }
+        ` : '';
 
         return `
-          <article class="neu-item">
-            <div class="member-head">
-              <div class="member-id">
-                <div class="member-avatar">${escapeHtml(initials)}</div>
-                <div style="min-width:0;">
-                  <div class="member-name">${escapeHtml(m.name)}${isMe ? '<span class="me-dot" title="Anda"></span>' : ''}</div>
-                  <div class="member-sub mono">${escapeHtml(m.kta)} · ${escapeHtml(phoneMask)}</div>
+          <div class="m-row">
+            <div class="m-main" onclick="toggleExpand(${m.id})">
+              <div class="m-left">
+                <div class="m-av">${esc(ini)}</div>
+                <div class="m-info">
+                  <div class="m-name">${esc(m.name)}${isMe ? '<span class="me-dot"></span>' : ''}</div>
+                  <div class="m-role">${esc(m.role)}</div>
                 </div>
               </div>
-              <span class="tag-pill">${escapeHtml(m.role)}</span>
+              <div class="m-right" onclick="event.stopPropagation()">
+                ${editable && !paid ? `<button class="btn ico-btn sm btn-amber" onclick="billMemberWA(${m.id},${activeMonth})" aria-label="Tagih">${ICO.send}</button>` : ''}
+                <button class="check-orb ${paid ? 'paid' : ''} ${!editable ? 'ro' : ''}" onclick="toggleMonth(${m.id},${activeMonth})" aria-label="${paid ? 'Lunas' : 'Belum'}">
+                  ${paid ? ICO.check : ''}
+                </button>
+              </div>
             </div>
-            <div class="months-grid">${pills}</div>
-            <div class="card-actions">${actions}</div>
-          </article>
+            ${drawer}
+          </div>
         `;
       }).join('');
     }
 
-    function toggleMonth(memberId, monthIdx) {
+    function toggleMonth(memberId, mIdx) {
       if (!canEditFinance()) return;
       const m = db.members.find(x => x.id === memberId);
       if (!m) return;
-      m.paid[monthIdx] = m.paid[monthIdx] ? 0 : 1;
+      m.paid[mIdx] = m.paid[mIdx] ? 0 : 1;
       saveDB();
-      toast(`${m.name} · ${MONTHS[monthIdx]} ${m.paid[monthIdx] ? 'Lunas' : 'Belum'}`);
+      toast(`${m.name.split(' ')[0]} · ${m.paid[mIdx] ? 'Lunas' : 'Belum'}`);
     }
 
     function deleteMember(memberId) {
-      if (!isKetua()) return;
-      if (db.members.length <= 1) {
-        toast('Minimal 1 anggota.');
-        return;
-      }
-      if (activeUser && memberId === activeUser.id) {
-        toast('Tidak bisa hapus akun aktif.');
-        return;
-      }
-      const m = db.members.find(x => x.id === memberId);
-      if (!m) return;
+      if (!isKetua() || db.members.length <= 1 || (activeUser && memberId === activeUser.id)) return;
       db.members = db.members.filter(x => x.id !== memberId);
+      expandedMemberId = null;
       saveDB();
-      toast(`${m.name} dihapus`);
+      toast('Dihapus');
     }
 
-    function billMemberWA(memberId, monthIdx) {
+    function billMemberWA(memberId, mIdx) {
       const m = db.members.find(x => x.id === memberId);
       if (!m) return;
-      const text = `Halo *${m.name}* (${m.kta}),\n\nPengingat iuran *${db.name}* bulan *${MONTHS[monthIdx]} 2026* sebesar *${rp(db.fee)}*.\n\nTerima kasih.`;
+      const text = `Halo *${m.name}* (${m.kta}),\n\nPengingat iuran *${db.name}* bulan *${MONTHS[mIdx]} 2026* sebesar *${rp(db.fee)}*.`;
       const phone = m.phone.replace(/^0/, '62').replace(/\D/g, '');
       window.open(`https://wa.me/${phone}?text=${encodeURIComponent(text)}`, '_blank');
     }
 
-    // ==================== 2. AGENDA & RSVP ====================
+    function confirmPayToTreasurerWA() {
+      if (!activeUser) return;
+      const bendahara = db.members.find(m => m.accessRole === 'bendahara') || db.members[0];
+      const msg = `Halo Bendahara *${db.name}*,\n\nSaya *${activeUser.name}* (${activeUser.kta}) konfirmasi iuran *${MONTHS[activeMonth]} 2026* (${rp(db.fee)}).`;
+      const phone = (bendahara?.phone || '081234567802').replace(/^0/, '62').replace(/\D/g, '');
+      window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, '_blank');
+    }
+
+    // ==================== 2. AGENDA ====================
     function renderAgendas() {
       const box = document.getElementById('agendaListContainer');
       if (!db.agendas || !db.agendas.length) {
-        box.innerHTML = `<div class="empty-state">Belum ada agenda.</div>`;
+        box.innerHTML = `<div class="empty">Kosong</div>`;
         return;
       }
-
       const myId = activeUser ? String(activeUser.id) : '1';
-
       box.innerHTML = db.agendas.map(ag => {
         const rsvps = ag.rsvps || {};
-        const myStatus = rsvps[myId] || '';
-
-        const hadirNames = [];
-        let raguCount = 0;
-        let tidakCount = 0;
-
+        const my = rsvps[myId] || '';
+        const hadir = [];
+        let ragu = 0, tidak = 0;
         db.members.forEach(m => {
           const st = rsvps[String(m.id)];
-          if (st === 'hadir') hadirNames.push(m.name.split(' ')[0]);
-          else if (st === 'ragu') raguCount++;
-          else if (st === 'tidak') tidakCount++;
+          if (st === 'hadir') hadir.push(m.name.split(' ')[0]);
+          else if (st === 'ragu') ragu++;
+          else if (st === 'tidak') tidak++;
         });
 
         return `
-          <article class="neu-item">
-            <div class="agenda-top">
-              <div style="display:flex;align-items:center;gap:6px;">
-                <span class="tag-pill accent">${escapeHtml(ag.type)}</span>
-                <span class="tag-pill num">${ag.fee > 0 ? rp(ag.fee) : 'Gratis'}</span>
-              </div>
-              <div style="display:flex;gap:6px;">
-                <button class="btn icon-btn sm" onclick="shareAgendaToWA(${ag.id})" title="Salin ke WA" aria-label="Salin ke WA">${ICO.share}</button>
-                ${canEditFinance() ? `<button class="btn icon-btn sm btn-danger" onclick="deleteAgenda(${ag.id})" title="Hapus" aria-label="Hapus">${ICO.trash}</button>` : ''}
+          <article class="card ag-card">
+            <div class="ag-top">
+              <div class="ag-title">${esc(ag.title)}</div>
+              <div style="display:flex;gap:6px;flex-shrink:0;">
+                <button class="btn ico-btn sm" onclick="shareAgendaToWA(${ag.id})" aria-label="Bagikan">${ICO.share}</button>
+                ${canEditFinance() ? `<button class="btn ico-btn sm btn-rose" onclick="deleteAgenda(${ag.id})" aria-label="Hapus">${ICO.trash}</button>` : ''}
               </div>
             </div>
-
-            <div class="agenda-title">${escapeHtml(ag.title)}</div>
-
-            <div class="agenda-meta">
-              <span class="meta-item mono">${ICO.cal} ${escapeHtml(ag.date)}</span>
-              <span class="meta-item mono">${ICO.clock} ${escapeHtml(ag.time)}</span>
-              <span class="meta-item">${ICO.pin} ${escapeHtml(ag.location)}</span>
+            <div class="ag-meta">
+              <span class="mono">${esc(ag.date)} · ${esc(ag.time)}</span>
+              <span>${esc(ag.location)}</span>
+              ${ag.fee > 0 ? `<span class="num" style="color:var(--blue);font-weight:700;">${rp(ag.fee)}</span>` : ''}
             </div>
-
-            ${ag.notes ? `<div class="agenda-note">${escapeHtml(ag.notes)}</div>` : ''}
-
-            <div class="seg-track">
-              <button class="seg-btn ${myStatus === 'hadir' ? 'active-hadir' : ''}" onclick="setAgendaRSVP(${ag.id},'hadir')">Hadir · ${hadirNames.length}</button>
-              <button class="seg-btn ${myStatus === 'ragu' ? 'active-ragu' : ''}" onclick="setAgendaRSVP(${ag.id},'ragu')">Ragu · ${raguCount}</button>
-              <button class="seg-btn ${myStatus === 'tidak' ? 'active-tidak' : ''}" onclick="setAgendaRSVP(${ag.id},'tidak')">Tidak · ${tidakCount}</button>
+            <div class="seg">
+              <button class="seg-b ${my === 'hadir' ? 'on' : ''}" onclick="setAgendaRSVP(${ag.id},'hadir')">Hadir ${hadir.length}</button>
+              <button class="seg-b ${my === 'ragu' ? 'on-amber' : ''}" onclick="setAgendaRSVP(${ag.id},'ragu')">Ragu ${ragu}</button>
+              <button class="seg-b ${my === 'tidak' ? 'on-rose' : ''}" onclick="setAgendaRSVP(${ag.id},'tidak')">Tidak ${tidak}</button>
             </div>
-
-            ${
-              hadirNames.length
-                ? `<div class="attendee-row"><div class="attendee-chips">${hadirNames.map(n => `<span class="attendee-chip">${escapeHtml(n)}</span>`).join('')}</div></div>`
-                : ''
-            }
+            ${hadir.length ? `<div class="ag-who">${esc(hadir.join(', '))}</div>` : ''}
           </article>
         `;
       }).join('');
     }
 
-    function setAgendaRSVP(agendaId, status) {
+    function setAgendaRSVP(id, status) {
       if (!activeUser) return;
-      const ag = db.agendas.find(a => a.id === agendaId);
+      const ag = db.agendas.find(a => a.id === id);
       if (!ag) return;
       if (!ag.rsvps) ag.rsvps = {};
       ag.rsvps[String(activeUser.id)] = status;
       saveDB();
-      const map = { hadir: 'Hadir', ragu: 'Ragu', tidak: 'Tidak hadir' };
-      toast(`RSVP: ${map[status]}`);
     }
 
     function saveNewAgenda(e) {
@@ -2144,8 +1705,7 @@
       if (!title || !location) return;
 
       db.agendas.unshift({
-        id: Date.now(),
-        title, type, fee, date, time, location, notes,
+        id: Date.now(), title, type, fee, date, time, location, notes,
         rsvps: activeUser ? { [String(activeUser.id)]: 'hadir' } : {}
       });
       document.getElementById('agTitle').value = '';
@@ -2153,38 +1713,28 @@
       document.getElementById('agNotes').value = '';
       closeModal('agendaModal');
       saveDB();
-      toast('Agenda diterbitkan');
+      toast('Tersimpan');
     }
 
-    function deleteAgenda(agendaId) {
+    function deleteAgenda(id) {
       if (!canEditFinance()) return;
-      db.agendas = db.agendas.filter(a => a.id !== agendaId);
+      db.agendas = db.agendas.filter(a => a.id !== id);
       saveDB();
-      toast('Agenda dihapus');
+      toast('Dihapus');
     }
 
-    function shareAgendaToWA(agendaId) {
-      const ag = db.agendas.find(a => a.id === agendaId);
+    function shareAgendaToWA(id) {
+      const ag = db.agendas.find(a => a.id === id);
       if (!ag) return;
-      const hadirList = db.members.filter(m => ag.rsvps && ag.rsvps[String(m.id)] === 'hadir');
-      const txt = `*${db.name.toUpperCase()} — ${ag.type.toUpperCase()}*
-*${ag.title}*
-Tanggal: ${ag.date} · ${ag.time} WIB
-Lokasi: ${ag.location}
-HTM: ${ag.fee > 0 ? rp(ag.fee) : 'Gratis'}
-${ag.notes ? `Catatan: ${ag.notes}\n` : ''}
-*Hadir (${hadirList.length}):*
-${hadirList.map((m, i) => `${i + 1}. ${m.name}`).join('\n') || '-'}`;
-
-      copyText(txt, 'Undangan disalin');
+      const hadir = db.members.filter(m => ag.rsvps && ag.rsvps[String(m.id)] === 'hadir');
+      const txt = `*${ag.title}*\n${ag.date} · ${ag.time} WIB\n${ag.location}${ag.fee > 0 ? '\nHTM: ' + rp(ag.fee) : ''}\n\n*Hadir (${hadir.length}):*\n${hadir.map((m, i) => `${i + 1}. ${m.name}`).join('\n') || '-'}`;
+      copyText(txt, 'Disalin');
     }
 
-    // ==================== 3. BUKU KAS ====================
+    // ==================== 3. KAS ====================
     function setKasFilter(f) {
       kasFilter = f;
-      ['all', 'in', 'out'].forEach(k => {
-        document.getElementById('fkp-' + k).classList.toggle('active', k === f);
-      });
+      ['all', 'in', 'out'].forEach(k => document.getElementById('fkp-' + k).classList.toggle('on', k === f));
       renderKas();
     }
 
@@ -2194,44 +1744,42 @@ ${hadirList.map((m, i) => `${i + 1}. ${m.name}`).join('\n') || '-'}`;
       document.getElementById('finTotalOut').textContent = rp(fin.totalOut);
       document.getElementById('finNetSaldo').textContent = rp(fin.saldo);
 
-      const listEl = document.getElementById('txHistoryList');
+      const box = document.getElementById('txHistoryList');
       let html = '';
 
       if (kasFilter === 'all' || kasFilter === 'in') {
         html += `
           <div class="tx-row">
-            <div class="tx-left">
-              <div class="tx-dir in">${ICO.arrowDown}</div>
+            <div class="tx-l">
+              <div class="tx-dot in">${ICO.down}</div>
               <div style="min-width:0;">
-                <div class="tx-desc">Iuran Anggota</div>
-                <div class="tx-meta">Otomatis</div>
+                <div class="tx-t">Iuran Anggota</div>
+                <div class="tx-d">Otomatis</div>
               </div>
             </div>
-            <div class="tx-right">
-              <span class="tx-amt in num">+${rp(fin.totalIuran)}</span>
-            </div>
+            <div class="tx-r"><span class="tx-v in num">+${rp(fin.totalIuran)}</span></div>
           </div>
         `;
       }
 
-      const filteredTxs = db.txs.filter(t => kasFilter === 'all' || t.type === kasFilter);
-      html += filteredTxs.map(t => `
+      const items = db.txs.filter(t => kasFilter === 'all' || t.type === kasFilter);
+      html += items.map(t => `
         <div class="tx-row">
-          <div class="tx-left">
-            <div class="tx-dir ${t.type === 'in' ? 'in' : 'out'}">${t.type === 'in' ? ICO.arrowDown : ICO.arrowUp}</div>
+          <div class="tx-l">
+            <div class="tx-dot ${t.type === 'in' ? 'in' : 'out'}">${t.type === 'in' ? ICO.down : ICO.up}</div>
             <div style="min-width:0;">
-              <div class="tx-desc">${escapeHtml(t.desc)}</div>
-              <div class="tx-meta">${escapeHtml(t.category || 'Kas')}${t.date ? ` · ${escapeHtml(t.date)}` : ''}</div>
+              <div class="tx-t">${esc(t.desc)}</div>
+              <div class="tx-d mono">${esc(t.date || '')}</div>
             </div>
           </div>
-          <div class="tx-right">
-            <span class="tx-amt ${t.type === 'in' ? 'in' : 'out'} num">${t.type === 'in' ? '+' : '-'}${rp(t.amount)}</span>
-            ${canEditFinance() ? `<button class="del-x" onclick="deleteTx(${t.id})" aria-label="Hapus">${ICO.x}</button>` : ''}
+          <div class="tx-r">
+            <span class="tx-v ${t.type === 'in' ? 'in' : 'out'} num">${t.type === 'in' ? '+' : '-'}${rp(t.amount)}</span>
+            ${canEditFinance() ? `<button class="x-btn" onclick="deleteTx(${t.id})" aria-label="Hapus">${ICO.x}</button>` : ''}
           </div>
         </div>
       `).join('');
 
-      listEl.innerHTML = html || `<div class="empty-state">Belum ada transaksi.</div>`;
+      box.innerHTML = html || `<div class="empty">Kosong</div>`;
     }
 
     function addTransaction(e) {
@@ -2243,7 +1791,6 @@ ${hadirList.map((m, i) => `${i + 1}. ${m.name}`).join('\n') || '-'}`;
       const date = document.getElementById('txDate').value;
       const desc = document.getElementById('txDesc').value.trim();
       if (!amount || !desc) return;
-
       db.txs.unshift({ id: Date.now(), type, category, amount, date, desc });
       document.getElementById('txAmount').value = '';
       document.getElementById('txDesc').value = '';
@@ -2252,32 +1799,26 @@ ${hadirList.map((m, i) => `${i + 1}. ${m.name}`).join('\n') || '-'}`;
       toast('Tersimpan');
     }
 
-    function deleteTx(txId) {
+    function deleteTx(id) {
       if (!canEditFinance()) return;
-      db.txs = db.txs.filter(t => t.id !== txId);
+      db.txs = db.txs.filter(t => t.id !== id);
       saveDB();
-      toast('Transaksi dihapus');
+      toast('Dihapus');
     }
 
     function exportKasToCSV() {
       const headers = ['Tanggal', 'Tipe', 'Kategori', 'Keterangan', 'Nominal'];
-      const rows = db.txs.map(t => [
-        t.date || '2026-01-01',
-        t.type === 'in' ? 'MASUK' : 'KELUAR',
-        `"${t.category || 'Kas'}"`,
-        `"${t.desc}"`,
-        t.amount
-      ]);
+      const rows = db.txs.map(t => [t.date || '', t.type === 'in' ? 'MASUK' : 'KELUAR', `"${t.category || ''}"`, `"${t.desc}"`, t.amount]);
       const csv = 'data:text/csv;charset=utf-8,' + [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
       const a = document.createElement('a');
       a.href = encodeURI(csv);
       a.download = `Kas-${db.name.replace(/\s+/g, '-')}.csv`;
       a.click();
-      toast('CSV kas diunduh');
+      toast('CSV diunduh');
     }
 
-    // ==================== 4. KTA CANVAS ====================
-    function roundRectPath(ctx, x, y, w, h, r) {
+    // ==================== 4. KTA ====================
+    function rrect(ctx, x, y, w, h, r) {
       ctx.beginPath();
       ctx.moveTo(x + r, y);
       ctx.arcTo(x + w, y, x + w, y + h, r);
@@ -2287,15 +1828,15 @@ ${hadirList.map((m, i) => `${i + 1}. ${m.name}`).join('\n') || '-'}`;
       ctx.closePath();
     }
 
-    function previewMemberKTA(memberId) {
-      document.getElementById('ktaMemberSelect').value = memberId;
+    function previewMemberKTA(id) {
+      document.getElementById('ktaMemberSelect').value = id;
       switchView('card');
     }
 
     function setTheme(idx, el) {
       db.theme = idx;
-      document.querySelectorAll('.theme-dot').forEach(d => d.classList.remove('active'));
-      if (el) el.classList.add('active');
+      document.querySelectorAll('.sw').forEach(d => d.classList.remove('on'));
+      if (el) el.classList.add('on');
       saveDB();
       drawIDCard();
     }
@@ -2312,13 +1853,11 @@ ${hadirList.map((m, i) => `${i + 1}. ${m.name}`).join('\n') || '-'}`;
       ctx.fillStyle = grad;
       ctx.fillRect(0, 0, W, H);
 
-      // Subtle architectural rings
       ctx.strokeStyle = 'rgba(255,255,255,0.08)';
       ctx.lineWidth = 1.5;
       ctx.beginPath(); ctx.arc(W - 90, 90, 170, 0, Math.PI * 2); ctx.stroke();
       ctx.beginPath(); ctx.arc(W - 90, 90, 230, 0, Math.PI * 2); ctx.stroke();
 
-      // Header
       ctx.fillStyle = 'rgba(255,255,255,0.72)';
       ctx.font = '600 15px "Plus Jakarta Sans", sans-serif';
       ctx.textAlign = 'left';
@@ -2332,9 +1871,8 @@ ${hadirList.map((m, i) => `${i + 1}. ${m.name}`).join('\n') || '-'}`;
       ctx.lineWidth = 1.5;
       ctx.beginPath(); ctx.moveTo(48, 130); ctx.lineTo(W - 48, 130); ctx.stroke();
 
-      // Initials emblem
       ctx.fillStyle = 'rgba(255,255,255,0.14)';
-      roundRectPath(ctx, 48, 174, 126, 126, 26);
+      rrect(ctx, 48, 174, 126, 126, 26);
       ctx.fill();
       ctx.strokeStyle = 'rgba(255,255,255,0.35)';
       ctx.lineWidth = 2;
@@ -2346,7 +1884,6 @@ ${hadirList.map((m, i) => `${i + 1}. ${m.name}`).join('\n') || '-'}`;
       ctx.textAlign = 'center';
       ctx.fillText(initials, 111, 254);
 
-      // Member Details
       ctx.textAlign = 'left';
       ctx.fillStyle = 'rgba(255,255,255,0.78)';
       ctx.font = '600 20px "JetBrains Mono", monospace';
@@ -2360,32 +1897,28 @@ ${hadirList.map((m, i) => `${i + 1}. ${m.name}`).join('\n') || '-'}`;
       ctx.font = '500 20px "Plus Jakarta Sans", sans-serif';
       ctx.fillText(`${m.role}  ·  ${m.phone}`, 204, 288);
 
-      // Deterministic QR Matrix
       const qrX = W - 178, qrY = 174, qrSize = 130;
       ctx.fillStyle = '#ffffff';
-      roundRectPath(ctx, qrX, qrY, qrSize, qrSize, 16);
+      rrect(ctx, qrX, qrY, qrSize, qrSize, 16);
       ctx.fill();
 
       ctx.fillStyle = '#0f172a';
-      const seedStr = m.kta + m.name;
+      const seed = m.kta + m.name;
       const cells = 9, pad = 14, cellW = (qrSize - pad * 2) / cells;
       for (let r = 0; r < cells; r++) {
         for (let c = 0; c < cells; c++) {
-          const isCorner = (r < 3 && c < 3) || (r < 3 && c >= cells - 3) || (r >= cells - 3 && c < 3);
-          const charCode = seedStr.charCodeAt((r * cells + c) % seedStr.length);
-          if (isCorner || (charCode + r * c) % 2 === 0) {
+          const corner = (r < 3 && c < 3) || (r < 3 && c >= cells - 3) || (r >= cells - 3 && c < 3);
+          const code = seed.charCodeAt((r * cells + c) % seed.length);
+          if (corner || (code + r * c) % 2 === 0) {
             ctx.fillRect(qrX + pad + c * cellW, qrY + pad + r * cellW, cellW - 1.5, cellW - 1.5);
           }
         }
       }
 
-      // Footer strip
       ctx.fillStyle = 'rgba(0,0,0,0.22)';
       ctx.fillRect(0, H - 68, W, 68);
 
-      const mIdx = parseInt(document.getElementById('activeMonthSelect').value, 10);
-      const lunas = !!m.paid[mIdx];
-
+      const lunas = !!m.paid[activeMonth];
       ctx.fillStyle = 'rgba(255,255,255,0.82)';
       ctx.font = '600 17px "Plus Jakarta Sans", sans-serif';
       ctx.fillText('AKTIF', 48, H - 28);
@@ -2393,42 +1926,36 @@ ${hadirList.map((m, i) => `${i + 1}. ${m.name}`).join('\n') || '-'}`;
       ctx.textAlign = 'right';
       ctx.fillStyle = lunas ? '#93c5fd' : '#fde68a';
       ctx.font = '700 18px "Plus Jakarta Sans", sans-serif';
-      ctx.fillText(`${MONTHS[mIdx].toUpperCase()} · ${lunas ? 'LUNAS' : 'BELUM'}`, W - 48, H - 28);
+      ctx.fillText(`${MONTHS[activeMonth].toUpperCase()} · ${lunas ? 'LUNAS' : 'BELUM'}`, W - 48, H - 28);
     }
 
     function drawIDCard() {
       const canvas = document.getElementById('ktaCanvas');
       const selId = parseInt(document.getElementById('ktaMemberSelect').value, 10);
       const m = db.members.find(x => x.id === selId) || activeUser || db.members[0];
-      if (!m) return;
-      renderKTAOnCanvas(canvas, m);
+      if (m) renderKTAOnCanvas(canvas, m);
     }
 
     function toggleMassPrintKTA() {
       const sheet = document.getElementById('massKtaSheetCard');
       const grid = document.getElementById('massKtaGrid');
-      const isHidden = sheet.classList.contains('hidden');
-      if (!isHidden) {
+      if (!sheet.classList.contains('hidden')) {
         sheet.classList.add('hidden');
         return;
       }
       sheet.classList.remove('hidden');
       document.getElementById('massKtaCount').textContent = db.members.length;
       grid.innerHTML = '';
-
       db.members.forEach(m => {
         const wrap = document.createElement('div');
-        wrap.className = 'canvas-inner';
+        wrap.className = 'frame-in';
         const c = document.createElement('canvas');
-        c.width = 856;
-        c.height = 540;
-        c.style.width = '100%';
-        c.style.display = 'block';
+        c.width = 856; c.height = 540;
+        c.style.width = '100%'; c.style.display = 'block';
         wrap.appendChild(c);
         grid.appendChild(wrap);
         renderKTAOnCanvas(c, m);
       });
-      toast('Siap cetak A4');
     }
 
     function downloadCanvasPNG() {
@@ -2445,29 +1972,28 @@ ${hadirList.map((m, i) => `${i + 1}. ${m.name}`).join('\n') || '-'}`;
       a.download = fileName;
       a.href = dataUrl;
       a.click();
-      toast('KTA disimpan');
+      toast('Disimpan');
     }
 
     function sendKTAWhatsApp() {
       const selId = parseInt(document.getElementById('ktaMemberSelect').value, 10);
       const m = db.members.find(x => x.id === selId) || db.members[0];
-      const msg = `Halo *${m.name}*,\n\nData KTA *${db.name}*:\nNo. KTA: ${m.kta}\nJabatan: ${m.role}\nStatus: Aktif`;
+      const msg = `Halo *${m.name}*,\nKTA *${db.name}*\nNo: ${m.kta}\nJabatan: ${m.role}`;
       const phone = m.phone.replace(/^0/, '62').replace(/\D/g, '');
       window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, '_blank');
     }
 
-    // ==================== 5. LAPORAN WA ====================
+    // ==================== 5. LAPORAN ====================
     function setReportMode(mode) {
       reportMode = mode;
-      document.getElementById('rep-kas').classList.toggle('active', mode === 'kas');
-      document.getElementById('rep-agenda').classList.toggle('active', mode === 'agenda');
+      document.getElementById('rep-kas').classList.toggle('on', mode === 'kas');
+      document.getElementById('rep-agenda').classList.toggle('on', mode === 'agenda');
       renderReportWA();
     }
 
     function renderReportWA() {
       const fin = getCashSummary();
-      const mIdx = parseInt(document.getElementById('activeMonthSelect').value, 10);
-      const mName = MONTHS[mIdx];
+      const mName = MONTHS[activeMonth];
 
       if (reportMode === 'agenda') {
         if (!db.agendas.length) {
@@ -2475,73 +2001,46 @@ ${hadirList.map((m, i) => `${i + 1}. ${m.name}`).join('\n') || '-'}`;
           return;
         }
         const ag = db.agendas[0];
-        const hadirList = db.members.filter(m => ag.rsvps && ag.rsvps[String(m.id)] === 'hadir');
-        const raguList = db.members.filter(m => ag.rsvps && ag.rsvps[String(m.id)] === 'ragu');
-        document.getElementById('waTextOutput').value = `*${db.name.toUpperCase()} — ${ag.type.toUpperCase()}*
-*${ag.title}*
-Tanggal: ${ag.date} · ${ag.time} WIB
-Lokasi: ${ag.location}
-HTM: ${ag.fee > 0 ? rp(ag.fee) : 'Gratis'}
-${ag.notes ? `Catatan: ${ag.notes}\n` : ''}
-*Hadir (${hadirList.length}):*
-${hadirList.map((m, i) => `${i + 1}. ${m.name}`).join('\n') || '-'}
-
-*Ragu (${raguList.length}):*
-${raguList.map((m, i) => `${i + 1}. ${m.name}`).join('\n') || '-'}`;
+        const hadir = db.members.filter(m => ag.rsvps && ag.rsvps[String(m.id)] === 'hadir');
+        document.getElementById('waTextOutput').value = `*${ag.title}*\n${ag.date} · ${ag.time} WIB\n${ag.location}${ag.fee > 0 ? '\nHTM: ' + rp(ag.fee) : ''}\n\n*Hadir (${hadir.length}):*\n${hadir.map((m, i) => `${i + 1}. ${m.name}`).join('\n') || '-'}`;
         return;
       }
 
-      const paidMembers = db.members.filter(m => m.paid[mIdx]);
-      const unpaidMembers = db.members.filter(m => !m.paid[mIdx]);
+      const paid = db.members.filter(m => m.paid[activeMonth]);
+      const unpaid = db.members.filter(m => !m.paid[activeMonth]);
 
-      document.getElementById('waTextOutput').value = `*LAPORAN ${db.name.toUpperCase()}*
-Periode: ${mName} 2026 (${rp(db.fee)}/bln)
-
-*Lunas (${paidMembers.length}):*
-${paidMembers.map((m, i) => `${i + 1}. ${m.name}`).join('\n') || '-'}
-
-*Belum (${unpaidMembers.length}):*
-${unpaidMembers.map((m, i) => `${i + 1}. ${m.name}`).join('\n') || 'Semua lunas'}
-
-*Kas:*
-Iuran: ${rp(fin.totalIuran)}
-Masuk lain: ${rp(fin.totalIn)}
-Keluar: ${rp(fin.totalOut)}
-*Saldo: ${rp(fin.saldo)}*`;
+      document.getElementById('waTextOutput').value = `*${db.name.toUpperCase()} — ${mName} 2026*\n\n*Lunas (${paid.length}):*\n${paid.map((m, i) => `${i + 1}. ${m.name}`).join('\n') || '-'}\n\n*Belum (${unpaid.length}):*\n${unpaid.map((m, i) => `${i + 1}. ${m.name}`).join('\n') || 'Semua lunas'}\n\n*Saldo Kas:* ${rp(fin.saldo)}`;
     }
 
     function copyReportWA() {
       renderReportWA();
-      copyText(document.getElementById('waTextOutput').value, 'Laporan disalin');
+      copyText(document.getElementById('waTextOutput').value, 'Disalin');
     }
 
     function exportToExcelCSV() {
       const headers = ['No KTA', 'Nama', 'Jabatan', 'WhatsApp', ...MONTHS];
-      const rows = db.members.map(m => [
-        m.kta, `"${m.name}"`, `"${m.role}"`, `'${m.phone}`,
-        ...m.paid.map(p => p ? 'LUNAS' : 'BELUM')
-      ]);
-      const csvContent = 'data:text/csv;charset=utf-8,' + [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
-      const link = document.createElement('a');
-      link.setAttribute('href', encodeURI(csvContent));
-      link.setAttribute('download', `Iuran-${db.name.replace(/\s+/g, '-')}.csv`);
-      link.click();
-      toast('CSV iuran diunduh');
+      const rows = db.members.map(m => [m.kta, `"${m.name}"`, `"${m.role}"`, `'${m.phone}`, ...m.paid.map(p => p ? 'LUNAS' : 'BELUM')]);
+      const csv = 'data:text/csv;charset=utf-8,' + [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+      const a = document.createElement('a');
+      a.href = encodeURI(csv);
+      a.download = `Iuran-${db.name.replace(/\s+/g, '-')}.csv`;
+      a.click();
+      toast('CSV diunduh');
     }
 
     function simulateKTPScan(input) {
       if (!input.files || !input.files[0]) return;
-      toast('Membaca KTP...');
+      toast('Membaca...');
       setTimeout(() => {
-        const sampleNames = ['Wahyu Hidayat', 'Siti Nurhaliza', 'Reza Rahadian', 'Dedi Kurniawan'];
-        document.getElementById('inName').value = sampleNames[Math.floor(Math.random() * sampleNames.length)];
+        const names = ['Wahyu Hidayat', 'Siti Nurhaliza', 'Reza Rahadian', 'Dedi Kurniawan'];
+        document.getElementById('inName').value = names[Math.floor(Math.random() * names.length)];
         document.getElementById('inRole').value = 'Anggota';
         document.getElementById('inPhone').value = '0813' + Math.floor(10000000 + Math.random() * 89999999);
-        toast('Data KTP terisi');
-      }, 550);
+        toast('Terisi');
+      }, 500);
     }
 
-    // ==================== MODALS & SETTINGS ====================
+    // ==================== MODALS ====================
     function openModal(id) {
       if (id === 'settingsModal') {
         if (!isKetua()) return;
@@ -2549,19 +2048,12 @@ Keluar: ${rp(fin.totalOut)}
         document.getElementById('setCommFee').value = db.fee;
         document.getElementById('setCommPrefix').value = db.prefix;
       }
-      if (id === 'txModal') {
-        document.getElementById('txDate').valueAsDate = new Date();
-      }
+      if (id === 'txModal') document.getElementById('txDate').valueAsDate = new Date();
       document.getElementById(id).classList.add('show');
     }
 
-    function closeModal(id) {
-      document.getElementById(id).classList.remove('show');
-    }
-
-    function backdropClose(e, id) {
-      if (e.target.id === id) closeModal(id);
-    }
+    function closeModal(id) { document.getElementById(id).classList.remove('show'); }
+    function backdropClose(e, id) { if (e.target.id === id) closeModal(id); }
 
     function saveMember(e) {
       e.preventDefault();
@@ -2574,16 +2066,12 @@ Keluar: ${rp(fin.totalOut)}
       if (!name) return;
 
       const num = String(db.members.length + 1).padStart(3, '0');
-      const newKta = `${db.prefix}-${num}`;
-      db.members.push({
-        id: Date.now(), kta: newKta, name, role, accessRole, phone, pin,
-        paid: [0, 0, 0, 0, 0, 0]
-      });
+      db.members.push({ id: Date.now(), kta: `${db.prefix}-${num}`, name, role, accessRole, phone, pin, paid: [0, 0, 0, 0, 0, 0] });
       document.getElementById('inName').value = '';
       document.getElementById('inPhone').value = '';
       closeModal('memberModal');
       saveDB();
-      toast(`${name} ditambahkan`);
+      toast('Tersimpan');
     }
 
     function saveSettings(e) {
@@ -2594,44 +2082,32 @@ Keluar: ${rp(fin.totalOut)}
       db.prefix = document.getElementById('setCommPrefix').value.trim();
       closeModal('settingsModal');
       saveDB();
-      toast('Pengaturan disimpan');
+      toast('Tersimpan');
     }
 
     function refreshUI() {
       document.getElementById('hdrName').textContent = db.name;
-      document.getElementById('hdrSub').textContent = `${rp(db.fee)}/bln`;
 
-      const mIdx = parseInt(document.getElementById('activeMonthSelect').value, 10);
-      const paidNow = db.members.filter(m => m.paid[mIdx]).length;
+      const paidNow = db.members.filter(m => m.paid[activeMonth]).length;
       const fin = getCashSummary();
+      const pct = db.members.length ? Math.round((paidNow / db.members.length) * 100) : 0;
 
-      document.getElementById('kpiMembers').textContent = db.members.length;
-      document.getElementById('kpiPaidLabel').textContent = `Lunas ${MONTHS[mIdx]}`;
-      document.getElementById('kpiPaid').textContent = `${paidNow}/${db.members.length}`;
-      const paidPct = db.members.length ? Math.round((paidNow / db.members.length) * 100) : 0;
-      const bar = document.getElementById('kpiPaidBar');
-      if (bar) bar.style.width = `${paidPct}%`;
       document.getElementById('kpiSaldo').textContent = rp(fin.saldo);
-      document.getElementById('kpiAgendaCount').textContent = db.agendas.length;
+      document.getElementById('kpiPaid').textContent = `${paidNow}/${db.members.length} ${MONTHS[activeMonth]}`;
+      document.getElementById('kpiPaidBar').style.width = `${pct}%`;
 
-      const badge = document.getElementById('navAgendaBadge');
-      badge.textContent = db.agendas.length;
-      badge.classList.toggle('hidden', db.agendas.length === 0);
+      document.getElementById('navAgendaBadge').classList.toggle('hidden', db.agendas.length === 0);
 
       const sel = document.getElementById('ktaMemberSelect');
       const cur = sel.value;
-      sel.innerHTML = db.members.map(m => `<option value="${m.id}">${escapeHtml(m.name)}</option>`).join('');
-      if (cur && db.members.some(m => String(m.id) === String(cur))) {
-        sel.value = cur;
-      } else if (activeUser) {
-        sel.value = activeUser.id;
-      }
+      sel.innerHTML = db.members.map(m => `<option value="${m.id}">${esc(m.name)}</option>`).join('');
+      if (cur && db.members.some(m => String(m.id) === String(cur))) sel.value = cur;
+      else if (activeUser) sel.value = activeUser.id;
 
-      document.querySelectorAll('.theme-dot').forEach((d, idx) => {
-        d.classList.toggle('active', idx === (db.theme || 0));
-      });
+      document.querySelectorAll('.sw').forEach((d, idx) => d.classList.toggle('on', idx === (db.theme || 0)));
 
-      applyRolePermissionsUI();
+      applyRoleUI();
+      renderMonthBar();
       renderMemberList();
       renderAgendas();
       renderKas();
