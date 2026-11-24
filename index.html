@@ -3,1035 +3,1682 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <meta name="theme-color" content="#0f7a5a" />
-  <title>KomunitasKu by Tersistem — Sistem Manajemen Komunitas Lengkap</title>
+  <meta name="theme-color" content="#eaeff6" />
+  <meta name="description" content="KomunitasKu — Pengelolaan iuran, agenda RSVP, kas, dan kartu anggota komunitas." />
+  <title>KomunitasKu</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --brand: #059669;
-      --brand-deep: #0f7a5a;
-      --brand-dark: #047857;
-      --brand-bg: #ecfdf5;
-      --brand-light: #e7f5ef;
-      --accent: #d8a13c;
-      --accent-soft: #fbf3e1;
+      --bg: #eaeff6;
+      --surface: #eaeff6;
+      --surface-hi: #f1f5fb;
+      --sd: rgba(148, 166, 194, 0.54);
+      --sl: rgba(255, 255, 255, 0.92);
+
+      --neu-out: 7px 7px 15px var(--sd), -7px -7px 15px var(--sl);
+      --neu-out-sm: 4px 4px 9px var(--sd), -4px -4px 9px var(--sl);
+      --neu-out-xs: 2.5px 2.5px 5px var(--sd), -2.5px -2.5px 5px var(--sl);
+      --neu-in: inset 4px 4px 8px var(--sd), inset -4px -4px 8px var(--sl);
+      --neu-in-sm: inset 2.5px 2.5px 5px var(--sd), inset -2.5px -2.5px 5px var(--sl);
+
+      --bevel: 1px solid rgba(255, 255, 255, 0.58);
+      --bevel-in: 1px solid rgba(255, 255, 255, 0.38);
+
       --ink: #0f172a;
-      --ink-warm: #1c1917;
+      --ink-2: #475569;
       --muted: #64748b;
-      --line: #e2e8f0;
-      --border-warm: #ece8e1;
-      --bg: #ffffff;
-      --bg-soft: #faf8f3;
-      --danger: #b91c1c;
-      --danger-bg: #fdf1f1;
-      --radius: 14px;
-      --radius-lg: 20px;
-      --shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-      --shadow-emerald: 0 10px 30px -12px rgba(5, 150, 105, 0.28);
+
+      --accent: #2563eb;
+      --accent-hi: #1d4ed8;
+      --accent-soft: rgba(37, 99, 235, 0.11);
+      --warn: #b45309;
+      --warn-soft: rgba(180, 83, 9, 0.11);
+      --danger: #be123c;
+      --danger-soft: rgba(190, 18, 60, 0.10);
+
+      --r-sm: 11px;
+      --r-md: 16px;
+      --r-lg: 22px;
+      --r-pill: 999px;
+      --ease: cubic-bezier(0.22, 1, 0.36, 1);
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
     html { scroll-behavior: smooth; }
+
     body {
-      font-family: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background: var(--bg-soft);
+      font-family: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
       color: var(--ink);
-      line-height: 1.55;
+      line-height: 1.45;
       -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
     }
 
-    .oswald { font-family: "Oswald", sans-serif; letter-spacing: -0.01em; }
-    .container { max-width: 600px; margin: 0 auto; padding: 0 14px 96px; }
+    .mono {
+      font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .num { font-variant-numeric: tabular-nums; }
     .hidden { display: none !important; }
 
-    /* ==========================================================================
-       FULL-SCREEN REAL LOGIN GATE (Tersistem Auth Screen)
-       ========================================================================== */
+    svg.ico {
+      width: 17px;
+      height: 17px;
+      stroke: currentColor;
+      stroke-width: 1.9;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+      flex-shrink: 0;
+    }
+
+    /* ========================================================================
+       NEUMORPHIC PRIMITIVES
+       ======================================================================== */
+    .neu-card {
+      background: linear-gradient(145deg, var(--surface-hi), var(--surface));
+      border: var(--bevel);
+      border-radius: var(--r-lg);
+      box-shadow: var(--neu-out);
+      padding: 18px;
+    }
+
+    .neu-item {
+      background: linear-gradient(145deg, var(--surface-hi), var(--surface));
+      border: var(--bevel);
+      border-radius: var(--r-md);
+      box-shadow: var(--neu-out-sm);
+      padding: 14px;
+      transition: transform 0.18s var(--ease), box-shadow 0.18s var(--ease);
+    }
+
+    .neu-well {
+      background: var(--bg);
+      border: var(--bevel-in);
+      border-radius: var(--r-md);
+      box-shadow: var(--neu-in);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      padding: 10px 16px;
+      border-radius: var(--r-sm);
+      border: var(--bevel);
+      background: linear-gradient(145deg, var(--surface-hi), var(--surface));
+      color: var(--ink);
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: var(--neu-out-sm);
+      transition: transform 0.15s var(--ease), box-shadow 0.15s var(--ease), color 0.15s ease;
+      text-decoration: none;
+      user-select: none;
+    }
+
+    .btn:hover { color: var(--accent); }
+
+    .btn:active {
+      box-shadow: var(--neu-in-sm);
+      transform: translateY(0.5px);
+    }
+
+    .btn-pill { border-radius: var(--r-pill); }
+    .btn-block { width: 100%; }
+
+    .btn-primary {
+      background: linear-gradient(145deg, #3b82f6, #2563eb);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      box-shadow: 5px 5px 14px rgba(37, 99, 235, 0.30), -4px -4px 10px var(--sl), inset 0 1px 1px rgba(255, 255, 255, 0.30);
+    }
+
+    .btn-primary:hover {
+      color: #ffffff;
+      background: linear-gradient(145deg, #2563eb, #1d4ed8);
+    }
+
+    .btn-primary:active {
+      box-shadow: inset 3px 3px 7px rgba(17, 45, 115, 0.45), inset -2px -2px 5px rgba(255, 255, 255, 0.15);
+    }
+
+    .btn-accent-soft {
+      color: var(--accent);
+    }
+
+    .btn-warn {
+      color: var(--warn);
+    }
+
+    .btn-danger {
+      color: var(--danger);
+    }
+
+    .icon-btn {
+      width: 38px;
+      height: 38px;
+      padding: 0;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .icon-btn.sm {
+      width: 32px;
+      height: 32px;
+    }
+
+    /* Form Controls */
+    input, select, textarea {
+      width: 100%;
+      padding: 11px 13px;
+      border-radius: var(--r-sm);
+      border: var(--bevel-in);
+      background: var(--bg);
+      color: var(--ink);
+      font-family: inherit;
+      font-size: 13.5px;
+      font-weight: 500;
+      box-shadow: var(--neu-in);
+      transition: box-shadow 0.18s ease;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+
+    select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23475569' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      padding-right: 34px;
+      cursor: pointer;
+    }
+
+    input::placeholder, textarea::placeholder { color: var(--muted); font-weight: 400; }
+
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      box-shadow: var(--neu-in), 0 0 0 2px rgba(37, 99, 235, 0.30);
+    }
+
+    input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      padding: 0;
+      border-radius: 6px;
+      cursor: pointer;
+      display: grid;
+      place-content: center;
+      flex-shrink: 0;
+    }
+
+    input[type="checkbox"]:checked {
+      background: var(--accent);
+      box-shadow: var(--neu-out-xs);
+    }
+
+    input[type="checkbox"]:checked::after {
+      content: "";
+      width: 9px;
+      height: 5px;
+      border-left: 2px solid #fff;
+      border-bottom: 2px solid #fff;
+      transform: rotate(-45deg) translate(0.5px, -0.5px);
+    }
+
+    /* Segmented Track */
+    .seg-track {
+      display: flex;
+      gap: 4px;
+      padding: 4px;
+      border-radius: var(--r-pill);
+      background: var(--bg);
+      border: var(--bevel-in);
+      box-shadow: var(--neu-in);
+    }
+
+    .seg-btn {
+      flex: 1;
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--muted);
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 7px 10px;
+      border-radius: var(--r-pill);
+      cursor: pointer;
+      transition: all 0.18s var(--ease);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      white-space: nowrap;
+    }
+
+    .seg-btn.active {
+      background: linear-gradient(145deg, var(--surface-hi), var(--surface));
+      color: var(--ink);
+      border-color: rgba(255, 255, 255, 0.55);
+      box-shadow: var(--neu-out-xs);
+    }
+
+    .seg-btn.active-hadir {
+      background: linear-gradient(145deg, var(--surface-hi), var(--surface));
+      color: var(--accent);
+      border-color: rgba(255, 255, 255, 0.55);
+      box-shadow: var(--neu-out-xs);
+    }
+
+    .seg-btn.active-ragu {
+      background: linear-gradient(145deg, var(--surface-hi), var(--surface));
+      color: var(--warn);
+      border-color: rgba(255, 255, 255, 0.55);
+      box-shadow: var(--neu-out-xs);
+    }
+
+    .seg-btn.active-tidak {
+      background: linear-gradient(145deg, var(--surface-hi), var(--surface));
+      color: var(--danger);
+      border-color: rgba(255, 255, 255, 0.55);
+      box-shadow: var(--neu-out-xs);
+    }
+
+    /* ========================================================================
+       1. LOGIN SCREEN
+       ======================================================================== */
     .auth-screen {
       min-height: 100vh;
       display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 20px 16px;
-      background: radial-gradient(circle at top right, #d1fae5 0%, #faf8f3 45%, #f1f5f9 100%);
+      padding: 24px 16px;
     }
+
     .auth-card {
       width: 100%;
-      max-width: 420px;
-      background: #ffffff;
-      border: 1px solid var(--border-warm);
-      border-radius: 24px;
-      padding: 28px 24px;
-      box-shadow: 0 20px 45px -15px rgba(15, 23, 42, 0.12);
-      animation: fadeSlideIn 0.25s ease-out;
+      max-width: 380px;
+      padding: 30px 24px 26px;
+      animation: fadeUp 0.25s var(--ease);
     }
-    .auth-brand-header { text-align: center; margin-bottom: 22px; }
-    .auth-logo-badge {
-      width: 52px; height: 52px; border-radius: 15px;
-      background: linear-gradient(135deg, #0b5e45, #059669);
-      color: #fff; font-weight: 800; font-size: 26px;
-      display: inline-flex; align-items: center; justify-content: center;
-      box-shadow: 0 8px 20px rgba(5, 150, 105, 0.3); margin-bottom: 12px;
+
+    .auth-head {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      margin-bottom: 24px;
     }
-    .auth-eyebrow {
-      font-size: 11px; font-weight: 800; text-transform: uppercase;
-      letter-spacing: 0.08em; color: var(--brand); display: block; margin-bottom: 4px;
+
+    .brand-mark {
+      width: 56px;
+      height: 56px;
+      border-radius: 18px;
+      background: linear-gradient(145deg, var(--surface-hi), var(--surface));
+      border: var(--bevel);
+      box-shadow: var(--neu-out);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent);
+      margin-bottom: 14px;
     }
+
+    .brand-mark svg { width: 26px; height: 26px; }
+
     .auth-title {
-      font-family: "Oswald", sans-serif; font-size: 26px; font-weight: 700;
-      color: var(--ink-warm); line-height: 1.15;
+      font-size: 19px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--ink);
     }
-    .auth-subtitle { font-size: 13px; color: var(--muted); margin-top: 4px; }
+
     .auth-error {
-      background: var(--danger-bg); border: 1px solid #fecaca; color: var(--danger);
-      padding: 10px 12px; border-radius: 10px; font-size: 12.5px; font-weight: 700;
-      margin-bottom: 14px; display: flex; align-items: center; gap: 8px;
-    }
-    .password-wrap { position: relative; }
-    .password-toggle {
-      position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
-      background: none; border: none; font-size: 12px; font-weight: 700;
-      color: var(--muted); cursor: pointer; padding: 4px 6px;
-    }
-
-    details.demo-helper {
-      margin-top: 20px; background: #f8fafc; border: 1px dashed var(--line);
-      border-radius: 12px; padding: 10px 12px; font-size: 12px;
-    }
-    details.demo-helper summary {
-      font-weight: 700; color: var(--muted); cursor: pointer; user-select: none;
-      list-style: none; display: flex; align-items: center; justify-content: space-between;
-    }
-    details.demo-helper summary::after { content: "▼"; font-size: 10px; }
-    details.demo-helper[open] summary::after { content: "▲"; }
-    .demo-cred-list {
-      margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--line);
-      display: flex; flex-direction: column; gap: 6px;
-    }
-    .demo-cred-item {
-      display: flex; align-items: center; justify-content: space-between;
-      background: #fff; border: 1px solid var(--line); padding: 7px 10px;
-      border-radius: 8px; cursor: pointer; transition: border-color 0.15s ease;
-    }
-    .demo-cred-item:hover { border-color: var(--brand); }
-
-    /* ==========================================================================
-       MAIN APPLICATION UI
-       ========================================================================== */
-    header.ts-header {
-      position: sticky; top: 0; z-index: 30;
-      background: rgba(255, 255, 255, 0.92);
-      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
-      border-bottom: 1px solid var(--line);
-    }
-    .ts-nav {
-      max-width: 600px; margin: 0 auto; padding: 0 14px; height: 62px;
-      display: flex; align-items: center; justify-content: space-between; gap: 8px;
-    }
-    .ts-logo {
-      display: flex; align-items: center; gap: 10px;
-      text-decoration: none; color: var(--ink); min-width: 0;
-    }
-    .ts-logo-box {
-      width: 34px; height: 34px; border-radius: 9px; background: var(--brand);
-      color: #fff; font-weight: 800; font-size: 18px;
-      display: flex; align-items: center; justify-content: center;
-      box-shadow: 0 3px 10px rgba(5, 150, 105, 0.25); flex-shrink: 0;
-    }
-    .ts-logo-text { display: flex; flex-direction: column; min-width: 0; }
-    .ts-logo-brand {
-      font-size: 10.5px; font-weight: 700; color: var(--brand);
-      text-transform: uppercase; letter-spacing: 0.5px; line-height: 1.1;
-    }
-    .ts-logo-title {
-      font-size: 14.5px; font-weight: 800; color: var(--ink); line-height: 1.2;
-      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      background: var(--danger-soft);
+      color: var(--danger);
+      border-radius: var(--r-sm);
+      padding: 9px 12px;
+      font-size: 12.5px;
+      font-weight: 600;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
-    /* User Session Bar */
-    .session-bar {
-      background: #fff; border-bottom: 1px solid var(--border-warm); padding: 8px 14px;
+    .pwd-wrap { position: relative; }
+    .pwd-eye {
+      position: absolute;
+      right: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 32px;
+      height: 32px;
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
     }
-    .session-bar-inner {
-      max-width: 600px; margin: 0 auto;
-      display: flex; align-items: center; justify-content: space-between; gap: 8px;
-    }
-    .session-user-info {
-      display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--ink);
-    }
-    .session-avatar {
-      width: 26px; height: 26px; border-radius: 50%;
-      background: var(--brand-bg); color: var(--brand-dark);
-      font-weight: 800; font-size: 11px; display: flex; align-items: center;
-      justify-content: center; border: 1px solid #a7f3d0;
+    .pwd-eye:hover { color: var(--ink); }
+
+    .auth-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 14px 0 20px;
+      font-size: 12.5px;
+      color: var(--ink-2);
     }
 
-    /* Hero Balance Banner (.pub-hero) */
-    .pub-hero {
-      background: linear-gradient(135deg, #0b5e45 0%, #0f7a5a 55%, #059669 100%);
-      color: #fff; border-radius: var(--radius-lg); padding: 18px 16px;
-      margin: 14px 0 12px; box-shadow: 0 10px 25px -8px rgba(15, 122, 90, 0.4);
-      position: relative; overflow: hidden;
-    }
-    .pub-hero::after {
-      content: ""; position: absolute; right: -30px; top: -30px;
-      width: 130px; height: 130px; border-radius: 50%;
-      background: rgba(255, 255, 255, 0.07); pointer-events: none;
-    }
-    .pub-top {
-      display: flex; justify-content: space-between; align-items: flex-start;
-      gap: 8px; margin-bottom: 12px;
-    }
-    .eyebrow-pill {
-      display: inline-block; background: rgba(255, 255, 255, 0.16); color: #ecfdf5;
-      padding: 4px 11px; border-radius: 999px; font-size: 11px; font-weight: 700;
-    }
-    .pub-saldo-label {
-      font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em;
-      color: rgba(255, 255, 255, 0.8); font-weight: 600;
-    }
-    .pub-saldo {
-      font-family: "Oswald", sans-serif; font-size: 34px; font-weight: 700;
-      color: #fde047; line-height: 1.1; margin-top: 2px;
-    }
-    .hero-kpis {
-      display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px;
-      margin-top: 14px; padding-top: 12px; border-top: 1px solid rgba(255, 255, 255, 0.16);
-    }
-    .hero-kpi-item {
-      background: rgba(0, 0, 0, 0.15); padding: 7px 8px; border-radius: 10px;
-    }
-    .hero-kpi-label {
-      font-size: 9.5px; color: rgba(255, 255, 255, 0.75);
-      font-weight: 600; text-transform: uppercase;
-    }
-    .hero-kpi-val {
-      font-family: "Oswald", sans-serif; font-size: 15.5px; font-weight: 600;
-      color: #fff; margin-top: 1px;
+    .auth-link {
+      color: var(--accent);
+      font-weight: 600;
+      text-decoration: none;
     }
 
-    /* Quick 3-Card Financial Breakdown (Pemasukan vs Pengeluaran) */
-    .fin-summary-grid {
-      display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 14px;
-    }
-    .fin-box {
-      background: #f8fafc; border: 1px solid var(--line); border-radius: 12px; padding: 10px;
-    }
-    .fin-box-label { font-size: 10.5px; font-weight: 700; color: var(--muted); text-transform: uppercase; }
-    .fin-box-val { font-family: "Oswald", sans-serif; font-size: 18px; font-weight: 700; margin-top: 2px; }
-
-    /* Cards & Hover Lift Animation (.18s) */
-    .ts-card {
-      background: var(--bg); border: 1px solid var(--border-warm);
-      border-radius: var(--radius-lg); padding: 16px; margin-bottom: 14px;
-      box-shadow: var(--shadow);
-      transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
-    }
-    .ts-card-interactive {
-      background: var(--bg); border: 1px solid var(--line);
-      border-radius: 16px; padding: 14px; margin-bottom: 10px;
-      transition: all 0.18s ease;
-    }
-    .ts-card-interactive:hover {
-      border-color: var(--brand); box-shadow: var(--shadow-emerald); transform: translateY(-3px);
+    .demo-row {
+      margin-top: 20px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(163, 177, 198, 0.35);
     }
 
-    .power-result {
-      background: var(--brand-light); border-left: 3px solid var(--brand-deep);
-      padding: 10px 13px; border-radius: 6px; font-size: 12.5px;
-      color: var(--brand-dark); font-weight: 600; margin-bottom: 12px;
-      display: flex; align-items: center; justify-content: space-between; gap: 8px;
-    }
-    .power-result.warn {
-      background: var(--accent-soft); border-left-color: var(--accent); color: #92400e;
-    }
-
-    .section-head {
-      display: flex; justify-content: space-between; align-items: center;
-      gap: 8px; margin-bottom: 12px; flex-wrap: wrap;
-    }
-    .section-title {
-      font-family: "Oswald", sans-serif; font-size: 20px; font-weight: 600;
-      color: var(--ink-warm); line-height: 1.2;
-    }
-    .section-sub { font-size: 12.5px; color: var(--muted); }
-
-    /* Filter Pills */
-    .filter-pills { display: flex; gap: 6px; margin-bottom: 12px; flex-wrap: wrap; }
-    .filter-pill {
-      padding: 6px 12px; border-radius: 999px; font-size: 11.5px; font-weight: 700;
-      border: 1px solid var(--line); background: #fff; color: var(--muted); cursor: pointer;
-    }
-    .filter-pill.active {
-      background: var(--brand-deep); color: #fff; border-color: var(--brand-deep);
+    .demo-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--muted);
+      text-align: center;
+      margin-bottom: 10px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
     }
 
-    /* Buttons */
-    .btn {
-      display: inline-flex; align-items: center; justify-content: center; gap: 6px;
-      padding: 10px 15px; border-radius: 10px; font-weight: 700; font-size: 12.5px;
-      cursor: pointer; border: 1px solid transparent; transition: all 0.18s ease;
-      text-decoration: none; font-family: inherit;
-    }
-    .btn:active { transform: scale(0.97); }
-    .btn-pill { border-radius: 999px; }
-    .btn-primary {
-      background: linear-gradient(180deg, #16a34a, #0f7a5a); color: #fff;
-      box-shadow: 0 4px 14px rgba(15, 122, 90, 0.28);
-    }
-    .btn-primary:hover {
-      background: var(--brand-dark); transform: translateY(-2px);
-      box-shadow: 0 6px 18px rgba(15, 122, 90, 0.36);
-    }
-    .btn-ghost { background: #fff; color: var(--ink); border-color: var(--line); }
-    .btn-ghost:hover { border-color: var(--brand); color: var(--brand); }
-    .btn-warn { background: var(--accent-soft); color: #92400e; border-color: #fde68a; }
-    .btn-danger { background: var(--danger-bg); color: var(--danger); border-color: #fecaca; }
-    .btn-block { width: 100%; }
-
-    /* Form Controls */
-    .toolbar { display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
-    input, select, textarea {
-      width: 100%; padding: 10px 12px; border: 1px solid var(--line);
-      border-radius: 10px; font-size: 13.5px; font-family: inherit;
-      background: #f8fafc; color: var(--ink);
-      transition: border-color 0.18s ease, box-shadow 0.18s ease;
-    }
-    input:focus, select:focus, textarea:focus {
-      outline: none; border-color: var(--brand); background: #fff;
-      box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.12);
+    .demo-pills {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
     }
 
-    /* Member Item */
-    .member-top {
-      display: flex; justify-content: space-between; align-items: flex-start;
-      gap: 8px; margin-bottom: 10px;
-    }
-    .member-avatar-row { display: flex; align-items: center; gap: 10px; }
-    .ic-box {
-      width: 40px; height: 40px; border-radius: 11px; background: var(--brand-bg);
-      color: var(--brand-dark); font-weight: 800; font-size: 14px;
-      display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0; border: 1px solid #a7f3d0;
-    }
-    .member-name { font-size: 15px; font-weight: 800; color: var(--ink); }
-    .member-meta { font-size: 12px; color: var(--muted); font-family: monospace; }
-    .role-pill {
-      font-size: 11px; font-weight: 700; background: var(--brand-light);
-      color: var(--brand-dark); padding: 3px 10px; border-radius: 999px; white-space: nowrap;
+    .demo-pill {
+      padding: 8px 6px;
+      font-size: 12px;
+      border-radius: var(--r-pill);
     }
 
+    /* ========================================================================
+       2. APP SHELL
+       ======================================================================== */
+    .shell {
+      max-width: 540px;
+      margin: 0 auto;
+      padding: 14px 16px 104px;
+    }
+
+    /* Compact Top Bar */
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .user-chip {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .avatar-neu {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(145deg, var(--surface-hi), var(--surface));
+      border: var(--bevel);
+      box-shadow: var(--neu-out-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--accent);
+      flex-shrink: 0;
+    }
+
+    .top-meta { min-width: 0; }
+    .top-comm {
+      font-size: 14.5px;
+      font-weight: 800;
+      letter-spacing: -0.015em;
+      color: var(--ink);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .top-user {
+      font-size: 11.5px;
+      color: var(--muted);
+      font-weight: 500;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    /* Summary Card */
+    .summary-card {
+      margin-bottom: 18px;
+      padding: 18px 18px 14px;
+    }
+
+    .summary-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .micro-label {
+      font-size: 10.5px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .saldo-val {
+      font-size: 29px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: var(--ink);
+      line-height: 1.15;
+      margin-top: 2px;
+    }
+
+    .fee-chip {
+      padding: 5px 11px;
+      border-radius: var(--r-pill);
+      font-size: 11.5px;
+      font-weight: 700;
+      color: var(--accent);
+      background: var(--bg);
+      box-shadow: var(--neu-in-sm);
+      white-space: nowrap;
+    }
+
+    .neu-progress {
+      height: 6px;
+      border-radius: var(--r-pill);
+      background: var(--bg);
+      box-shadow: var(--neu-in-sm);
+      margin-top: 13px;
+      overflow: hidden;
+    }
+
+    .neu-progress-fill {
+      height: 100%;
+      width: 0%;
+      border-radius: var(--r-pill);
+      background: linear-gradient(90deg, #2563eb, #60a5fa);
+      transition: width 0.35s var(--ease);
+    }
+
+    .kpi-strip {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(148, 166, 194, 0.30);
+    }
+
+    .kpi-cell {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+    }
+
+    .kpi-val {
+      font-size: 15.5px;
+      font-weight: 800;
+      color: var(--ink);
+      letter-spacing: -0.015em;
+    }
+
+    .kpi-val.accent { color: var(--accent); }
+
+    .kpi-lbl {
+      font-size: 11px;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    /* View Header & Controls */
+    .view-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .view-title {
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+    }
+
+    .toolbar {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin-bottom: 14px;
+    }
+
+    .search-box {
+      position: relative;
+      flex: 1.3;
+    }
+
+    .search-box svg {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted);
+      pointer-events: none;
+    }
+
+    .search-box input { padding-left: 36px; }
+
+    .stack {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    /* Member Card */
+    .member-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .member-id {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .member-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 12px;
+      background: var(--bg);
+      box-shadow: var(--neu-in-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--accent);
+      flex-shrink: 0;
+    }
+
+    .member-name {
+      font-size: 14.5px;
+      font-weight: 700;
+      color: var(--ink);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .me-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--accent);
+      display: inline-block;
+    }
+
+    .member-sub {
+      font-size: 11.5px;
+      color: var(--muted);
+    }
+
+    .tag-pill {
+      padding: 4px 10px;
+      border-radius: var(--r-pill);
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--ink-2);
+      background: var(--bg);
+      box-shadow: var(--neu-in-sm);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .tag-pill.accent { color: var(--accent); }
+
+    /* Tactile Month Toggles */
     .months-grid {
-      display: grid; grid-template-columns: repeat(6, 1fr); gap: 5px; margin-bottom: 10px;
-    }
-    .month-pill {
-      padding: 7px 2px; border-radius: 8px; font-size: 11px; font-weight: 700;
-      text-align: center; border: 1px solid var(--line); background: #f8fafc;
-      color: var(--muted); cursor: pointer; user-select: none; transition: all 0.15s ease;
-    }
-    .month-pill:hover { border-color: var(--brand); }
-    .month-pill.paid {
-      background: var(--brand-bg); color: var(--brand-dark); border-color: #6ee7b7;
-    }
-    .month-pill.readonly { cursor: default; }
-    .member-actions { display: flex; gap: 6px; }
-    .member-actions .btn { flex: 1; padding: 8px 10px; font-size: 12px; }
-
-    /* Agenda & RSVP Card Styling */
-    .agenda-badge-row {
-      display: flex; align-items: center; justify-content: space-between;
-      gap: 8px; margin-bottom: 8px;
-    }
-    .agenda-type-badge {
-      font-size: 11px; font-weight: 800; text-transform: uppercase;
-      padding: 3px 10px; border-radius: 999px;
-      background: var(--brand-bg); color: var(--brand-dark);
-    }
-    .agenda-title { font-size: 16.5px; font-weight: 800; color: var(--ink); margin-bottom: 6px; }
-    .agenda-meta-grid {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 6px;
-      background: #f8fafc; padding: 10px; border-radius: 12px;
-      font-size: 12px; color: var(--ink); margin-bottom: 10px; border: 1px solid var(--line);
-    }
-    .rsvp-btn-group {
-      display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 10px;
-    }
-    .rsvp-choice {
-      padding: 8px 6px; border-radius: 10px; font-size: 12px; font-weight: 700;
-      border: 1px solid var(--line); background: #fff; color: var(--muted);
-      cursor: pointer; text-align: center; transition: all 0.15s ease;
-    }
-    .rsvp-choice.active-hadir {
-      background: var(--brand-bg); color: var(--brand-dark); border-color: #34d399; font-weight: 800;
-    }
-    .rsvp-choice.active-ragu {
-      background: var(--accent-soft); color: #92400e; border-color: #fbbf24; font-weight: 800;
-    }
-    .rsvp-choice.active-tidak {
-      background: var(--danger-bg); color: var(--danger); border-color: #fda4af; font-weight: 800;
-    }
-    .rsvp-attendee-pills {
-      display: flex; flex-wrap: wrap; gap: 5px; margin-top: 6px;
-    }
-    .attendee-tag {
-      font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 6px;
-      background: #f1f5f9; color: var(--ink);
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 6px;
+      margin-bottom: 12px;
     }
 
-    /* KTA Canvas & Mass Grid */
-    .canvas-wrap {
-      width: 100%; overflow: hidden; border-radius: 16px;
-      box-shadow: 0 12px 28px -8px rgba(15, 23, 42, 0.22);
-      margin: 10px 0 14px; background: #0b5e45;
+    .m-pill {
+      padding: 7px 2px;
+      border-radius: 10px;
+      font-size: 11.5px;
+      font-weight: 600;
+      text-align: center;
+      color: var(--muted);
+      background: linear-gradient(145deg, var(--surface-hi), var(--surface));
+      border: var(--bevel);
+      box-shadow: var(--neu-out-xs);
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.16s var(--ease);
     }
-    canvas#ktaCanvas { width: 100%; height: auto; display: block; }
-    .theme-picker { display: flex; gap: 8px; margin: 8px 0 12px; }
-    .theme-dot {
-      flex: 1; height: 36px; border-radius: 10px; border: 2px solid transparent;
-      cursor: pointer; transition: transform 0.15s ease, border-color 0.15s ease;
+
+    .m-pill:active:not(.readonly) {
+      box-shadow: var(--neu-in-sm);
     }
-    .theme-dot.active {
-      border-color: var(--ink); transform: translateY(-2px);
-      box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+
+    .m-pill.paid {
+      background: var(--bg);
+      color: var(--accent);
+      font-weight: 700;
+      border: var(--bevel-in);
+      box-shadow: var(--neu-in-sm);
+    }
+
+    .m-pill.readonly { cursor: default; }
+
+    .card-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card-actions .btn {
+      flex: 1;
+      padding: 8px 10px;
+      font-size: 12px;
+    }
+
+    .card-actions .icon-btn { flex: 0 0 34px; width: 34px; height: 34px; }
+
+    .status-chip {
+      flex: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      padding: 8px 10px;
+      border-radius: var(--r-sm);
+      font-size: 12px;
+      font-weight: 700;
+      background: var(--bg);
+      box-shadow: var(--neu-in-sm);
+    }
+
+    .status-chip.paid { color: var(--accent); }
+    .status-chip.unpaid { color: var(--warn); }
+
+    /* Self Action Strip (Anggota) */
+    .self-strip {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 11px 14px;
+      margin-bottom: 12px;
+    }
+
+    /* Agenda Card */
+    .agenda-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .agenda-title {
+      font-size: 15.5px;
+      font-weight: 700;
+      color: var(--ink);
+      letter-spacing: -0.015em;
+      margin-bottom: 10px;
+    }
+
+    .agenda-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 14px;
+      font-size: 12px;
+      color: var(--ink-2);
+      margin-bottom: 10px;
+    }
+
+    .meta-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .meta-item svg { width: 14px; height: 14px; color: var(--accent); }
+
+    .agenda-note {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 12px;
+      padding: 8px 11px;
+      border-radius: var(--r-sm);
+      background: var(--bg);
+      box-shadow: var(--neu-in-sm);
+    }
+
+    .attendee-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-top: 11px;
+    }
+
+    .attendee-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      flex: 1;
+    }
+
+    .attendee-chip {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--ink-2);
+      padding: 3px 9px;
+      border-radius: var(--r-pill);
+      background: var(--bg);
+      box-shadow: var(--neu-in-sm);
+    }
+
+    /* Kas View */
+    .fin-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .fin-tile {
+      padding: 12px 11px;
+      border-radius: var(--r-md);
+      background: linear-gradient(145deg, var(--surface-hi), var(--surface));
+      border: var(--bevel);
+      box-shadow: var(--neu-out-sm);
+    }
+
+    .fin-val {
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-top: 3px;
+    }
+
+    .tx-list {
+      padding: 4px 14px;
     }
 
     .tx-row {
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 11px 0; border-bottom: 1px solid var(--line); font-size: 13px; gap: 8px;
-    }
-    .tx-row:last-child { border-bottom: none; }
-    .tx-cat-badge {
-      font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 6px;
-      background: #f1f5f9; color: var(--muted); display: inline-block; margin-top: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(163, 177, 198, 0.30);
     }
 
-    /* 5-Tab Bottom Navigation Bar */
-    .bottom-nav {
-      position: fixed; bottom: 0; left: 0; right: 0;
-      background: rgba(255, 255, 255, 0.96);
-      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
-      border-top: 1px solid var(--line);
-      display: flex; justify-content: space-around;
-      padding: 5px 6px calc(5px + env(safe-area-inset-bottom));
-      z-index: 40; box-shadow: 0 -4px 16px rgba(15, 23, 42, 0.05);
+    .tx-row:last-child { border-bottom: none; }
+
+    .tx-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
     }
-    .nav-item {
-      flex: 1; max-width: 120px; background: none; border: none;
-      padding: 6px 2px; border-radius: 11px;
-      display: flex; flex-direction: column; align-items: center; gap: 2px;
-      color: var(--muted); font-size: 10.5px; font-weight: 700;
-      cursor: pointer; transition: all 0.18s ease; position: relative;
+
+    .tx-dir {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--bg);
+      box-shadow: var(--neu-in-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
     }
-    .nav-item .icon { font-size: 17px; line-height: 1; }
-    .nav-item.active {
-      color: var(--brand-dark); background: var(--brand-bg);
+
+    .tx-dir.in { color: var(--accent); }
+    .tx-dir.out { color: var(--danger); }
+
+    .tx-desc {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--ink);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
-    .nav-badge {
-      position: absolute; top: 3px; right: 14px;
-      background: var(--brand); color: #fff; font-size: 9px; font-weight: 800;
-      padding: 1px 5px; border-radius: 99px;
+
+    .tx-meta {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .tx-right {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+
+    .tx-amt {
+      font-size: 13px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .tx-amt.in { color: var(--accent); }
+    .tx-amt.out { color: var(--danger); }
+
+    .del-x {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .del-x:hover { color: var(--danger); }
+
+    /* KTA Card View */
+    .kta-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .theme-dots {
+      display: flex;
+      gap: 8px;
+      padding: 5px 8px;
+      border-radius: var(--r-pill);
+      background: var(--bg);
+      box-shadow: var(--neu-in-sm);
+      flex-shrink: 0;
+    }
+
+    .theme-dot {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: transform 0.16s var(--ease), box-shadow 0.16s var(--ease);
+    }
+
+    .theme-dot.active {
+      transform: scale(1.12);
+      border-color: #ffffff;
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.35);
+    }
+
+    .canvas-frame {
+      padding: 10px;
+      border-radius: var(--r-lg);
+      background: var(--bg);
+      box-shadow: var(--neu-in);
+      margin-bottom: 14px;
+    }
+
+    .canvas-inner {
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 8px 20px -6px rgba(15, 23, 42, 0.25);
+    }
+
+    canvas#ktaCanvas {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    /* Report Preview */
+    .report-box {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 12px;
+      line-height: 1.6;
+      color: var(--ink);
+      background: var(--bg);
+      box-shadow: var(--neu-in);
+      border: var(--bevel-in);
+      border-radius: var(--r-md);
+      padding: 14px;
+      margin: 14px 0;
+      resize: none;
+    }
+
+    /* Floating Neumorphic Bottom Navigation */
+    .bottom-dock {
+      position: fixed;
+      left: 50%;
+      bottom: calc(12px + env(safe-area-inset-bottom));
+      transform: translateX(-50%);
+      width: calc(100% - 28px);
+      max-width: 508px;
+      background: linear-gradient(145deg, #eef2f7, #e5ebf2);
+      border: var(--bevel);
+      border-radius: 24px;
+      box-shadow: 9px 9px 20px rgba(148, 163, 184, 0.62), -6px -6px 16px rgba(255, 255, 255, 0.92);
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 4px;
+      padding: 6px;
+      z-index: 40;
+    }
+
+    .nav-tab {
+      position: relative;
+      border: 1px solid transparent;
+      background: transparent;
+      border-radius: 18px;
+      padding: 8px 2px 7px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      color: var(--muted);
+      font-family: inherit;
+      font-size: 10.5px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.18s var(--ease);
+    }
+
+    .nav-tab svg { width: 19px; height: 19px; }
+
+    .nav-tab.active {
+      background: var(--bg);
+      color: var(--accent);
+      font-weight: 700;
+      border-color: rgba(255, 255, 255, 0.32);
+      box-shadow: var(--neu-in-sm);
+    }
+
+    .nav-tab::after {
+      content: "";
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--accent);
+      margin-top: 1px;
+      opacity: 0;
+      transition: opacity 0.18s ease;
+    }
+
+    .nav-tab.active::after {
+      opacity: 1;
+    }
+
+    .nav-dot {
+      position: absolute;
+      top: 5px;
+      right: 16px;
+      min-width: 15px;
+      height: 15px;
+      padding: 0 4px;
+      border-radius: var(--r-pill);
+      background: var(--accent);
+      color: #fff;
+      font-size: 9.5px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     /* Modals */
     .modal-backdrop {
-      position: fixed; inset: 0; background: rgba(15, 23, 42, 0.6);
-      backdrop-filter: blur(4px); display: none;
-      align-items: center; justify-content: center; padding: 16px; z-index: 50;
-    }
-    .modal-backdrop.show { display: flex; }
-    .modal-box {
-      background: #fff; width: 100%; max-width: 430px; border-radius: 20px;
-      padding: 20px; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.22);
-      animation: modalPop 0.18s ease-out; max-height: 92vh; overflow-y: auto;
-    }
-    @keyframes modalPop {
-      from { opacity: 0; transform: translateY(10px) scale(0.98); }
-      to { opacity: 1; transform: translateY(0) scale(1); }
-    }
-    .form-group { margin-bottom: 11px; }
-    .form-group label {
-      display: block; font-size: 12px; font-weight: 700; margin-bottom: 4px; color: var(--ink);
+      position: fixed;
+      inset: 0;
+      background: rgba(30, 41, 59, 0.32);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      z-index: 50;
     }
 
-    .view-panel { animation: fadeSlideIn 0.2s ease-out; }
-    @keyframes fadeSlideIn {
-      from { opacity: 0; transform: translateY(6px); }
+    .modal-backdrop.show { display: flex; }
+
+    .modal-box {
+      width: 100%;
+      max-width: 410px;
+      max-height: 90vh;
+      overflow-y: auto;
+      background: var(--bg);
+      border: var(--bevel);
+      border-radius: var(--r-lg);
+      padding: 20px;
+      box-shadow: 14px 14px 32px rgba(30, 41, 59, 0.24), -8px -8px 22px rgba(255, 255, 255, 0.65);
+      animation: fadeUp 0.18s var(--ease);
+    }
+
+    .modal-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .modal-title {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--ink);
+    }
+
+    .form-group { margin-bottom: 12px; }
+    .form-group label {
+      display: block;
+      font-size: 11.5px;
+      font-weight: 700;
+      color: var(--ink-2);
+      margin-bottom: 5px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .modal-foot {
+      display: flex;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 28px 14px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .view-panel { animation: fadeUp 0.2s var(--ease); }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(8px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
+    /* Toast */
     #toast {
-      position: fixed; top: 14px; left: 50%;
-      transform: translateX(-50%) translateY(-80px);
-      background: var(--ink); color: #fff; padding: 10px 18px; border-radius: 999px;
-      font-size: 12.5px; font-weight: 700; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.22);
-      transition: transform 0.22s ease; z-index: 60; white-space: nowrap;
-      border: 1px solid rgba(255,255,255,0.12);
+      position: fixed;
+      bottom: calc(92px + env(safe-area-inset-bottom));
+      left: 50%;
+      transform: translateX(-50%) translateY(14px);
+      opacity: 0;
+      pointer-events: none;
+      background: var(--ink);
+      color: #f8fafc;
+      padding: 9px 18px;
+      border-radius: var(--r-pill);
+      font-size: 12.5px;
+      font-weight: 600;
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.24);
+      transition: transform 0.22s var(--ease), opacity 0.22s ease;
+      z-index: 60;
+      white-space: nowrap;
+      max-width: 92vw;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
-    #toast.show { transform: translateX(-50%) translateY(0); }
 
-    .ts-footer {
-      text-align: center; font-size: 12px; color: var(--muted); padding: 12px 0 20px;
+    #toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
     }
-    .ts-footer a { color: var(--brand-deep); font-weight: 700; text-decoration: none; }
 
-    /* Print Media Query for Mass KTA Printing */
     @media print {
-      header, .session-bar, .pub-hero, .bottom-nav, .no-print { display: none !important; }
+      .no-print, .top-bar, .summary-card, .bottom-dock { display: none !important; }
       body { background: #fff; }
-      .container { max-width: 100%; padding: 0; }
+      .shell { max-width: 100%; padding: 0; }
+      .neu-card { box-shadow: none; border: none; background: #fff; padding: 0; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Toast Notification -->
-  <div id="toast">✅ Berhasil disimpan</div>
+  <div id="toast" role="status" aria-live="polite"></div>
 
-  <!-- ==========================================================================
-       1. REAL AUTHENTICATION LOGIN PAGE
-       ========================================================================== -->
+  <!-- ========================================================================
+       1. LOGIN SCREEN
+       ======================================================================== -->
   <div id="authScreen" class="auth-screen">
-    <div class="auth-card">
-      <div class="auth-brand-header">
-        <div class="auth-logo-badge">T</div>
-        <span class="auth-eyebrow">Ekosistem Tersistem.com</span>
-        <h1 class="auth-title" id="authCommTitle">KOMUNITAS MOTOR NUSANTARA</h1>
-        <p class="auth-subtitle">Silakan masuk menggunakan Nomor WA / No. KTA &amp; Kata Sandi</p>
+    <div class="neu-card auth-card">
+      <div class="auth-head">
+        <div class="brand-mark" aria-hidden="true">
+          <svg class="ico" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <h1 class="auth-title" id="authCommTitle">Komunitas Motor Nusantara</h1>
       </div>
 
       <div id="authErrorBox" class="auth-error hidden">
-        <span>⚠️</span>
-        <span id="authErrorText">ID Akun atau Kata Sandi tidak sesuai.</span>
+        <svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <span id="authErrorText">Akun atau PIN salah.</span>
       </div>
 
       <form onsubmit="handleRealLogin(event)">
         <div class="form-group">
-          <label for="loginIdentifier">Nomor WhatsApp / Username / No. KTA</label>
-          <input
-            type="text"
-            id="loginIdentifier"
-            required
-            autocomplete="username"
-            placeholder="Contoh: 081234567801 atau KMN-26-001"
-          />
+          <label for="loginIdentifier">No. WA / KTA</label>
+          <input type="text" id="loginIdentifier" required autocomplete="username" placeholder="081234567801 atau KMN-26-001" />
         </div>
 
         <div class="form-group">
-          <label for="loginPassword">Kata Sandi / PIN Keamanan</label>
-          <div class="password-wrap">
-            <input
-              type="password"
-              id="loginPassword"
-              required
-              autocomplete="current-password"
-              placeholder="Masukkan kata sandi / PIN"
-              style="padding-right: 68px;"
-            />
-            <button type="button" class="password-toggle" onclick="togglePasswordVisibility()" id="btnTogglePwd">
-              Lihat
+          <label for="loginPassword">PIN</label>
+          <div class="pwd-wrap">
+            <input type="password" id="loginPassword" required autocomplete="current-password" placeholder="••••" style="padding-right:42px;" />
+            <button type="button" class="pwd-eye" onclick="togglePasswordVisibility()" id="btnTogglePwd" aria-label="Tampilkan PIN">
+              <svg class="ico" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
             </button>
           </div>
         </div>
 
-        <div style="display:flex;align-items:center;justify-content:space-between;margin: 12px 0 18px;font-size:12px;">
-          <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-weight:600;color:var(--muted);">
-            <input type="checkbox" id="rememberSession" checked style="width:15px;height:15px;" />
-            Ingat sesi masuk saya
+        <div class="auth-row">
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-weight:500;">
+            <input type="checkbox" id="rememberSession" checked />
+            Ingat saya
           </label>
-          <a href="javascript:void(0)" onclick="forgotPinAlert()" style="color:var(--brand-deep);font-weight:700;text-decoration:none;">
-            Lupa Sandi?
-          </a>
+          <a href="javascript:void(0)" class="auth-link" onclick="forgotPinAlert()">Lupa PIN?</a>
         </div>
 
-        <button type="submit" class="btn btn-primary btn-pill btn-block" style="padding:13px 20px;font-size:14px;">
-          🔐 Masuk ke Sistem Komunitas
+        <button type="submit" class="btn btn-primary btn-pill btn-block" style="padding:12px;">
+          Masuk
         </button>
       </form>
 
-      <details class="demo-helper">
-        <summary>🔑 Lihat Akun Terdaftar (Untuk Testing)</summary>
-        <div class="demo-cred-list">
-          <div class="demo-cred-item" onclick="fillLoginInput('081234567801', '1111')">
-            <div>
-              <strong>👑 Ketua (Budi Santoso)</strong>
-              <div style="font-size:11px;color:var(--muted);">ID: 081234567801 • Sandi: 1111</div>
-            </div>
-            <span style="font-size:11px;font-weight:700;color:var(--brand);">Isi Form →</span>
-          </div>
-          <div class="demo-cred-item" onclick="fillLoginInput('081234567802', '2222')">
-            <div>
-              <strong>💰 Bendahara (Rina Wijaya)</strong>
-              <div style="font-size:11px;color:var(--muted);">ID: 081234567802 • Sandi: 2222</div>
-            </div>
-            <span style="font-size:11px;font-weight:700;color:var(--brand);">Isi Form →</span>
-          </div>
-          <div class="demo-cred-item" onclick="fillLoginInput('KMN-26-003', '1234')">
-            <div>
-              <strong>👤 Anggota (Dimas Saputra)</strong>
-              <div style="font-size:11px;color:var(--muted);">ID: KMN-26-003 • Sandi: 1234</div>
-            </div>
-            <span style="font-size:11px;font-weight:700;color:var(--brand);">Isi Form →</span>
-          </div>
+      <div class="demo-row">
+        <div class="demo-label">Akses Cepat</div>
+        <div class="demo-pills">
+          <button type="button" class="btn demo-pill" onclick="fillLoginInput('081234567801','1111')">Ketua</button>
+          <button type="button" class="btn demo-pill" onclick="fillLoginInput('081234567802','2222')">Bendahara</button>
+          <button type="button" class="btn demo-pill" onclick="fillLoginInput('KMN-26-003','1234')">Anggota</button>
         </div>
-      </details>
-    </div>
-
-    <div class="ts-footer" style="margin-top:16px;">
-      Ditenagai oleh <a href="https://tersistem.com" target="_blank">Tersistem.com</a> • Sistem Manajemen Komunitas Terpadu
+      </div>
     </div>
   </div>
 
-  <!-- ==========================================================================
-       2. PROTECTED APPLICATION SHELL (5 Complete Menus)
-       ========================================================================== -->
+  <!-- ========================================================================
+       2. APPLICATION SHELL
+       ======================================================================== -->
   <div id="appShell" class="hidden">
+    <main class="shell">
 
-    <!-- Sticky Glass Header -->
-    <header class="ts-header">
-      <nav class="ts-nav">
-        <div class="ts-logo">
-          <div class="ts-logo-box">T</div>
-          <div class="ts-logo-text">
-            <span class="ts-logo-brand">Tersistem.com</span>
-            <span class="ts-logo-title" id="hdrName">Komunitas Motor Nusantara</span>
+      <!-- Top Bar -->
+      <header class="top-bar no-print">
+        <div class="user-chip">
+          <div class="avatar-neu" id="sessAvatar">BS</div>
+          <div class="top-meta">
+            <div class="top-comm" id="hdrName">Komunitas Motor Nusantara</div>
+            <div class="top-user"><span id="sessUserName">Budi Santoso</span> · <span id="sessRoleBadge">Ketua Umum</span></div>
           </div>
         </div>
-        <div style="display:flex; gap:6px; align-items:center;">
-          <button class="btn btn-ghost" style="padding:6px 10px; font-size:11.5px;" onclick="exportToExcelCSV()" title="Download Excel CSV">
-            📥 Excel
+
+        <div class="top-actions">
+          <button class="btn icon-btn" onclick="exportToExcelCSV()" title="Ekspor CSV" aria-label="Ekspor CSV">
+            <svg class="ico" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
           </button>
-          <button id="btnSettingsHeader" class="btn btn-ghost" style="padding:6px 10px; font-size:11.5px;" onclick="openModal('settingsModal')">
-            ⚙️ Setup
+          <button id="btnSettingsHeader" class="btn icon-btn" onclick="openModal('settingsModal')" title="Pengaturan" aria-label="Pengaturan">
+            <svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
           </button>
-          <button class="btn btn-danger btn-pill" style="padding:6px 11px; font-size:11.5px;" onclick="handleLogout()" title="Keluar dari sesi">
-            🚪 Keluar
+          <button class="btn icon-btn btn-danger" onclick="handleLogout()" title="Keluar" aria-label="Keluar">
+            <svg class="ico" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
           </button>
         </div>
-      </nav>
-    </header>
+      </header>
 
-    <!-- Active Authenticated User Session Strip -->
-    <div class="session-bar">
-      <div class="session-bar-inner">
-        <div class="session-user-info">
-          <div class="session-avatar" id="sessAvatar">BS</div>
+      <!-- Tactile Balance Summary -->
+      <section class="neu-card summary-card no-print" aria-label="Ringkasan">
+        <div class="summary-top">
           <div>
-            <span style="color:var(--muted);">Akun:</span>
-            <strong id="sessUserName">Budi Santoso</strong>
-            <span class="role-pill" id="sessRoleBadge" style="margin-left:4px;">Ketua Umum</span>
+            <div class="micro-label">Saldo Kas</div>
+            <div class="saldo-val num" id="kpiSaldo">Rp 0</div>
           </div>
-        </div>
-        <span style="font-size:11px;color:var(--muted);font-family:monospace;" id="sessKtaCode">KMN-26-001</span>
-      </div>
-    </div>
-
-    <main class="container">
-
-      <!-- Tersistem Signature Emerald & Gold Balance Banner (.pub-hero) -->
-      <div class="pub-hero">
-        <div class="pub-top">
-          <div>
-            <div class="pub-saldo-label">SALDO KAS KOMUNITAS TRANSPARAN</div>
-            <div class="pub-saldo" id="kpiSaldo">Rp 0</div>
-          </div>
-          <span class="eyebrow-pill" id="hdrSub">Iuran: Rp 50.000/bln</span>
+          <span class="fee-chip num" id="hdrSub">Rp 50.000/bln</span>
         </div>
 
-        <div class="hero-kpis">
-          <div class="hero-kpi-item">
-            <div class="hero-kpi-label">Anggota</div>
-            <div class="hero-kpi-val" id="kpiMembers">0</div>
+        <div class="neu-progress" aria-hidden="true">
+          <div class="neu-progress-fill" id="kpiPaidBar"></div>
+        </div>
+
+        <div class="kpi-strip">
+          <div class="kpi-cell">
+            <span class="kpi-val num" id="kpiMembers">0</span>
+            <span class="kpi-lbl">Anggota</span>
           </div>
-          <div class="hero-kpi-item">
-            <div class="hero-kpi-label" id="kpiPaidLabel">Lunas (Jan)</div>
-            <div class="hero-kpi-val" id="kpiPaid" style="color:#6ee7b7;">0/0</div>
+          <div class="kpi-cell">
+            <span class="kpi-val accent num" id="kpiPaid">0/0</span>
+            <span class="kpi-lbl" id="kpiPaidLabel">Lunas Jan</span>
           </div>
-          <div class="hero-kpi-item">
-            <div class="hero-kpi-label">Pemasukan</div>
-            <div class="hero-kpi-val" id="kpiTotalMasuk">Rp 0</div>
-          </div>
-          <div class="hero-kpi-item">
-            <div class="hero-kpi-label">Agenda Aktif</div>
-            <div class="hero-kpi-val" id="kpiAgendaCount" style="color:#fde047;">0 Acara</div>
+          <div class="kpi-cell">
+            <span class="kpi-val num" id="kpiAgendaCount">0</span>
+            <span class="kpi-lbl">Agenda</span>
           </div>
         </div>
-      </div>
+      </section>
 
-      <!-- ==================== MENU 1: ANGGOTA & IURAN BULANAN ==================== -->
+      <!-- ==================== 1. IURAN & ANGGOTA ==================== -->
       <section id="view-members" class="view-panel">
-        <div class="ts-card">
-          <div class="section-head">
-            <div>
-              <h2 class="section-title">👥 DAFTAR ANGGOTA &amp; IURAN</h2>
-              <p class="section-sub">Kelola data anggota, checklist iuran bulanan &amp; penagihan WA</p>
-            </div>
-            <button id="btnAddMember" class="btn btn-primary btn-pill" onclick="openModal('memberModal')">
-              + Anggota Baru
-            </button>
+        <div id="anggotaSelfBar" class="neu-item self-strip hidden">
+          <div>
+            <div class="micro-label">Iuran Saya</div>
+            <div style="font-size:13.5px;font-weight:700;" id="activeAnggotaName">Dimas Saputra</div>
           </div>
-
-          <div class="power-result" id="rolePermissionBanner">
-            <span id="roleBannerText">⚡ Klik bulan untuk ubah Lunas / Belum. Saldo kas otomatis terhitung.</span>
-            <button onclick="switchView('laporan')" style="background:none;border:none;color:var(--brand-deep);font-weight:800;font-size:12px;cursor:pointer;text-decoration:underline;white-space:nowrap;">
-              Laporan WA →
-            </button>
-          </div>
-
-          <!-- Member Self-View Action Box (Only shown when logged in as Anggota) -->
-          <div id="anggotaSelfBar" class="hidden" style="background:#f8fafc;border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:12px;">
-            <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;">
-              <div>
-                <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;">Tagihan Iuran Anda:</div>
-                <div style="font-size:13.5px;font-weight:800;color:var(--ink);" id="activeAnggotaName">Dimas Saputra (KMN-26-003)</div>
-              </div>
-              <button class="btn btn-primary btn-pill" style="padding:7px 14px;font-size:12px;" onclick="confirmPayToTreasurerWA()">
-                💳 Konfirmasi Bayar Iuran via WA
-              </button>
-            </div>
-          </div>
-
-          <div class="toolbar">
-            <select id="activeMonthSelect" onchange="refreshUI()" style="flex:1;">
-              <option value="0">Bulan Tagihan: Januari</option>
-              <option value="1">Bulan Tagihan: Februari</option>
-              <option value="2">Bulan Tagihan: Maret</option>
-              <option value="3">Bulan Tagihan: April</option>
-              <option value="4">Bulan Tagihan: Mei</option>
-              <option value="5">Bulan Tagihan: Juni</option>
-            </select>
-            <input type="search" id="searchMember" oninput="renderMemberList()" placeholder="🔍 Cari nama / No. KTA..." style="flex:1.2;" />
-          </div>
-
-          <div id="memberListContainer"></div>
+          <button class="btn btn-primary btn-pill" style="padding:8px 14px;font-size:12px;" onclick="confirmPayToTreasurerWA()">
+            Konfirmasi WA
+          </button>
         </div>
+
+        <div class="toolbar">
+          <select id="activeMonthSelect" onchange="refreshUI()" style="flex:0.85;" aria-label="Pilih bulan">
+            <option value="0">Januari</option>
+            <option value="1">Februari</option>
+            <option value="2">Maret</option>
+            <option value="3">April</option>
+            <option value="4">Mei</option>
+            <option value="5">Juni</option>
+          </select>
+          <div class="search-box">
+            <svg class="ico" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="search" id="searchMember" oninput="renderMemberList()" placeholder="Cari anggota..." aria-label="Cari anggota" />
+          </div>
+          <button id="btnAddMember" class="btn btn-primary icon-btn" onclick="openModal('memberModal')" title="Tambah Anggota" aria-label="Tambah Anggota">
+            <svg class="ico" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </button>
+        </div>
+
+        <div id="memberListContainer" class="stack"></div>
       </section>
 
-      <!-- ==================== MENU 2: AGENDA & RSVP KEHADIRAN ==================== -->
+      <!-- ==================== 2. AGENDA & RSVP ==================== -->
       <section id="view-agenda" class="view-panel hidden">
-        <div class="ts-card">
-          <div class="section-head">
-            <div>
-              <h2 class="section-title">📅 AGENDA KOMUNITAS &amp; RSVP</h2>
-              <p class="section-sub">Jadwal Kopdar, Rapat, Touring &amp; Konfirmasi Kehadiran Anggota</p>
-            </div>
-            <button id="btnAddAgenda" class="btn btn-primary btn-pill" onclick="openModal('agendaModal')">
-              + Buat Agenda
-            </button>
-          </div>
-
-          <div class="power-result">
-            <span>✅ Klik tombol <strong>Hadir / Ragu / Tidak Hadir</strong> untuk konfirmasi RSVP kehadiran Anda di setiap agenda.</span>
-          </div>
-
-          <div id="agendaListContainer"></div>
+        <div class="view-bar">
+          <h2 class="view-title">Agenda</h2>
+          <button id="btnAddAgenda" class="btn btn-primary btn-pill" style="padding:8px 14px;font-size:12.5px;" onclick="openModal('agendaModal')">
+            <svg class="ico" viewBox="0 0 24 24" style="width:15px;height:15px;"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Buat
+          </button>
         </div>
+
+        <div id="agendaListContainer" class="stack"></div>
       </section>
 
-      <!-- ==================== MENU 3: PEMASUKAN & PENGELUARAN KAS ==================== -->
+      <!-- ==================== 3. BUKU KAS ==================== -->
       <section id="view-kas" class="view-panel hidden">
-        <div class="ts-card">
-          <div class="section-head">
-            <div>
-              <h2 class="section-title">💰 BUKU KAS: PEMASUKAN &amp; PENGELUARAN</h2>
-              <p class="section-sub">Pencatatan mutasi uang masuk, sponsor, donasi &amp; pengeluaran acara</p>
-            </div>
-            <button class="btn btn-ghost" style="padding:7px 12px;font-size:12px;" onclick="exportKasToCSV()">
-              📥 Excel Kas
+        <div class="view-bar">
+          <h2 class="view-title">Kas</h2>
+          <div style="display:flex;gap:8px;align-items:center;">
+            <button class="btn icon-btn sm" onclick="exportKasToCSV()" title="Unduh CSV" aria-label="Unduh CSV Kas">
+              <svg class="ico" viewBox="0 0 24 24" style="width:15px;height:15px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            </button>
+            <button id="btnAddTx" class="btn btn-primary btn-pill" style="padding:8px 14px;font-size:12.5px;" onclick="openModal('txModal')">
+              <svg class="ico" viewBox="0 0 24 24" style="width:15px;height:15px;"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Catat
             </button>
           </div>
-
-          <!-- 3-Column Financial Breakdown -->
-          <div class="fin-summary-grid">
-            <div class="fin-box">
-              <div class="fin-box-label">🟢 Total Masuk</div>
-              <div class="fin-box-val" style="color:var(--brand-dark);" id="finTotalIn">Rp 0</div>
-              <div style="font-size:10px;color:var(--muted);" id="finIuranSub">Iuran + Kas Masuk</div>
-            </div>
-            <div class="fin-box">
-              <div class="fin-box-label">🔴 Total Keluar</div>
-              <div class="fin-box-val" style="color:var(--danger);" id="finTotalOut">Rp 0</div>
-              <div style="font-size:10px;color:var(--muted);">Biaya Operasional</div>
-            </div>
-            <div class="fin-box" style="background:var(--brand-bg);border-color:#a7f3d0;">
-              <div class="fin-box-label" style="color:var(--brand-dark);">🏦 Saldo Bersih</div>
-              <div class="fin-box-val" style="color:var(--brand-deep);" id="finNetSaldo">Rp 0</div>
-              <div style="font-size:10px;color:var(--brand-dark);">Kas Tersedia</div>
-            </div>
-          </div>
-
-          <!-- Input Form Pemasukan / Pengeluaran (Ketua & Bendahara) -->
-          <form id="cashInputForm" onsubmit="addTransaction(event)" style="background:#f8fafc;border:1px solid var(--line);border-radius:14px;padding:12px;margin-bottom:14px;">
-            <div style="font-size:12px;font-weight:800;margin-bottom:8px;color:var(--ink);">+ Tambah Mutasi Pemasukan / Pengeluaran Baru</div>
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
-              <select id="txType">
-                <option value="in">🟢 Pemasukan (+)</option>
-                <option value="out">🔴 Pengeluaran (-)</option>
-              </select>
-              <select id="txCategory">
-                <option value="Konsumsi & Kopdar">☕ Konsumsi &amp; Kopdar</option>
-                <option value="Donasi & Sponsor">🤝 Donasi &amp; Sponsor</option>
-                <option value="Perlengkapan & Merchandise">👕 Merchandise / Banner</option>
-                <option value="Dana Sosial / Santunan">❤️ Kas Sosial / Santunan</option>
-                <option value="Operasional Lainnya">📁 Operasional Lainnya</option>
-              </select>
-              <input type="number" id="txAmount" required placeholder="Nominal (Rp)" />
-              <input type="date" id="txDate" required />
-              <input type="text" id="txDesc" required placeholder="Keterangan lengkap transaksi..." style="grid-column: span 2;" />
-              <button type="submit" class="btn btn-primary" style="grid-column: span 2;">💾 Simpan ke Buku Kas</button>
-            </div>
-          </form>
-
-          <div id="cashReadonlyNotice" class="power-result warn hidden">
-            <span>🔒 Mode Anggota (Read-Only): Anda dapat memantau seluruh mutasi pemasukan &amp; pengeluaran secara transparan.</span>
-          </div>
-
-          <!-- Filter Mutasi -->
-          <div class="filter-pills">
-            <button class="filter-pill active" id="fkp-all" onclick="setKasFilter('all')">Semua Mutasi</button>
-            <button class="filter-pill" id="fkp-in" onclick="setKasFilter('in')">🟢 Pemasukan Saja</button>
-            <button class="filter-pill" id="fkp-out" onclick="setKasFilter('out')">🔴 Pengeluaran Saja</button>
-          </div>
-
-          <div id="txHistoryList"></div>
         </div>
+
+        <div class="fin-grid">
+          <div class="fin-tile">
+            <div class="micro-label">Masuk</div>
+            <div class="fin-val num" style="color:var(--accent);" id="finTotalIn">Rp 0</div>
+          </div>
+          <div class="fin-tile">
+            <div class="micro-label">Keluar</div>
+            <div class="fin-val num" style="color:var(--danger);" id="finTotalOut">Rp 0</div>
+          </div>
+          <div class="fin-tile">
+            <div class="micro-label">Saldo</div>
+            <div class="fin-val num" id="finNetSaldo">Rp 0</div>
+          </div>
+        </div>
+
+        <div class="seg-track" style="margin-bottom:14px;">
+          <button class="seg-btn active" id="fkp-all" onclick="setKasFilter('all')">Semua</button>
+          <button class="seg-btn" id="fkp-in" onclick="setKasFilter('in')">Masuk</button>
+          <button class="seg-btn" id="fkp-out" onclick="setKasFilter('out')">Keluar</button>
+        </div>
+
+        <div class="neu-card tx-list" id="txHistoryList"></div>
       </section>
 
-      <!-- ==================== MENU 4: CETAK KARTU ANGGOTA (SATUAN & MASSAL) ==================== -->
+      <!-- ==================== 4. KTA DIGITAL ==================== -->
       <section id="view-card" class="view-panel hidden">
-        <div class="ts-card no-print">
-          <div class="section-head">
-            <div>
-              <h2 class="section-title">🪪 CETAK KARTU ANGGOTA (KTA)</h2>
-              <p class="section-sub">Download PNG satuan atau cetak lembaran A4 massal seluruh anggota</p>
-            </div>
-            <button class="btn btn-ghost" onclick="toggleMassPrintKTA()">
-              🖨️ Cetak Lembar A4 ( Semua )
+        <div class="no-print">
+          <div class="view-bar">
+            <h2 class="view-title">Kartu Anggota</h2>
+            <button class="btn btn-pill" style="padding:7px 13px;font-size:12px;" onclick="toggleMassPrintKTA()">
+              <svg class="ico" viewBox="0 0 24 24" style="width:15px;height:15px;"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+              Cetak A4
             </button>
           </div>
 
-          <div class="form-group" id="ktaSelectGroup">
-            <label>Pilih Anggota Komunitas</label>
-            <select id="ktaMemberSelect" onchange="drawIDCard()"></select>
-          </div>
-
-          <div class="form-group">
-            <label>Tema Warna Kartu Resmi</label>
-            <div class="theme-picker">
-              <div class="theme-dot active" style="background:linear-gradient(135deg,#064e3b,#059669)" onclick="setTheme(0, this)" title="Tersistem Emerald"></div>
-              <div class="theme-dot" style="background:linear-gradient(135deg,#0f172a,#2563eb)" onclick="setTheme(1, this)" title="Royal Blue"></div>
-              <div class="theme-dot" style="background:linear-gradient(135deg,#3b0764,#d97706)" onclick="setTheme(2, this)" title="Purple Gold"></div>
-              <div class="theme-dot" style="background:linear-gradient(135deg,#450a0a,#ef4444)" onclick="setTheme(3, this)" title="Crimson Red"></div>
+          <div class="kta-controls">
+            <select id="ktaMemberSelect" onchange="drawIDCard()" style="flex:1;" aria-label="Pilih anggota"></select>
+            <div class="theme-dots" role="radiogroup" aria-label="Tema kartu">
+              <button type="button" class="theme-dot active" style="background:linear-gradient(135deg,#0f2447,#2563eb)" onclick="setTheme(0,this)" title="Cobalt"></button>
+              <button type="button" class="theme-dot" style="background:linear-gradient(135deg,#0c4a6e,#0ea5e9)" onclick="setTheme(1,this)" title="Ocean"></button>
+              <button type="button" class="theme-dot" style="background:linear-gradient(135deg,#0f172a,#334155)" onclick="setTheme(2,this)" title="Slate"></button>
+              <button type="button" class="theme-dot" style="background:linear-gradient(135deg,#450a18,#be123c)" onclick="setTheme(3,this)" title="Crimson"></button>
             </div>
           </div>
 
-          <div class="canvas-wrap">
-            <canvas id="ktaCanvas" width="856" height="540"></canvas>
+          <div class="canvas-frame">
+            <div class="canvas-inner">
+              <canvas id="ktaCanvas" width="856" height="540"></canvas>
+            </div>
           </div>
 
-          <div style="display:flex; gap:8px;">
-            <button class="btn btn-primary btn-pill" style="flex:1.3;" onclick="downloadCanvasPNG()">
-              📥 Download KTA (PNG)
+          <div style="display:flex;gap:10px;">
+            <button class="btn btn-primary btn-pill" style="flex:1.25;" onclick="downloadCanvasPNG()">
+              <svg class="ico" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Simpan PNG
             </button>
-            <button class="btn btn-ghost btn-pill" style="flex:1;" onclick="sendKTAWhatsApp()">
-              📲 Kirim ke WA
+            <button class="btn btn-pill" style="flex:1;" onclick="sendKTAWhatsApp()">
+              <svg class="ico" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+              Kirim WA
             </button>
           </div>
         </div>
 
-        <!-- Mass Printable KTA Sheet (Shown when clicking Cetak Lembar A4) -->
-        <div id="massKtaSheetCard" class="ts-card hidden">
-          <div class="section-head no-print">
-            <div>
-              <h3 class="section-title">🖨️ LEMBAR CETAK KTA MASSAL (<span id="massKtaCount">0</span> KARTU)</h3>
-              <p class="section-sub">Siap diprint di kertas PVC / Art Carton A4</p>
-            </div>
-            <button class="btn btn-primary" onclick="window.print()">🖨️ Print Sekarang</button>
+        <div id="massKtaSheetCard" class="neu-card hidden" style="margin-top:16px;">
+          <div class="view-bar no-print">
+            <h3 class="view-title">Lembar A4 (<span id="massKtaCount">0</span>)</h3>
+            <button class="btn btn-primary btn-pill" style="padding:7px 14px;font-size:12px;" onclick="window.print()">Print</button>
           </div>
           <div id="massKtaGrid" style="display:grid;grid-template-columns:1fr;gap:12px;"></div>
         </div>
       </section>
 
-      <!-- ==================== MENU 5: BROADCAST & LAPORAN GRUP WA ==================== -->
+      <!-- ==================== 5. LAPORAN WA ==================== -->
       <section id="view-laporan" class="view-panel hidden">
-        <div class="ts-card">
-          <div class="section-head">
-            <div>
-              <h2 class="section-title">📢 BROADCAST &amp; LAPORAN GRUP WA</h2>
-              <p class="section-sub">Format laporan otomatis siap salin ke grup WhatsApp komunitas</p>
-            </div>
-          </div>
-
-          <div class="filter-pills">
-            <button class="filter-pill active" id="rep-kas" onclick="setReportMode('kas')">📊 Laporan Kas &amp; Iuran</button>
-            <button class="filter-pill" id="rep-agenda" onclick="setReportMode('agenda')">📅 Undangan Agenda &amp; RSVP</button>
-          </div>
-
-          <textarea id="waTextOutput" rows="13" readonly style="font-family:monospace; font-size:12px; background:#0f172a; color:#6ee7b7; border:none; margin-bottom:12px; border-radius:14px; padding:14px;"></textarea>
-
-          <button class="btn btn-primary btn-pill btn-block" onclick="copyReportWA()">
-            📋 Salin Teks &amp; Paste di Grup WhatsApp
-          </button>
+        <div class="view-bar">
+          <h2 class="view-title">Laporan WA</h2>
         </div>
-      </section>
 
-      <footer class="ts-footer no-print">
-        Bagian dari ekosistem <a href="https://tersistem.com" target="_blank">Tersistem.com</a> — Usaha &amp; Komunitas Lebih Rapi Tanpa Ribet
-      </footer>
+        <div class="seg-track">
+          <button class="seg-btn active" id="rep-kas" onclick="setReportMode('kas')">Kas &amp; Iuran</button>
+          <button class="seg-btn" id="rep-agenda" onclick="setReportMode('agenda')">Agenda</button>
+        </div>
+
+        <textarea id="waTextOutput" class="report-box" rows="13" readonly aria-label="Pratinjau laporan WhatsApp"></textarea>
+
+        <button class="btn btn-primary btn-pill btn-block" onclick="copyReportWA()">
+          <svg class="ico" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          Salin untuk WA
+        </button>
+      </section>
 
     </main>
 
-    <!-- 5-Tab Mobile Bottom Navigation Bar -->
-    <nav class="bottom-nav no-print">
-      <button class="nav-item active" id="nav-members" onclick="switchView('members')">
-        <span class="icon">👥</span>
+    <!-- Floating Neumorphic Dock -->
+    <nav class="bottom-dock no-print" aria-label="Menu utama">
+      <button class="nav-tab active" id="nav-members" onclick="switchView('members')">
+        <svg class="ico" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
         <span>Iuran</span>
       </button>
-      <button class="nav-item" id="nav-agenda" onclick="switchView('agenda')">
-        <span class="icon">📅</span>
-        <span>Agenda &amp; RSVP</span>
-        <span class="nav-badge" id="navAgendaBadge">2</span>
+      <button class="nav-tab" id="nav-agenda" onclick="switchView('agenda')">
+        <svg class="ico" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        <span>Agenda</span>
+        <span class="nav-dot" id="navAgendaBadge">2</span>
       </button>
-      <button class="nav-item" id="nav-kas" onclick="switchView('kas')">
-        <span class="icon">💰</span>
-        <span>Buku Kas</span>
+      <button class="nav-tab" id="nav-kas" onclick="switchView('kas')">
+        <svg class="ico" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+        <span>Kas</span>
       </button>
-      <button class="nav-item" id="nav-card" onclick="switchView('card')">
-        <span class="icon">🪪</span>
-        <span>Cetak KTA</span>
+      <button class="nav-tab" id="nav-card" onclick="switchView('card')">
+        <svg class="ico" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><circle cx="8" cy="11" r="2.5"/><path d="M14 10h4"/><path d="M14 14h4"/></svg>
+        <span>KTA</span>
       </button>
-      <button class="nav-item" id="nav-laporan" onclick="switchView('laporan')">
-        <span class="icon">📢</span>
-        <span>Laporan WA</span>
+      <button class="nav-tab" id="nav-laporan" onclick="switchView('laporan')">
+        <svg class="ico" viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+        <span>Laporan</span>
       </button>
     </nav>
-
   </div>
 
-  <!-- MODAL: BUAT AGENDA BARU -->
-  <div id="agendaModal" class="modal-backdrop">
+  <!-- MODAL: CATAT KAS -->
+  <div id="txModal" class="modal-backdrop" onclick="backdropClose(event,'txModal')">
     <div class="modal-box">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
-        <h3 class="section-title">📅 BUAT AGENDA KOMUNITAS BARU</h3>
-        <button onclick="closeModal('agendaModal')" style="background:none;border:none;font-size:18px;cursor:pointer;color:var(--muted);">✕</button>
+      <div class="modal-head">
+        <h3 class="modal-title">Catat Kas</h3>
+        <button class="btn icon-btn sm" onclick="closeModal('txModal')" aria-label="Tutup">
+          <svg class="ico" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
       </div>
-      <form onsubmit="saveNewAgenda(event)">
-        <div class="form-group">
-          <label>Nama Acara / Kegiatan</label>
-          <input type="text" id="agTitle" required placeholder="Contoh: Kopdar Bulanan & Silaturahmi" />
-        </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+      <form onsubmit="addTransaction(event)">
+        <div class="grid-2">
           <div class="form-group">
-            <label>Kategori Kegiatan</label>
-            <select id="agType">
-              <option value="Kopdar Rutin">☕ Kopdar Rutin</option>
-              <option value="Rapat Pengurus">📋 Rapat Pengurus</option>
-              <option value="Touring / Acara">🏍️ Touring / Event</option>
-              <option value="Bakti Sosial">❤️ Bakti Sosial</option>
+            <label>Jenis</label>
+            <select id="txType">
+              <option value="in">Pemasukan</option>
+              <option value="out">Pengeluaran</option>
             </select>
           </div>
           <div class="form-group">
-            <label>Biaya / HTM Peserta (Rp)</label>
-            <input type="number" id="agFee" value="0" placeholder="0 jika Gratis" />
+            <label>Kategori</label>
+            <select id="txCategory">
+              <option value="Konsumsi">Konsumsi</option>
+              <option value="Donasi & Sponsor">Donasi / Sponsor</option>
+              <option value="Perlengkapan">Perlengkapan</option>
+              <option value="Dana Sosial">Dana Sosial</option>
+              <option value="Operasional">Operasional</option>
+            </select>
           </div>
         </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+        <div class="grid-2">
           <div class="form-group">
-            <label>Tanggal Acara</label>
-            <input type="date" id="agDate" required />
+            <label>Nominal (Rp)</label>
+            <input type="number" id="txAmount" required placeholder="50000" min="1" />
           </div>
           <div class="form-group">
-            <label>Waktu / Jam</label>
-            <input type="time" id="agTime" value="19:30" required />
+            <label>Tanggal</label>
+            <input type="date" id="txDate" required />
           </div>
         </div>
         <div class="form-group">
-          <label>Lokasi / Titik Kumpul</label>
-          <input type="text" id="agLocation" required placeholder="Contoh: Warkop Senja, Jl. Sudirman No. 12" />
+          <label>Keterangan</label>
+          <input type="text" id="txDesc" required placeholder="Konsumsi kopdar" />
         </div>
-        <div class="form-group">
-          <label>Catatan / Dresscode / Agenda Pembahasan</label>
-          <input type="text" id="agNotes" placeholder="Contoh: Wajib pakai kaos komunitas & bahas kas" />
-        </div>
-        <div style="display:flex; gap:8px; margin-top:16px;">
-          <button type="button" class="btn btn-ghost" style="flex:1;" onclick="closeModal('agendaModal')">Batal</button>
-          <button type="submit" class="btn btn-primary" style="flex:1.4;">📅 Terbitkan Agenda</button>
+        <div class="modal-foot">
+          <button type="button" class="btn btn-pill" style="flex:1;" onclick="closeModal('txModal')">Batal</button>
+          <button type="submit" class="btn btn-primary btn-pill" style="flex:1.3;">Simpan</button>
         </div>
       </form>
     </div>
   </div>
 
-  <!-- MODAL: TAMBAH ANGGOTA (+ AI KTP Autofill) -->
-  <div id="memberModal" class="modal-backdrop">
+  <!-- MODAL: BUAT AGENDA -->
+  <div id="agendaModal" class="modal-backdrop" onclick="backdropClose(event,'agendaModal')">
     <div class="modal-box">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
-        <h3 class="section-title">TAMBAH ANGGOTA BARU</h3>
-        <label style="background:var(--brand-light);color:var(--brand-dark);padding:5px 10px;border-radius:999px;font-size:11px;font-weight:800;cursor:pointer;">
-          📸 Scan Foto KTP
+      <div class="modal-head">
+        <h3 class="modal-title">Agenda Baru</h3>
+        <button class="btn icon-btn sm" onclick="closeModal('agendaModal')" aria-label="Tutup">
+          <svg class="ico" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <form onsubmit="saveNewAgenda(event)">
+        <div class="form-group">
+          <label>Judul</label>
+          <input type="text" id="agTitle" required placeholder="Kopdar Bulanan" />
+        </div>
+        <div class="grid-2">
+          <div class="form-group">
+            <label>Kategori</label>
+            <select id="agType">
+              <option value="Kopdar">Kopdar</option>
+              <option value="Rapat">Rapat</option>
+              <option value="Touring">Touring</option>
+              <option value="Bakti Sosial">Bakti Sosial</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>HTM (Rp)</label>
+            <input type="number" id="agFee" value="0" min="0" />
+          </div>
+        </div>
+        <div class="grid-2">
+          <div class="form-group">
+            <label>Tanggal</label>
+            <input type="date" id="agDate" required />
+          </div>
+          <div class="form-group">
+            <label>Jam</label>
+            <input type="time" id="agTime" value="19:30" required />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Lokasi</label>
+          <input type="text" id="agLocation" required placeholder="Kopi Senja, Jl. Sudirman" />
+        </div>
+        <div class="form-group">
+          <label>Catatan</label>
+          <input type="text" id="agNotes" placeholder="Opsional" />
+        </div>
+        <div class="modal-foot">
+          <button type="button" class="btn btn-pill" style="flex:1;" onclick="closeModal('agendaModal')">Batal</button>
+          <button type="submit" class="btn btn-primary btn-pill" style="flex:1.3;">Terbitkan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: TAMBAH ANGGOTA -->
+  <div id="memberModal" class="modal-backdrop" onclick="backdropClose(event,'memberModal')">
+    <div class="modal-box">
+      <div class="modal-head">
+        <h3 class="modal-title">Anggota Baru</h3>
+        <label class="btn btn-pill btn-accent-soft" style="padding:6px 12px;font-size:11.5px;">
+          <svg class="ico" viewBox="0 0 24 24" style="width:14px;height:14px;"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+          Scan KTP
           <input type="file" accept="image/*" style="display:none;" onchange="simulateKTPScan(this)" />
         </label>
       </div>
       <form onsubmit="saveMember(event)">
         <div class="form-group">
-          <label>Nama Lengkap Anggota</label>
-          <input type="text" id="inName" required placeholder="Contoh: Agus Setiawan" />
+          <label>Nama</label>
+          <input type="text" id="inName" required placeholder="Agus Setiawan" />
         </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+        <div class="grid-2">
           <div class="form-group">
-            <label>Role / Hak Akses Sistem</label>
+            <label>Akses</label>
             <select id="inAccessRole">
-              <option value="anggota">👤 Anggota Biasa</option>
-              <option value="bendahara">💰 Bendahara</option>
-              <option value="ketua">👑 Ketua / Admin</option>
+              <option value="anggota">Anggota</option>
+              <option value="bendahara">Bendahara</option>
+              <option value="ketua">Ketua</option>
             </select>
           </div>
           <div class="form-group">
-            <label>Jabatan di Komunitas</label>
+            <label>Jabatan</label>
             <input type="text" id="inRole" value="Anggota" required />
           </div>
         </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+        <div class="grid-2">
           <div class="form-group">
-            <label>Nomor WhatsApp (ID Login)</label>
+            <label>No. WA</label>
             <input type="tel" id="inPhone" required placeholder="08123456789" />
           </div>
           <div class="form-group">
-            <label>Kata Sandi / PIN Login</label>
-            <input type="text" id="inPin" value="1234" required placeholder="Contoh: 1234" />
+            <label>PIN</label>
+            <input type="text" id="inPin" value="1234" required />
           </div>
         </div>
-        <div style="display:flex; gap:8px; margin-top:16px;">
-          <button type="button" class="btn btn-ghost" style="flex:1;" onclick="closeModal('memberModal')">Batal</button>
-          <button type="submit" class="btn btn-primary" style="flex:1.4;">Simpan &amp; Buat Akun</button>
+        <div class="modal-foot">
+          <button type="button" class="btn btn-pill" style="flex:1;" onclick="closeModal('memberModal')">Batal</button>
+          <button type="submit" class="btn btn-primary btn-pill" style="flex:1.3;">Simpan</button>
         </div>
       </form>
     </div>
   </div>
 
-  <!-- MODAL: EDIT KOMUNITAS (Hanya Ketua) -->
-  <div id="settingsModal" class="modal-backdrop">
+  <!-- MODAL: PENGATURAN (Ketua) -->
+  <div id="settingsModal" class="modal-backdrop" onclick="backdropClose(event,'settingsModal')">
     <div class="modal-box">
-      <h3 class="section-title" style="margin-bottom:12px;">⚙️ PENGATURAN KOMUNITAS</h3>
+      <div class="modal-head">
+        <h3 class="modal-title">Pengaturan</h3>
+        <button class="btn icon-btn sm" onclick="closeModal('settingsModal')" aria-label="Tutup">
+          <svg class="ico" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
       <form onsubmit="saveSettings(event)">
         <div class="form-group">
-          <label>Nama Komunitas / Paguyuban / Klub</label>
+          <label>Nama Komunitas</label>
           <input type="text" id="setCommName" required />
         </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+        <div class="grid-2">
           <div class="form-group">
-            <label>Iuran Bulanan (Rp)</label>
-            <input type="number" id="setCommFee" required />
+            <label>Iuran / bln (Rp)</label>
+            <input type="number" id="setCommFee" required min="0" />
           </div>
           <div class="form-group">
-            <label>Kode Awalan KTA</label>
+            <label>Prefix KTA</label>
             <input type="text" id="setCommPrefix" required placeholder="KMN-26" />
           </div>
         </div>
-        <div style="display:flex; gap:8px; margin-top:16px;">
-          <button type="button" class="btn btn-ghost" style="flex:1;" onclick="closeModal('settingsModal')">Batal</button>
-          <button type="submit" class="btn btn-primary" style="flex:1.4;">Simpan Perubahan</button>
+        <div class="modal-foot">
+          <button type="button" class="btn btn-pill" style="flex:1;" onclick="closeModal('settingsModal')">Batal</button>
+          <button type="submit" class="btn btn-primary btn-pill" style="flex:1.3;">Simpan</button>
         </div>
       </form>
     </div>
@@ -1040,11 +1687,27 @@
   <script>
     const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun'];
     const THEMES = [
-      ['#064e3b', '#0f7a5a', '#059669'],
-      ['#0f172a', '#1e3a8a', '#2563eb'],
-      ['#3b0764', '#6d28d9', '#d97706'],
-      ['#450a0a', '#b91c1c', '#ef4444']
+      ['#0f2447', '#1d4ed8', '#3b82f6'],
+      ['#0c4a6e', '#0369a1', '#0ea5e9'],
+      ['#0f172a', '#1e293b', '#334155'],
+      ['#450a18', '#881337', '#be123c']
     ];
+
+    const ICO = {
+      card: '<svg class="ico" viewBox="0 0 24 24" style="width:14px;height:14px;"><rect x="2" y="4" width="20" height="16" rx="2"/><circle cx="8" cy="11" r="2"/><path d="M14 10h4"/><path d="M14 14h4"/></svg>',
+      check: '<svg class="ico" viewBox="0 0 24 24" style="width:14px;height:14px;"><polyline points="20 6 9 17 4 12"/></svg>',
+      send: '<svg class="ico" viewBox="0 0 24 24" style="width:14px;height:14px;"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>',
+      trash: '<svg class="ico" viewBox="0 0 24 24" style="width:14px;height:14px;"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>',
+      cal: '<svg class="ico" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>',
+      clock: '<svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
+      pin: '<svg class="ico" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>',
+      share: '<svg class="ico" viewBox="0 0 24 24" style="width:14px;height:14px;"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>',
+      arrowDown: '<svg class="ico" viewBox="0 0 24 24" style="width:14px;height:14px;"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>',
+      arrowUp: '<svg class="ico" viewBox="0 0 24 24" style="width:14px;height:14px;"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>',
+      x: '<svg class="ico" viewBox="0 0 24 24" style="width:13px;height:13px;"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>',
+      eye: '<svg class="ico" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>',
+      eyeOff: '<svg class="ico" viewBox="0 0 24 24"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>'
+    };
 
     let kasFilter = 'all';
     let reportMode = 'kas';
@@ -1057,35 +1720,35 @@
       members: [
         { id: 1, kta: 'KMN-26-001', name: 'Budi Santoso', role: 'Ketua Umum', accessRole: 'ketua', phone: '081234567801', pin: '1111', paid: [1, 1, 1, 0, 0, 0] },
         { id: 2, kta: 'KMN-26-002', name: 'Rina Wijaya', role: 'Bendahara', accessRole: 'bendahara', phone: '081234567802', pin: '2222', paid: [1, 1, 1, 1, 0, 0] },
-        { id: 3, kta: 'KMN-26-003', name: 'Dimas Saputra', role: 'Humas & Event', accessRole: 'anggota', phone: '081234567803', pin: '1234', paid: [1, 0, 0, 0, 0, 0] },
+        { id: 3, kta: 'KMN-26-003', name: 'Dimas Saputra', role: 'Humas', accessRole: 'anggota', phone: '081234567803', pin: '1234', paid: [1, 0, 0, 0, 0, 0] },
         { id: 4, kta: 'KMN-26-004', name: 'Hendra Gunawan', role: 'Anggota', accessRole: 'anggota', phone: '081234567804', pin: '1234', paid: [1, 1, 0, 0, 0, 0] }
       ],
       txs: [
-        { id: 1, type: 'in', category: 'Donasi & Sponsor', desc: 'Donasi Sponsor Kopdar Awal Tahun', amount: 350000, date: '2026-01-15' },
-        { id: 2, type: 'out', category: 'Perlengkapan & Merchandise', desc: 'Cetak Stiker & Banner Komunitas', amount: 150000, date: '2026-02-10' },
-        { id: 3, type: 'out', category: 'Konsumsi & Kopdar', desc: 'Konsumsi Kopdar Bulanan & Kopi', amount: 120000, date: '2026-03-05' }
+        { id: 1, type: 'in', category: 'Donasi & Sponsor', desc: 'Sponsor Kopdar Awal Tahun', amount: 350000, date: '2026-01-15' },
+        { id: 2, type: 'out', category: 'Perlengkapan', desc: 'Stiker & Banner Komunitas', amount: 150000, date: '2026-02-10' },
+        { id: 3, type: 'out', category: 'Konsumsi', desc: 'Konsumsi Kopdar Bulanan', amount: 120000, date: '2026-03-05' }
       ],
       agendas: [
         {
           id: 101,
-          title: 'Kopdar Wajib & Pembahasan Touring Akbar',
-          type: 'Kopdar Rutin',
+          title: 'Kopdar Wajib & Bahas Touring',
+          type: 'Kopdar',
           date: '2026-11-28',
           time: '19:30',
-          location: 'Kopi Senja Nusantara, Jl. Merdeka No. 45',
+          location: 'Kopi Senja, Jl. Merdeka 45',
           fee: 25000,
-          notes: 'Wajib memakai kaos/jaket identitas komunitas & pembagian stiker baru.',
+          notes: 'Pakai kaos atau jaket komunitas.',
           rsvps: { '1': 'hadir', '2': 'hadir', '3': 'hadir', '4': 'ragu' }
         },
         {
           id: 102,
-          title: 'Bakti Sosial & Santunan Anak Yatim',
+          title: 'Bakti Sosial & Santunan',
           type: 'Bakti Sosial',
           date: '2026-12-06',
           time: '09:00',
-          location: 'Yayasan Al-Ikhlas & Titik Kumpul Balai Kota',
+          location: 'Yayasan Al-Ikhlas',
           fee: 0,
-          notes: 'Donasi sukarela dibuka melalui Bendahara komunitas.',
+          notes: 'Donasi sukarela lewat Bendahara.',
           rsvps: { '1': 'hadir', '2': 'hadir' }
         }
       ]
@@ -1110,37 +1773,61 @@
       return 'Rp ' + Number(n).toLocaleString('id-ID');
     }
 
+    function escapeHtml(s) {
+      return String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    }
+
     function toast(msg) {
       const el = document.getElementById('toast');
       el.textContent = msg;
       el.classList.add('show');
       clearTimeout(window._tTimer);
-      window._tTimer = setTimeout(() => el.classList.remove('show'), 2300);
+      window._tTimer = setTimeout(() => el.classList.remove('show'), 2200);
     }
 
-    // ==================== REAL AUTHENTICATION ENGINE ====================
+    function copyText(txt, okMsg) {
+      if (window.AndroidNative && window.AndroidNative.copyToClipboard) {
+        window.AndroidNative.copyToClipboard(txt);
+        return;
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(txt).then(() => toast(okMsg)).catch(() => fallbackCopy(txt, okMsg));
+      } else {
+        fallbackCopy(txt, okMsg);
+      }
+    }
+
+    function fallbackCopy(txt, okMsg) {
+      const ta = document.createElement('textarea');
+      ta.value = txt;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      ta.remove();
+      toast(okMsg);
+    }
+
+    // ==================== AUTH ====================
     function togglePasswordVisibility() {
       const input = document.getElementById('loginPassword');
       const btn = document.getElementById('btnTogglePwd');
-      if (input.type === 'password') {
-        input.type = 'text';
-        btn.textContent = 'Sembunyi';
-      } else {
-        input.type = 'password';
-        btn.textContent = 'Lihat';
-      }
+      const isPwd = input.type === 'password';
+      input.type = isPwd ? 'text' : 'password';
+      btn.innerHTML = isPwd ? ICO.eyeOff : ICO.eye;
     }
 
     function fillLoginInput(idVal, pwdVal) {
       document.getElementById('loginIdentifier').value = idVal;
       document.getElementById('loginPassword').value = pwdVal;
       document.getElementById('authErrorBox').classList.add('hidden');
-      toast('🔑 Form login terisi, silakan klik Masuk.');
+      toast('Siap masuk');
     }
 
     function forgotPinAlert() {
       const ketua = db.members.find(m => m.accessRole === 'ketua') || db.members[0];
-      toast(`Hubungi Ketua (${ketua.name}: ${ketua.phone}) untuk reset sandi.`);
+      toast(`Hubungi ${ketua.name} (${ketua.phone})`);
     }
 
     function handleRealLogin(e) {
@@ -1157,7 +1844,7 @@
 
       if (!found || String(found.pin || '1234') !== pwd) {
         errBox.classList.remove('hidden');
-        document.getElementById('authErrorText').textContent = 'Nomor WA / No. KTA atau Kata Sandi salah!';
+        document.getElementById('authErrorText').textContent = 'Akun atau PIN tidak cocok.';
         return;
       }
 
@@ -1174,7 +1861,7 @@
 
       document.getElementById('loginPassword').value = '';
       renderAuthGate();
-      toast(`✅ Selamat datang, ${found.name} (${found.role})!`);
+      toast(`Halo, ${found.name}`);
     }
 
     function handleLogout() {
@@ -1182,11 +1869,11 @@
       sessionStorage.removeItem('komunitasku_auth_user');
       localStorage.removeItem('komunitasku_auth_user');
       renderAuthGate();
-      toast('🚪 Anda telah keluar dari sesi.');
+      toast('Keluar');
     }
 
     function renderAuthGate() {
-      document.getElementById('authCommTitle').textContent = db.name.toUpperCase();
+      document.getElementById('authCommTitle').textContent = db.name;
       const authScreen = document.getElementById('authScreen');
       const appShell = document.getElementById('appShell');
 
@@ -1202,51 +1889,30 @@
       }
     }
 
-    // ==================== RBAC PERMISSION HELPERS ====================
-    function currentRole() {
-      return activeUser ? (activeUser.accessRole || 'anggota') : 'anggota';
-    }
-    function canEditFinance() {
-      const r = currentRole();
-      return r === 'ketua' || r === 'bendahara';
-    }
-    function isKetua() {
-      return currentRole() === 'ketua';
-    }
+    // ==================== RBAC ====================
+    function currentRole() { return activeUser ? (activeUser.accessRole || 'anggota') : 'anggota'; }
+    function canEditFinance() { const r = currentRole(); return r === 'ketua' || r === 'bendahara'; }
+    function isKetua() { return currentRole() === 'ketua'; }
 
     function applyRolePermissionsUI() {
       if (!activeUser) return;
-      const role = currentRole();
       const initials = activeUser.name.split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase();
 
       document.getElementById('sessAvatar').textContent = initials;
       document.getElementById('sessUserName').textContent = activeUser.name;
       document.getElementById('sessRoleBadge').textContent = activeUser.role;
-      document.getElementById('sessKtaCode').textContent = activeUser.kta;
 
       document.getElementById('btnSettingsHeader').classList.toggle('hidden', !isKetua());
       document.getElementById('btnAddMember').classList.toggle('hidden', !canEditFinance());
       document.getElementById('btnAddAgenda').classList.toggle('hidden', !canEditFinance());
-      document.getElementById('cashInputForm').classList.toggle('hidden', !canEditFinance());
-      document.getElementById('cashReadonlyNotice').classList.toggle('hidden', canEditFinance());
+      document.getElementById('btnAddTx').classList.toggle('hidden', !canEditFinance());
 
-      const bannerEl = document.getElementById('rolePermissionBanner');
-      const bannerTxt = document.getElementById('roleBannerText');
       const selfBar = document.getElementById('anggotaSelfBar');
-
-      if (role === 'ketua') {
-        bannerEl.className = 'power-result';
-        bannerTxt.textContent = '👑 Akses Ketua: Kelola anggota, agenda RSVP, pemasukan/pengeluaran kas & cetak KTA.';
-        selfBar.classList.add('hidden');
-      } else if (role === 'bendahara') {
-        bannerEl.className = 'power-result';
-        bannerTxt.textContent = '💰 Akses Bendahara: Klik bulan untuk catat Lunas, tagih WA, atau catat mutasi kas.';
+      if (canEditFinance()) {
         selfBar.classList.add('hidden');
       } else {
-        bannerEl.className = 'power-result warn';
-        bannerTxt.textContent = '🔒 Akses Anggota: Cek transparansi kas, isi RSVP Agenda & unduh KTA Anda.';
         selfBar.classList.remove('hidden');
-        document.getElementById('activeAnggotaName').textContent = `${activeUser.name} (${activeUser.kta})`;
+        document.getElementById('activeAnggotaName').textContent = `${activeUser.name} · ${activeUser.kta}`;
       }
     }
 
@@ -1254,7 +1920,7 @@
       if (!activeUser) return;
       const bendahara = db.members.find(m => m.accessRole === 'bendahara') || db.members[0];
       const mIdx = parseInt(document.getElementById('activeMonthSelect').value, 10);
-      const msg = `Halo Bendahara *${db.name}* 🙏,\n\nSaya *${activeUser.name}* (${activeUser.kta}) ingin melakukan konfirmasi pembayaran iuran bulan *${MONTHS[mIdx]} 2026* sebesar *${rp(db.fee)}*.\n\nTerima kasih! 🤝`;
+      const msg = `Halo Bendahara *${db.name}*,\n\nSaya *${activeUser.name}* (${activeUser.kta}) konfirmasi pembayaran iuran *${MONTHS[mIdx]} 2026* sebesar *${rp(db.fee)}*. Terima kasih.`;
       const phone = (bendahara?.phone || '081234567802').replace(/^0/, '62').replace(/\D/g, '');
       window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, '_blank');
     }
@@ -1287,7 +1953,7 @@
       };
     }
 
-    // ==================== MENU 1: ANGGOTA & IURAN ====================
+    // ==================== 1. ANGGOTA & IURAN ====================
     function renderMemberList() {
       const box = document.getElementById('memberListContainer');
       const q = document.getElementById('searchMember').value.toLowerCase();
@@ -1296,7 +1962,7 @@
 
       const list = db.members.filter(m => m.name.toLowerCase().includes(q) || m.kta.toLowerCase().includes(q));
       if (!list.length) {
-        box.innerHTML = `<div style="text-align:center; padding:24px; color:var(--muted); font-size:13px;">Tidak ada anggota ditemukan.</div>`;
+        box.innerHTML = `<div class="empty-state">Tidak ditemukan.</div>`;
         return;
       }
 
@@ -1304,99 +1970,97 @@
         const isPaidMonth = !!m.paid[mIdx];
         const initials = m.name.split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase();
         const isMe = activeUser && m.id === activeUser.id;
+        const phoneMask = editable || isMe ? m.phone : m.phone.slice(0, 6) + '••••';
 
         const pills = MONTHS.map((mName, idx) => `
-          <div class="month-pill ${m.paid[idx] ? 'paid' : ''} ${!editable ? 'readonly' : ''}"
+          <div class="m-pill ${m.paid[idx] ? 'paid' : ''} ${!editable ? 'readonly' : ''}"
                onclick="toggleMonth(${m.id}, ${idx})">
-            ${mName}${m.paid[idx] ? ' ✓' : ''}
+            ${mName}
           </div>
         `).join('');
 
-        let actionButtonsHTML = '';
+        let actions = '';
         if (editable) {
-          actionButtonsHTML = `
-            <button class="btn btn-ghost" onclick="previewMemberKTA(${m.id})">🪪 KTA</button>
+          actions = `
+            <button class="btn" onclick="previewMemberKTA(${m.id})">${ICO.card} KTA</button>
             ${
               isPaidMonth
-                ? `<button class="btn" style="background:var(--brand-bg); color:var(--brand-dark); border-color:#a7f3d0;" onclick="toggleMonth(${m.id}, ${mIdx})">✅ ${MONTHS[mIdx]} Lunas</button>`
-                : `<button class="btn btn-warn" onclick="billMemberWA(${m.id}, ${mIdx})">📲 Tagih ${MONTHS[mIdx]}</button>`
+                ? `<button class="btn btn-accent-soft" onclick="toggleMonth(${m.id}, ${mIdx})">${ICO.check} Lunas</button>`
+                : `<button class="btn btn-warn" onclick="billMemberWA(${m.id}, ${mIdx})">${ICO.send} Tagih</button>`
             }
-            ${
-              isKetua()
-                ? `<button class="btn btn-danger" style="flex:0 0 38px;padding:8px 0;" title="Hapus Anggota" onclick="deleteMember(${m.id})">🗑️</button>`
-                : ''
-            }
+            ${isKetua() ? `<button class="btn icon-btn btn-danger" title="Hapus" onclick="deleteMember(${m.id})">${ICO.trash}</button>` : ''}
           `;
         } else {
-          actionButtonsHTML = `
-            <button class="btn btn-ghost" onclick="previewMemberKTA(${m.id})">🪪 Lihat KTA</button>
+          actions = `
+            <button class="btn" onclick="previewMemberKTA(${m.id})">${ICO.card} KTA</button>
             ${
               isPaidMonth
-                ? `<span class="btn" style="background:var(--brand-bg); color:var(--brand-dark); cursor:default;">✅ ${MONTHS[mIdx]} Lunas</span>`
+                ? `<span class="status-chip paid">${ICO.check} Lunas</span>`
                 : (isMe
-                    ? `<button class="btn btn-primary" onclick="confirmPayToTreasurerWA()">💳 Bayar Iuran ${MONTHS[mIdx]}</button>`
-                    : `<span class="btn btn-warn" style="cursor:default;">⏳ Belum Bayar</span>`)
+                    ? `<button class="btn btn-primary" onclick="confirmPayToTreasurerWA()">Bayar ${MONTHS[mIdx]}</button>`
+                    : `<span class="status-chip unpaid">Belum</span>`)
             }
           `;
         }
 
         return `
-          <div class="ts-card-interactive" style="${isMe ? 'border:2px solid var(--brand);background:#f0fdf4;' : ''}">
-            <div class="member-top">
-              <div class="member-avatar-row">
-                <div class="ic-box">${initials}</div>
-                <div>
-                  <div class="member-name">${m.name} ${isMe ? '<span style="font-size:11px;color:var(--brand);">(Akun Anda)</span>' : ''}</div>
-                  <div class="member-meta">${m.kta} • ${editable || isMe ? m.phone : m.phone.slice(0, 6) + '••••'}</div>
+          <article class="neu-item">
+            <div class="member-head">
+              <div class="member-id">
+                <div class="member-avatar">${escapeHtml(initials)}</div>
+                <div style="min-width:0;">
+                  <div class="member-name">${escapeHtml(m.name)}${isMe ? '<span class="me-dot" title="Anda"></span>' : ''}</div>
+                  <div class="member-sub mono">${escapeHtml(m.kta)} · ${escapeHtml(phoneMask)}</div>
                 </div>
               </div>
-              <span class="role-pill">${m.role}</span>
+              <span class="tag-pill">${escapeHtml(m.role)}</span>
             </div>
             <div class="months-grid">${pills}</div>
-            <div class="member-actions">${actionButtonsHTML}</div>
-          </div>
+            <div class="card-actions">${actions}</div>
+          </article>
         `;
       }).join('');
     }
 
     function toggleMonth(memberId, monthIdx) {
-      if (!canEditFinance()) {
-        toast('🔒 Hanya Ketua & Bendahara yang dapat mengubah status iuran.');
-        return;
-      }
+      if (!canEditFinance()) return;
       const m = db.members.find(x => x.id === memberId);
       if (!m) return;
       m.paid[monthIdx] = m.paid[monthIdx] ? 0 : 1;
       saveDB();
-      toast(`${m.name} (${MONTHS[monthIdx]}): ${m.paid[monthIdx] ? 'LUNAS ✓' : 'Belum Bayar'}`);
+      toast(`${m.name} · ${MONTHS[monthIdx]} ${m.paid[monthIdx] ? 'Lunas' : 'Belum'}`);
     }
 
     function deleteMember(memberId) {
       if (!isKetua()) return;
       if (db.members.length <= 1) {
-        toast('Minimal harus ada 1 anggota.');
+        toast('Minimal 1 anggota.');
+        return;
+      }
+      if (activeUser && memberId === activeUser.id) {
+        toast('Tidak bisa hapus akun aktif.');
         return;
       }
       const m = db.members.find(x => x.id === memberId);
       if (!m) return;
       db.members = db.members.filter(x => x.id !== memberId);
       saveDB();
-      toast(`🗑️ Anggota ${m.name} dihapus.`);
+      toast(`${m.name} dihapus`);
     }
 
     function billMemberWA(memberId, monthIdx) {
       const m = db.members.find(x => x.id === memberId);
       if (!m) return;
-      const text = `Halo Kak *${m.name}* (${m.kta}) 🙏\n\nPengingat iuran *${db.name}* bulan *${MONTHS[monthIdx]} 2026* sebesar *${rp(db.fee)}*.\n\nTerima kasih atas dukungan & solidaritasnya! 🤝`;
+      const text = `Halo *${m.name}* (${m.kta}),\n\nPengingat iuran *${db.name}* bulan *${MONTHS[monthIdx]} 2026* sebesar *${rp(db.fee)}*.\n\nTerima kasih.`;
       const phone = m.phone.replace(/^0/, '62').replace(/\D/g, '');
       window.open(`https://wa.me/${phone}?text=${encodeURIComponent(text)}`, '_blank');
     }
 
-    // ==================== MENU 2: AGENDA & RSVP KEHADIRAN ====================
+    // ==================== 2. AGENDA & RSVP ====================
     function renderAgendas() {
       const box = document.getElementById('agendaListContainer');
       if (!db.agendas || !db.agendas.length) {
-        box.innerHTML = `<div style="text-align:center;padding:24px;color:var(--muted);font-size:13px;">Belum ada agenda kegiatan.</div>`;
+        box.innerHTML = `<div class="empty-state">Belum ada agenda.</div>`;
         return;
       }
 
@@ -1407,74 +2071,51 @@
         const myStatus = rsvps[myId] || '';
 
         const hadirNames = [];
-        const raguNames = [];
-        const tidakNames = [];
+        let raguCount = 0;
+        let tidakCount = 0;
 
         db.members.forEach(m => {
           const st = rsvps[String(m.id)];
-          if (st === 'hadir') hadirNames.push(m.name);
-          else if (st === 'ragu') raguNames.push(m.name);
-          else if (st === 'tidak') tidakNames.push(m.name);
+          if (st === 'hadir') hadirNames.push(m.name.split(' ')[0]);
+          else if (st === 'ragu') raguCount++;
+          else if (st === 'tidak') tidakCount++;
         });
 
         return `
-          <div class="ts-card-interactive">
-            <div class="agenda-badge-row">
-              <span class="agenda-type-badge">📌 ${ag.type}</span>
-              <span style="font-size:11.5px;font-weight:700;color:var(--brand-deep);">
-                ${ag.fee > 0 ? 'HTM: ' + rp(ag.fee) : '🆓 Gratis / Kas'}
-              </span>
-            </div>
-
-            <div class="agenda-title">${ag.title}</div>
-
-            <div class="agenda-meta-grid">
-              <div><strong>🗓️ Tanggal:</strong><br>${ag.date}</div>
-              <div><strong>⏰ Waktu:</strong><br>${ag.time} WIB</div>
-              <div style="grid-column: span 2;"><strong>📍 Lokasi Titik Kumpul:</strong><br>${ag.location}</div>
-              ${ag.notes ? `<div style="grid-column: span 2;color:var(--muted);"><strong>📝 Catatan:</strong> ${ag.notes}</div>` : ''}
-            </div>
-
-            <div style="font-size:11.5px;font-weight:800;color:var(--ink);margin-bottom:6px;">
-              Konfirmasi Kehadiran RSVP Anda (${activeUser ? activeUser.name : 'Anggota'}):
-            </div>
-
-            <div class="rsvp-btn-group">
-              <button class="rsvp-choice ${myStatus === 'hadir' ? 'active-hadir' : ''}" onclick="setAgendaRSVP(${ag.id}, 'hadir')">
-                ✅ Hadir (${hadirNames.length})
-              </button>
-              <button class="rsvp-choice ${myStatus === 'ragu' ? 'active-ragu' : ''}" onclick="setAgendaRSVP(${ag.id}, 'ragu')">
-                🤔 Masih Ragu (${raguNames.length})
-              </button>
-              <button class="rsvp-choice ${myStatus === 'tidak' ? 'active-tidak' : ''}" onclick="setAgendaRSVP(${ag.id}, 'tidak')">
-                ❌ Berhalangan (${tidakNames.length})
-              </button>
-            </div>
-
-            <div style="background:#f8fafc;padding:9px 11px;border-radius:10px;border:1px solid var(--line);">
-              <div style="font-size:11px;font-weight:700;color:var(--muted);">
-                Daftar Peserta Konfirmasi Hadir (${hadirNames.length}/${db.members.length} Anggota):
+          <article class="neu-item">
+            <div class="agenda-top">
+              <div style="display:flex;align-items:center;gap:6px;">
+                <span class="tag-pill accent">${escapeHtml(ag.type)}</span>
+                <span class="tag-pill num">${ag.fee > 0 ? rp(ag.fee) : 'Gratis'}</span>
               </div>
-              <div class="rsvp-attendee-pills">
-                ${
-                  hadirNames.length
-                    ? hadirNames.map(n => `<span class="attendee-tag">✅ ${n}</span>`).join('')
-                    : `<span style="font-size:11px;color:var(--muted);">Belum ada yang konfirmasi hadir</span>`
-                }
+              <div style="display:flex;gap:6px;">
+                <button class="btn icon-btn sm" onclick="shareAgendaToWA(${ag.id})" title="Salin ke WA" aria-label="Salin ke WA">${ICO.share}</button>
+                ${canEditFinance() ? `<button class="btn icon-btn sm btn-danger" onclick="deleteAgenda(${ag.id})" title="Hapus" aria-label="Hapus">${ICO.trash}</button>` : ''}
               </div>
             </div>
 
-            <div style="display:flex;gap:6px;margin-top:10px;">
-              <button class="btn btn-ghost" style="flex:1;padding:8px;" onclick="shareAgendaToWA(${ag.id})">
-                📲 Bagikan Undangan &amp; List RSVP ke Grup WA
-              </button>
-              ${
-                canEditFinance()
-                  ? `<button class="btn btn-danger" style="padding:8px 12px;" onclick="deleteAgenda(${ag.id})" title="Hapus Agenda">🗑️</button>`
-                  : ''
-              }
+            <div class="agenda-title">${escapeHtml(ag.title)}</div>
+
+            <div class="agenda-meta">
+              <span class="meta-item mono">${ICO.cal} ${escapeHtml(ag.date)}</span>
+              <span class="meta-item mono">${ICO.clock} ${escapeHtml(ag.time)}</span>
+              <span class="meta-item">${ICO.pin} ${escapeHtml(ag.location)}</span>
             </div>
-          </div>
+
+            ${ag.notes ? `<div class="agenda-note">${escapeHtml(ag.notes)}</div>` : ''}
+
+            <div class="seg-track">
+              <button class="seg-btn ${myStatus === 'hadir' ? 'active-hadir' : ''}" onclick="setAgendaRSVP(${ag.id},'hadir')">Hadir · ${hadirNames.length}</button>
+              <button class="seg-btn ${myStatus === 'ragu' ? 'active-ragu' : ''}" onclick="setAgendaRSVP(${ag.id},'ragu')">Ragu · ${raguCount}</button>
+              <button class="seg-btn ${myStatus === 'tidak' ? 'active-tidak' : ''}" onclick="setAgendaRSVP(${ag.id},'tidak')">Tidak · ${tidakCount}</button>
+            </div>
+
+            ${
+              hadirNames.length
+                ? `<div class="attendee-row"><div class="attendee-chips">${hadirNames.map(n => `<span class="attendee-chip">${escapeHtml(n)}</span>`).join('')}</div></div>`
+                : ''
+            }
+          </article>
         `;
       }).join('');
     }
@@ -1486,8 +2127,8 @@
       if (!ag.rsvps) ag.rsvps = {};
       ag.rsvps[String(activeUser.id)] = status;
       saveDB();
-      const labelMap = { hadir: '✅ Siap Hadir', ragu: '🤔 Masih Ragu', tidak: '❌ Berhalangan' };
-      toast(`RSVP ${activeUser.name}: ${labelMap[status]}`);
+      const map = { hadir: 'Hadir', ragu: 'Ragu', tidak: 'Tidak hadir' };
+      toast(`RSVP: ${map[status]}`);
     }
 
     function saveNewAgenda(e) {
@@ -1502,51 +2143,43 @@
       const notes = document.getElementById('agNotes').value.trim();
       if (!title || !location) return;
 
-      const newAg = {
+      db.agendas.unshift({
         id: Date.now(),
         title, type, fee, date, time, location, notes,
         rsvps: activeUser ? { [String(activeUser.id)]: 'hadir' } : {}
-      };
-      db.agendas.unshift(newAg);
+      });
       document.getElementById('agTitle').value = '';
       document.getElementById('agLocation').value = '';
       document.getElementById('agNotes').value = '';
       closeModal('agendaModal');
       saveDB();
-      toast('📅 Agenda baru berhasil diterbitkan!');
+      toast('Agenda diterbitkan');
     }
 
     function deleteAgenda(agendaId) {
       if (!canEditFinance()) return;
       db.agendas = db.agendas.filter(a => a.id !== agendaId);
       saveDB();
-      toast('🗑️ Agenda telah dihapus.');
+      toast('Agenda dihapus');
     }
 
     function shareAgendaToWA(agendaId) {
       const ag = db.agendas.find(a => a.id === agendaId);
       if (!ag) return;
       const hadirList = db.members.filter(m => ag.rsvps && ag.rsvps[String(m.id)] === 'hadir');
-      const txt = `📢 *UNDANGAN AGENDA ${db.name.toUpperCase()}*
-Kategori: *${ag.type}*
+      const txt = `*${db.name.toUpperCase()} — ${ag.type.toUpperCase()}*
+*${ag.title}*
+Tanggal: ${ag.date} · ${ag.time} WIB
+Lokasi: ${ag.location}
+HTM: ${ag.fee > 0 ? rp(ag.fee) : 'Gratis'}
+${ag.notes ? `Catatan: ${ag.notes}\n` : ''}
+*Hadir (${hadirList.length}):*
+${hadirList.map((m, i) => `${i + 1}. ${m.name}`).join('\n') || '-'}`;
 
-📌 *${ag.title}*
-🗓️ Tanggal: ${ag.date}
-⏰ Pukul: ${ag.time} WIB
-📍 Lokasi: ${ag.location}
-💰 HTM: ${ag.fee > 0 ? rp(ag.fee) : 'Gratis'}
-${ag.notes ? `📝 Catatan: ${ag.notes}\n` : ''}
-✅ *LIST RSVP SIAP HADIR (${hadirList.length} Anggota):*
-${hadirList.map((m, i) => `${i + 1}. ${m.name} ✓`).join('\n') || '1. ...'}
-
-_Silakan isi konfirmasi RSVP kehadiran Anda di aplikasi KomunitasKu!_`;
-
-      navigator.clipboard.writeText(txt).then(() => {
-        toast('📋 Undangan & List RSVP disalin! Siap paste di Grup WA.');
-      });
+      copyText(txt, 'Undangan disalin');
     }
 
-    // ==================== MENU 3: BUKU KAS PEMASUKAN & PENGELUARAN ====================
+    // ==================== 3. BUKU KAS ====================
     function setKasFilter(f) {
       kasFilter = f;
       ['all', 'in', 'out'].forEach(k => {
@@ -1558,7 +2191,6 @@ _Silakan isi konfirmasi RSVP kehadiran Anda di aplikasi KomunitasKu!_`;
     function renderKas() {
       const fin = getCashSummary();
       document.getElementById('finTotalIn').textContent = rp(fin.allIn);
-      document.getElementById('finIuranSub').textContent = `Iuran ${rp(fin.totalIuran)} + Lainnya`;
       document.getElementById('finTotalOut').textContent = rp(fin.totalOut);
       document.getElementById('finNetSaldo').textContent = rp(fin.saldo);
 
@@ -1568,11 +2200,16 @@ _Silakan isi konfirmasi RSVP kehadiran Anda di aplikasi KomunitasKu!_`;
       if (kasFilter === 'all' || kasFilter === 'in') {
         html += `
           <div class="tx-row">
-            <div>
-              <strong>🟢 Akumulasi Iuran Bulanan Anggota</strong>
-              <div><span class="tx-cat-badge">💳 Iuran Wajib Anggota</span></div>
+            <div class="tx-left">
+              <div class="tx-dir in">${ICO.arrowDown}</div>
+              <div style="min-width:0;">
+                <div class="tx-desc">Iuran Anggota</div>
+                <div class="tx-meta">Otomatis</div>
+              </div>
             </div>
-            <strong style="color:var(--brand-dark);white-space:nowrap;">+ ${rp(fin.totalIuran)}</strong>
+            <div class="tx-right">
+              <span class="tx-amt in num">+${rp(fin.totalIuran)}</span>
+            </div>
           </div>
         `;
       }
@@ -1580,73 +2217,76 @@ _Silakan isi konfirmasi RSVP kehadiran Anda di aplikasi KomunitasKu!_`;
       const filteredTxs = db.txs.filter(t => kasFilter === 'all' || t.type === kasFilter);
       html += filteredTxs.map(t => `
         <div class="tx-row">
-          <div>
-            <strong>${t.type === 'in' ? '🟢' : '🔴'} ${t.desc}</strong>
-            <div>
-              <span class="tx-cat-badge">${t.category || 'Operasional'}</span>
-              ${t.date ? `<span style="font-size:10.5px;color:var(--muted);margin-left:6px;">🗓️ ${t.date}</span>` : ''}
+          <div class="tx-left">
+            <div class="tx-dir ${t.type === 'in' ? 'in' : 'out'}">${t.type === 'in' ? ICO.arrowDown : ICO.arrowUp}</div>
+            <div style="min-width:0;">
+              <div class="tx-desc">${escapeHtml(t.desc)}</div>
+              <div class="tx-meta">${escapeHtml(t.category || 'Kas')}${t.date ? ` · ${escapeHtml(t.date)}` : ''}</div>
             </div>
           </div>
-          <div style="display:flex;align-items:center;gap:8px;">
-            <strong style="color:${t.type === 'in' ? 'var(--brand-dark)' : 'var(--danger)'};white-space:nowrap;">
-              ${t.type === 'in' ? '+' : '-'} ${rp(t.amount)}
-            </strong>
-            ${
-              canEditFinance()
-                ? `<button onclick="deleteTx(${t.id})" style="background:none;border:none;cursor:pointer;font-size:13px;color:var(--muted);" title="Hapus">✕</button>`
-                : ''
-            }
+          <div class="tx-right">
+            <span class="tx-amt ${t.type === 'in' ? 'in' : 'out'} num">${t.type === 'in' ? '+' : '-'}${rp(t.amount)}</span>
+            ${canEditFinance() ? `<button class="del-x" onclick="deleteTx(${t.id})" aria-label="Hapus">${ICO.x}</button>` : ''}
           </div>
         </div>
       `).join('');
 
-      listEl.innerHTML = html || `<div style="text-align:center;padding:20px;color:var(--muted);font-size:12.5px;">Belum ada mutasi pada filter ini.</div>`;
+      listEl.innerHTML = html || `<div class="empty-state">Belum ada transaksi.</div>`;
     }
 
     function addTransaction(e) {
       e.preventDefault();
-      if (!canEditFinance()) {
-        toast('🔒 Hanya Ketua & Bendahara yang dapat mencatat kas!');
-        return;
-      }
+      if (!canEditFinance()) return;
       const type = document.getElementById('txType').value;
       const category = document.getElementById('txCategory').value;
       const amount = parseInt(document.getElementById('txAmount').value, 10);
       const date = document.getElementById('txDate').value;
       const desc = document.getElementById('txDesc').value.trim();
       if (!amount || !desc) return;
+
       db.txs.unshift({ id: Date.now(), type, category, amount, date, desc });
       document.getElementById('txAmount').value = '';
       document.getElementById('txDesc').value = '';
+      closeModal('txModal');
       saveDB();
-      toast('💰 Mutasi kas berhasil disimpan!');
+      toast('Tersimpan');
     }
 
     function deleteTx(txId) {
       if (!canEditFinance()) return;
       db.txs = db.txs.filter(t => t.id !== txId);
       saveDB();
-      toast('🗑️ Catatan mutasi kas dihapus.');
+      toast('Transaksi dihapus');
     }
 
     function exportKasToCSV() {
-      const headers = ['Tanggal', 'Tipe', 'Kategori', 'Keterangan', 'Nominal (Rp)'];
+      const headers = ['Tanggal', 'Tipe', 'Kategori', 'Keterangan', 'Nominal'];
       const rows = db.txs.map(t => [
         t.date || '2026-01-01',
-        t.type === 'in' ? 'PEMASUKAN' : 'PENGELUARAN',
-        `"${t.category || 'Operasional'}"`,
+        t.type === 'in' ? 'MASUK' : 'KELUAR',
+        `"${t.category || 'Kas'}"`,
         `"${t.desc}"`,
         t.amount
       ]);
       const csv = 'data:text/csv;charset=utf-8,' + [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
       const a = document.createElement('a');
       a.href = encodeURI(csv);
-      a.download = `Buku-Kas-${db.name.replace(/\s+/g, '-')}.csv`;
+      a.download = `Kas-${db.name.replace(/\s+/g, '-')}.csv`;
       a.click();
-      toast('📥 Buku Kas berhasil diekspor ke Excel (.CSV)!');
+      toast('CSV kas diunduh');
     }
 
-    // ==================== MENU 4: CETAK KTA (SATUAN & MASSAL A4) ====================
+    // ==================== 4. KTA CANVAS ====================
+    function roundRectPath(ctx, x, y, w, h, r) {
+      ctx.beginPath();
+      ctx.moveTo(x + r, y);
+      ctx.arcTo(x + w, y, x + w, y + h, r);
+      ctx.arcTo(x + w, y + h, x, y + h, r);
+      ctx.arcTo(x, y + h, x, y, r);
+      ctx.arcTo(x, y, x + w, y, r);
+      ctx.closePath();
+    }
+
     function previewMemberKTA(memberId) {
       document.getElementById('ktaMemberSelect').value = memberId;
       switchView('card');
@@ -1662,7 +2302,7 @@ _Silakan isi konfirmasi RSVP kehadiran Anda di aplikasi KomunitasKu!_`;
 
     function renderKTAOnCanvas(canvas, m) {
       const ctx = canvas.getContext('2d');
-      const colors = THEMES[db.theme || 0];
+      const colors = THEMES[db.theme || 0] || THEMES[0];
       const W = canvas.width, H = canvas.height;
 
       const grad = ctx.createLinearGradient(0, 0, W, H);
@@ -1672,63 +2312,63 @@ _Silakan isi konfirmasi RSVP kehadiran Anda di aplikasi KomunitasKu!_`;
       ctx.fillStyle = grad;
       ctx.fillRect(0, 0, W, H);
 
-      ctx.fillStyle = 'rgba(255,255,255,0.07)';
-      ctx.beginPath(); ctx.arc(W - 60, 60, 160, 0, Math.PI * 2); ctx.fill();
-      ctx.beginPath(); ctx.arc(80, H - 30, 130, 0, Math.PI * 2); ctx.fill();
+      // Subtle architectural rings
+      ctx.strokeStyle = 'rgba(255,255,255,0.08)';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.arc(W - 90, 90, 170, 0, Math.PI * 2); ctx.stroke();
+      ctx.beginPath(); ctx.arc(W - 90, 90, 230, 0, Math.PI * 2); ctx.stroke();
 
-      ctx.fillStyle = '#ffffff';
-      ctx.beginPath(); ctx.roundRect(44, 38, 68, 68, 16); ctx.fill();
-
-      ctx.fillStyle = colors[0];
-      ctx.font = '800 38px "Plus Jakarta Sans", -apple-system, sans-serif';
-      ctx.textAlign = 'center';
-      ctx.fillText('T', 78, 86);
-
+      // Header
+      ctx.fillStyle = 'rgba(255,255,255,0.72)';
+      ctx.font = '600 15px "Plus Jakarta Sans", sans-serif';
       ctx.textAlign = 'left';
-      ctx.fillStyle = 'rgba(255,255,255,0.8)';
-      ctx.font = '700 16px "Plus Jakarta Sans", sans-serif';
-      ctx.fillText('KARTU TANDA ANGGOTA RESMI • TERSISTEM', 130, 62);
+      ctx.fillText('KARTU ANGGOTA', 48, 66);
 
       ctx.fillStyle = '#ffffff';
-      ctx.font = '700 29px "Oswald", sans-serif';
-      ctx.fillText(db.name.toUpperCase().substring(0, 30), 130, 97);
+      ctx.font = '800 28px "Plus Jakarta Sans", sans-serif';
+      ctx.fillText(db.name.substring(0, 32), 48, 102);
 
-      ctx.strokeStyle = 'rgba(255,255,255,0.2)';
+      ctx.strokeStyle = 'rgba(255,255,255,0.18)';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.moveTo(48, 130); ctx.lineTo(W - 48, 130); ctx.stroke();
+
+      // Initials emblem
+      ctx.fillStyle = 'rgba(255,255,255,0.14)';
+      roundRectPath(ctx, 48, 174, 126, 126, 26);
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(255,255,255,0.35)';
       ctx.lineWidth = 2;
-      ctx.beginPath(); ctx.moveTo(44, 128); ctx.lineTo(W - 44, 128); ctx.stroke();
-
-      ctx.fillStyle = 'rgba(255,255,255,0.18)';
-      ctx.beginPath(); ctx.roundRect(44, 175, 140, 140, 26); ctx.fill();
-      ctx.strokeStyle = 'rgba(255,255,255,0.6)';
-      ctx.lineWidth = 3;
       ctx.stroke();
 
       const initials = m.name.split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase();
       ctx.fillStyle = '#ffffff';
-      ctx.font = '800 54px "Plus Jakarta Sans", sans-serif';
+      ctx.font = '800 46px "Plus Jakarta Sans", sans-serif';
       ctx.textAlign = 'center';
-      ctx.fillText(initials, 114, 263);
+      ctx.fillText(initials, 111, 254);
 
+      // Member Details
       ctx.textAlign = 'left';
-      ctx.fillStyle = '#fde047';
-      ctx.font = '700 23px monospace';
-      ctx.fillText(m.kta, 212, 208);
+      ctx.fillStyle = 'rgba(255,255,255,0.78)';
+      ctx.font = '600 20px "JetBrains Mono", monospace';
+      ctx.fillText(m.kta, 204, 204);
 
       ctx.fillStyle = '#ffffff';
-      ctx.font = '700 40px "Oswald", sans-serif';
-      ctx.fillText(m.name.substring(0, 22), 212, 256);
+      ctx.font = '800 36px "Plus Jakarta Sans", sans-serif';
+      ctx.fillText(m.name.substring(0, 22), 204, 250);
 
-      ctx.fillStyle = 'rgba(255,255,255,0.88)';
-      ctx.font = '600 21px "Plus Jakarta Sans", sans-serif';
-      ctx.fillText(`Jabatan: ${m.role}  •  WA: ${m.phone}`, 212, 296);
+      ctx.fillStyle = 'rgba(255,255,255,0.82)';
+      ctx.font = '500 20px "Plus Jakarta Sans", sans-serif';
+      ctx.fillText(`${m.role}  ·  ${m.phone}`, 204, 288);
 
-      const qrX = W - 184, qrY = 175, qrSize = 140;
+      // Deterministic QR Matrix
+      const qrX = W - 178, qrY = 174, qrSize = 130;
       ctx.fillStyle = '#ffffff';
-      ctx.beginPath(); ctx.roundRect(qrX, qrY, qrSize, qrSize, 16); ctx.fill();
+      roundRectPath(ctx, qrX, qrY, qrSize, qrSize, 16);
+      ctx.fill();
 
       ctx.fillStyle = '#0f172a';
       const seedStr = m.kta + m.name;
-      const cells = 9, pad = 16, cellW = (qrSize - pad * 2) / cells;
+      const cells = 9, pad = 14, cellW = (qrSize - pad * 2) / cells;
       for (let r = 0; r < cells; r++) {
         for (let c = 0; c < cells; c++) {
           const isCorner = (r < 3 && c < 3) || (r < 3 && c >= cells - 3) || (r >= cells - 3 && c < 3);
@@ -1739,20 +2379,21 @@ _Silakan isi konfirmasi RSVP kehadiran Anda di aplikasi KomunitasKu!_`;
         }
       }
 
-      ctx.fillStyle = 'rgba(0,0,0,0.25)';
-      ctx.fillRect(0, H - 74, W, 74);
+      // Footer strip
+      ctx.fillStyle = 'rgba(0,0,0,0.22)';
+      ctx.fillRect(0, H - 68, W, 68);
 
       const mIdx = parseInt(document.getElementById('activeMonthSelect').value, 10);
       const lunas = !!m.paid[mIdx];
 
-      ctx.fillStyle = 'rgba(255,255,255,0.88)';
-      ctx.font = '700 18px "Plus Jakarta Sans", sans-serif';
-      ctx.fillText('STATUS ANGGOTA: AKTIF & TERVERIFIKASI', 44, H - 30);
+      ctx.fillStyle = 'rgba(255,255,255,0.82)';
+      ctx.font = '600 17px "Plus Jakarta Sans", sans-serif';
+      ctx.fillText('AKTIF', 48, H - 28);
 
       ctx.textAlign = 'right';
-      ctx.fillStyle = lunas ? '#6ee7b7' : '#fde047';
-      ctx.font = '800 20px "Plus Jakarta Sans", sans-serif';
-      ctx.fillText(`IURAN ${MONTHS[mIdx].toUpperCase()}: ${lunas ? 'LUNAS ✓' : 'BELUM LUNAS'}`, W - 44, H - 30);
+      ctx.fillStyle = lunas ? '#93c5fd' : '#fde68a';
+      ctx.font = '700 18px "Plus Jakarta Sans", sans-serif';
+      ctx.fillText(`${MONTHS[mIdx].toUpperCase()} · ${lunas ? 'LUNAS' : 'BELUM'}`, W - 48, H - 28);
     }
 
     function drawIDCard() {
@@ -1777,8 +2418,7 @@ _Silakan isi konfirmasi RSVP kehadiran Anda di aplikasi KomunitasKu!_`;
 
       db.members.forEach(m => {
         const wrap = document.createElement('div');
-        wrap.className = 'canvas-wrap';
-        wrap.style.margin = '0';
+        wrap.className = 'canvas-inner';
         const c = document.createElement('canvas');
         c.width = 856;
         c.height = 540;
@@ -1788,7 +2428,7 @@ _Silakan isi konfirmasi RSVP kehadiran Anda di aplikasi KomunitasKu!_`;
         grid.appendChild(wrap);
         renderKTAOnCanvas(c, m);
       });
-      toast('🖨️ Lembar KTA Massal siap dicetak!');
+      toast('Siap cetak A4');
     }
 
     function downloadCanvasPNG() {
@@ -1805,18 +2445,18 @@ _Silakan isi konfirmasi RSVP kehadiran Anda di aplikasi KomunitasKu!_`;
       a.download = fileName;
       a.href = dataUrl;
       a.click();
-      toast('📥 Gambar Kartu KTA berhasil disimpan!');
+      toast('KTA disimpan');
     }
 
     function sendKTAWhatsApp() {
       const selId = parseInt(document.getElementById('ktaMemberSelect').value, 10);
       const m = db.members.find(x => x.id === selId) || db.members[0];
-      const msg = `Halo *${m.name}*! 🪪\n\nSelamat, Anda terdaftar sebagai anggota resmi *${db.name}*:\n• *No. KTA:* ${m.kta}\n• *Jabatan:* ${m.role}\n• *Status:* Aktif ✅`;
+      const msg = `Halo *${m.name}*,\n\nData KTA *${db.name}*:\nNo. KTA: ${m.kta}\nJabatan: ${m.role}\nStatus: Aktif`;
       const phone = m.phone.replace(/^0/, '62').replace(/\D/g, '');
       window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, '_blank');
     }
 
-    // ==================== MENU 5: LAPORAN & BROADCAST GRUP WA ====================
+    // ==================== 5. LAPORAN WA ====================
     function setReportMode(mode) {
       reportMode = mode;
       document.getElementById('rep-kas').classList.toggle('active', mode === 'kas');
@@ -1829,106 +2469,98 @@ _Silakan isi konfirmasi RSVP kehadiran Anda di aplikasi KomunitasKu!_`;
       const mIdx = parseInt(document.getElementById('activeMonthSelect').value, 10);
       const mName = MONTHS[mIdx];
 
-      if (reportMode === 'agenda' && db.agendas.length > 0) {
+      if (reportMode === 'agenda') {
+        if (!db.agendas.length) {
+          document.getElementById('waTextOutput').value = 'Belum ada agenda.';
+          return;
+        }
         const ag = db.agendas[0];
         const hadirList = db.members.filter(m => ag.rsvps && ag.rsvps[String(m.id)] === 'hadir');
         const raguList = db.members.filter(m => ag.rsvps && ag.rsvps[String(m.id)] === 'ragu');
-        document.getElementById('waTextOutput').value = `📢 *UNDANGAN & REKAP RSVP ${db.name.toUpperCase()}*
-Kategori: *${ag.type}*
+        document.getElementById('waTextOutput').value = `*${db.name.toUpperCase()} — ${ag.type.toUpperCase()}*
+*${ag.title}*
+Tanggal: ${ag.date} · ${ag.time} WIB
+Lokasi: ${ag.location}
+HTM: ${ag.fee > 0 ? rp(ag.fee) : 'Gratis'}
+${ag.notes ? `Catatan: ${ag.notes}\n` : ''}
+*Hadir (${hadirList.length}):*
+${hadirList.map((m, i) => `${i + 1}. ${m.name}`).join('\n') || '-'}
 
-📌 *${ag.title}*
-🗓️ Tanggal: ${ag.date} | ⏰ ${ag.time} WIB
-📍 Lokasi: ${ag.location}
-💰 HTM: ${ag.fee > 0 ? rp(ag.fee) : 'Gratis / Kas'}
-${ag.notes ? `📝 Catatan: ${ag.notes}\n` : ''}
-✅ *KONFIRMASI HADIR (${hadirList.length} Anggota):*
-${hadirList.map((m, i) => `${i + 1}. ${m.name} ✓`).join('\n') || '- Belum ada -'}
-
-🤔 *MASIH RAGU (${raguList.length}):*
-${raguList.map((m, i) => `${i + 1}. ${m.name}`).join('\n') || '-'}
-
-_Update kehadiran Anda melalui menu Agenda & RSVP di KomunitasKu_`;
+*Ragu (${raguList.length}):*
+${raguList.map((m, i) => `${i + 1}. ${m.name}`).join('\n') || '-'}`;
         return;
       }
 
       const paidMembers = db.members.filter(m => m.paid[mIdx]);
       const unpaidMembers = db.members.filter(m => !m.paid[mIdx]);
 
-      const report = `📊 *LAPORAN IURAN & BUKU KAS ${db.name.toUpperCase()}*
-Bulan: *${mName} 2026* (${rp(db.fee)}/bln)
+      document.getElementById('waTextOutput').value = `*LAPORAN ${db.name.toUpperCase()}*
+Periode: ${mName} 2026 (${rp(db.fee)}/bln)
 
-✅ *SUDAH LUNAS (${paidMembers.length}):*
-${paidMembers.map((m, i) => `${i + 1}. ${m.name} ✓`).join('\n') || '- Belum ada -'}
+*Lunas (${paidMembers.length}):*
+${paidMembers.map((m, i) => `${i + 1}. ${m.name}`).join('\n') || '-'}
 
-⏳ *BELUM BAYAR (${unpaidMembers.length}):*
-${unpaidMembers.map((m, i) => `${i + 1}. ${m.name}`).join('\n') || '- Lunas Semua! -'}
+*Belum (${unpaidMembers.length}):*
+${unpaidMembers.map((m, i) => `${i + 1}. ${m.name}`).join('\n') || 'Semua lunas'}
 
-💰 *RINGKASAN BUKU KAS:*
-• Total Iuran Masuk: ${rp(fin.totalIuran)}
-• Pemasukan Lain/Sponsor: ${rp(fin.totalIn)}
-• Total Pengeluaran: ${rp(fin.totalOut)}
-——————————————
-🏦 *SALDO KAS AKHIR: ${rp(fin.saldo)}*
-_Dikelola transparan dengan Tersistem.com_`;
-
-      document.getElementById('waTextOutput').value = report;
+*Kas:*
+Iuran: ${rp(fin.totalIuran)}
+Masuk lain: ${rp(fin.totalIn)}
+Keluar: ${rp(fin.totalOut)}
+*Saldo: ${rp(fin.saldo)}*`;
     }
 
     function copyReportWA() {
       renderReportWA();
-      const txt = document.getElementById('waTextOutput').value;
-      if (window.AndroidNative && window.AndroidNative.copyToClipboard) {
-        window.AndroidNative.copyToClipboard(txt);
-        return;
-      }
-      navigator.clipboard.writeText(txt).then(() => toast('📋 Teks berhasil disalin! Siap paste di Grup WA'));
+      copyText(document.getElementById('waTextOutput').value, 'Laporan disalin');
     }
 
     function exportToExcelCSV() {
-      const headers = ['No KTA', 'Nama Anggota', 'Jabatan', 'WhatsApp', ...MONTHS.map(m => 'Iuran ' + m)];
+      const headers = ['No KTA', 'Nama', 'Jabatan', 'WhatsApp', ...MONTHS];
       const rows = db.members.map(m => [
-        m.kta,
-        `"${m.name}"`,
-        `"${m.role}"`,
-        `'${m.phone}`,
+        m.kta, `"${m.name}"`, `"${m.role}"`, `'${m.phone}`,
         ...m.paid.map(p => p ? 'LUNAS' : 'BELUM')
       ]);
       const csvContent = 'data:text/csv;charset=utf-8,' + [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
       const link = document.createElement('a');
       link.setAttribute('href', encodeURI(csvContent));
-      link.setAttribute('download', `Data-Iuran-${db.name.replace(/\s+/g, '-')}.csv`);
+      link.setAttribute('download', `Iuran-${db.name.replace(/\s+/g, '-')}.csv`);
       link.click();
-      toast('📥 Data berhasil diekspor ke Excel (.CSV)!');
+      toast('CSV iuran diunduh');
     }
 
     function simulateKTPScan(input) {
       if (!input.files || !input.files[0]) return;
-      toast('🤖 AI Tersistem sedang membaca foto KTP...');
+      toast('Membaca KTP...');
       setTimeout(() => {
         const sampleNames = ['Wahyu Hidayat', 'Siti Nurhaliza', 'Reza Rahadian', 'Dedi Kurniawan'];
-        const pick = sampleNames[Math.floor(Math.random() * sampleNames.length)];
-        document.getElementById('inName').value = pick;
+        document.getElementById('inName').value = sampleNames[Math.floor(Math.random() * sampleNames.length)];
         document.getElementById('inRole').value = 'Anggota';
         document.getElementById('inPhone').value = '0813' + Math.floor(10000000 + Math.random() * 89999999);
-        toast('✅ Data KTP berhasil terbaca otomatis!');
-      }, 650);
+        toast('Data KTP terisi');
+      }, 550);
     }
 
+    // ==================== MODALS & SETTINGS ====================
     function openModal(id) {
       if (id === 'settingsModal') {
-        if (!isKetua()) {
-          toast('🔒 Hanya Ketua yang bisa mengubah pengaturan!');
-          return;
-        }
+        if (!isKetua()) return;
         document.getElementById('setCommName').value = db.name;
         document.getElementById('setCommFee').value = db.fee;
         document.getElementById('setCommPrefix').value = db.prefix;
+      }
+      if (id === 'txModal') {
+        document.getElementById('txDate').valueAsDate = new Date();
       }
       document.getElementById(id).classList.add('show');
     }
 
     function closeModal(id) {
       document.getElementById(id).classList.remove('show');
+    }
+
+    function backdropClose(e, id) {
+      if (e.target.id === id) closeModal(id);
     }
 
     function saveMember(e) {
@@ -1944,20 +2576,14 @@ _Dikelola transparan dengan Tersistem.com_`;
       const num = String(db.members.length + 1).padStart(3, '0');
       const newKta = `${db.prefix}-${num}`;
       db.members.push({
-        id: Date.now(),
-        kta: newKta,
-        name,
-        role,
-        accessRole,
-        phone,
-        pin,
+        id: Date.now(), kta: newKta, name, role, accessRole, phone, pin,
         paid: [0, 0, 0, 0, 0, 0]
       });
       document.getElementById('inName').value = '';
       document.getElementById('inPhone').value = '';
       closeModal('memberModal');
       saveDB();
-      toast(`✅ Akun ${name} (${newKta} / Sandi: ${pin}) berhasil dibuat!`);
+      toast(`${name} ditambahkan`);
     }
 
     function saveSettings(e) {
@@ -1968,33 +2594,42 @@ _Dikelola transparan dengan Tersistem.com_`;
       db.prefix = document.getElementById('setCommPrefix').value.trim();
       closeModal('settingsModal');
       saveDB();
-      toast('⚙️ Pengaturan komunitas berhasil disimpan!');
+      toast('Pengaturan disimpan');
     }
 
     function refreshUI() {
       document.getElementById('hdrName').textContent = db.name;
-      document.getElementById('hdrSub').textContent = `Iuran: ${rp(db.fee)}/bln`;
+      document.getElementById('hdrSub').textContent = `${rp(db.fee)}/bln`;
 
       const mIdx = parseInt(document.getElementById('activeMonthSelect').value, 10);
       const paidNow = db.members.filter(m => m.paid[mIdx]).length;
       const fin = getCashSummary();
 
-      document.getElementById('kpiMembers').textContent = `${db.members.length} Org`;
-      document.getElementById('kpiPaidLabel').textContent = `Lunas (${MONTHS[mIdx]})`;
+      document.getElementById('kpiMembers').textContent = db.members.length;
+      document.getElementById('kpiPaidLabel').textContent = `Lunas ${MONTHS[mIdx]}`;
       document.getElementById('kpiPaid').textContent = `${paidNow}/${db.members.length}`;
-      document.getElementById('kpiTotalMasuk').textContent = rp(fin.allIn);
+      const paidPct = db.members.length ? Math.round((paidNow / db.members.length) * 100) : 0;
+      const bar = document.getElementById('kpiPaidBar');
+      if (bar) bar.style.width = `${paidPct}%`;
       document.getElementById('kpiSaldo').textContent = rp(fin.saldo);
-      document.getElementById('kpiAgendaCount').textContent = `${db.agendas.length} Acara`;
-      document.getElementById('navAgendaBadge').textContent = db.agendas.length;
+      document.getElementById('kpiAgendaCount').textContent = db.agendas.length;
+
+      const badge = document.getElementById('navAgendaBadge');
+      badge.textContent = db.agendas.length;
+      badge.classList.toggle('hidden', db.agendas.length === 0);
 
       const sel = document.getElementById('ktaMemberSelect');
       const cur = sel.value;
-      sel.innerHTML = db.members.map(m => `<option value="${m.id}">${m.kta} — ${m.name}</option>`).join('');
+      sel.innerHTML = db.members.map(m => `<option value="${m.id}">${escapeHtml(m.name)}</option>`).join('');
       if (cur && db.members.some(m => String(m.id) === String(cur))) {
         sel.value = cur;
       } else if (activeUser) {
         sel.value = activeUser.id;
       }
+
+      document.querySelectorAll('.theme-dot').forEach((d, idx) => {
+        d.classList.toggle('active', idx === (db.theme || 0));
+      });
 
       applyRolePermissionsUI();
       renderMemberList();
